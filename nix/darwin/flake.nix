@@ -18,10 +18,13 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
+	  pkgs.stow
+	  pkgs.git
           pkgs.alacritty
           pkgs.mkalias
           pkgs.neovim
           pkgs.tmux
+	  pkgs.fzf
         ];
 
       homebrew = {

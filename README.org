@@ -1,1 +1,9 @@
-# dotfiles
+* dotfiles
+
+** nix
+
+*** darwin
+
+```
+darwin-rebuild switch --flake ~/nix#mini
+```

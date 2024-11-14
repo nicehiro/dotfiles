@@ -89,3 +89,6 @@ export FZF_DEFAULT_OPTS=" \
 --color=marker:#babbf1,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284 \
 --color=selected-bg:#51576d \
 --multi"
+
+# mactex bin
+export PATH=$PATH:/Library/TeX/texbin

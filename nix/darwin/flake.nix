@@ -18,13 +18,18 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-	  pkgs.stow
-	  pkgs.git
+	        pkgs.stow
+	        pkgs.git
           pkgs.alacritty
           pkgs.mkalias
           pkgs.neovim
           pkgs.tmux
-	  pkgs.fzf
+	        pkgs.fzf
+	        pkgs.vscode
+	        pkgs.emacs
+	        pkgs.hugo
+	        pkgs.coreutils
+          pkgs.dict
         ];
 
       homebrew = {
@@ -35,6 +40,9 @@
         casks = [
           "iina"
           "the-unarchiver"
+	        "mactex"
+	        "zotero@beta"
+	        "squirrel"
         ];
         masApps = {
         };
@@ -45,6 +53,7 @@
         (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
       ];
 
+      # TODO: This symlink the apps, won't shown in spotlight
       system.activationScripts.applications.text = let
         env = pkgs.buildEnv {
           name = "system-applications";
@@ -69,12 +78,14 @@
         dock.autohide  = true;
         dock.largesize = 64;
         dock.persistent-apps = [
-	  "/System/Applications/Launchpad.app"
+	        "/System/Applications/Launchpad.app"
           "/System/Cryptexes/App/System/Applications/Safari.app"
           "${pkgs.alacritty}/Applications/Alacritty.app"
-	  "/System/Applications/Music.app"
+	        "${pkgs.emacs}/Applications/Emacs.app"
+	        "/System/Applications/Music.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
+	        "/Applications/Zotero.app"
         ];
         finder.FXPreferredViewStyle = "clmv";
         loginwindow.GuestEnabled  = false;
@@ -115,6 +126,7 @@
           nix-homebrew = {
             enable = true;
             # Apple Silicon Only
+            # TODO: this line don't work!
             enableRosetta = true;
             # User owning the Homebrew prefix
             user = "fangyuanwang";

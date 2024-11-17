@@ -6,9 +6,13 @@
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    homebrew-emacsplus = {
+      url = "github:d12frosted/homebrew-emacs-plus";
+      flake = false;
+    };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus }:
   let
     configuration = { pkgs, config, ... }: {
 
@@ -18,17 +22,16 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-	        pkgs.stow
-	        pkgs.git
+          pkgs.stow
+          pkgs.git
           pkgs.alacritty
           pkgs.mkalias
           pkgs.neovim
           pkgs.tmux
-	        pkgs.fzf
-	        pkgs.vscode
-	        pkgs.emacs
-	        pkgs.hugo
-	        pkgs.coreutils
+          pkgs.fzf
+          pkgs.vscode
+          pkgs.hugo
+          pkgs.coreutils
           pkgs.dict
         ];
 
@@ -36,15 +39,24 @@
         enable = true;
         brews = [
           "mas"
+          "emacs-plus@30"
         ];
         casks = [
           "iina"
           "the-unarchiver"
-	        "mactex"
-	        "zotero@beta"
-	        "squirrel"
+          "mactex"
+          "zotero@beta"
+          "squirrel"
+          "gimp"
+          "inkscape"
+          "steam"
+          "chatbox"
+          "google-chrome"
+          "orbstack"
         ];
         masApps = {
+          infuse = 1136220934;
+          opencat = 6445999201;
         };
         onActivation.cleanup = "zap";
       };
@@ -78,14 +90,14 @@
         dock.autohide  = true;
         dock.largesize = 64;
         dock.persistent-apps = [
-	        "/System/Applications/Launchpad.app"
+          "/System/Applications/Launchpad.app"
           "/System/Cryptexes/App/System/Applications/Safari.app"
           "${pkgs.alacritty}/Applications/Alacritty.app"
-	        "${pkgs.emacs}/Applications/Emacs.app"
-	        "/System/Applications/Music.app"
+          "/opt/homebrew/Cellar/emacs-plus@30/30.0.92/Emacs.app"
+          "/System/Applications/Music.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
-	        "/Applications/Zotero.app"
+          "/Applications/Zotero.app"
         ];
         finder.FXPreferredViewStyle = "clmv";
         loginwindow.GuestEnabled  = false;
@@ -130,6 +142,9 @@
             enableRosetta = true;
             # User owning the Homebrew prefix
             user = "fangyuanwang";
+	    taps = {
+	      "d12frosted/homebrew-emacs-plus" = homebrew-emacsplus;
+	    };
           };
         }
       ];

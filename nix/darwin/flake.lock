@@ -35,6 +35,22 @@
         "type": "github"
       }
     },
+    "homebrew-emacsplus": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1731575701,
+        "narHash": "sha256-L1cwZLA4tnQQUWw6cK7MN3YN/VGNx/+xsZj9jK0YjNI=",
+        "owner": "d12frosted",
+        "repo": "homebrew-emacs-plus",
+        "rev": "802eca97aad80c308b79ee07e662f8394146b3cb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "d12frosted",
+        "repo": "homebrew-emacs-plus",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -141,6 +157,7 @@
     },
     "root": {
       "inputs": {
+        "homebrew-emacsplus": "homebrew-emacsplus",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_3"

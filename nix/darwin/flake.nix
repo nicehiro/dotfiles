@@ -24,12 +24,10 @@
         [
           pkgs.stow
           pkgs.git
-          pkgs.alacritty
           pkgs.mkalias
           pkgs.neovim
           pkgs.tmux
           pkgs.fzf
-          pkgs.vscode
           pkgs.hugo
           pkgs.coreutils
           pkgs.dict
@@ -42,6 +40,7 @@
           "emacs-plus@30"
         ];
         casks = [
+	        "alacritty"
           "iina"
           "the-unarchiver"
           "mactex"
@@ -50,13 +49,18 @@
           "gimp"
           "inkscape"
           "steam"
-          "chatbox"
           "google-chrome"
           "orbstack"
+          "visual-studio-code"
+          "zed"
+          "google-drive"
+          "font-lxgw-wenkai"
         ];
         masApps = {
           infuse = 1136220934;
           opencat = 6445999201;
+          WeChat = 836500024;
+          WhatsApp = 310633997;
         };
         onActivation.cleanup = "zap";
       };
@@ -141,7 +145,7 @@
             # TODO: this line don't work!
             enableRosetta = true;
             # User owning the Homebrew prefix
-            user = "fangyuanwang";
+            user = "fangyuan";
 	    taps = {
 	      "d12frosted/homebrew-emacs-plus" = homebrew-emacsplus;
 	    };

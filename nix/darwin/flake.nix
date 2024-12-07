@@ -38,6 +38,7 @@
         brews = [
           "mas"
           "emacs-plus@30"
+          "aspell"
         ];
         casks = [
 	        "alacritty"
@@ -55,6 +56,7 @@
           "zed"
           "google-drive"
           "font-lxgw-wenkai"
+          "appcleaner"
         ];
         masApps = {
           infuse = 1136220934;
@@ -63,6 +65,8 @@
           WhatsApp = 310633997;
         };
         onActivation.cleanup = "zap";
+        onActivation.autoUpdate = true;
+        onActivation.upgrade = true;
       };
 
       fonts.packages = [

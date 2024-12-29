@@ -31,6 +31,7 @@
           pkgs.hugo
           pkgs.coreutils
           pkgs.dict
+          pkgs.cloudflared
         ];
 
       homebrew = {
@@ -41,22 +42,39 @@
           "aspell"
         ];
         casks = [
-	        "alacritty"
-          "iina"
-          "the-unarchiver"
-          "mactex"
-          "zotero@beta"
-          "squirrel"
-          "gimp"
-          "inkscape"
-          "steam"
+          # development
+          "alacritty"
           "google-chrome"
           "orbstack"
           "visual-studio-code"
           "zed"
+          "ghostty"
+          # graphics
+          "gimp"
+          "inkscape"
+          # game
+          "steam"
+          # other
+          "mactex"
+          "squirrel"
+          "iina"
+          "the-unarchiver"
+          "zotero@beta"
           "google-drive"
-          "font-lxgw-wenkai"
           "appcleaner"
+          "tencent-meeting"
+          "microsoft-office"
+          "free-download-manager"
+          "motrix"
+          # fonts
+          "font-lxgw-wenkai"
+          "font-ibm-plex-sans"
+          "font-ibm-plex-sans-sc"
+          "font-ibm-plex-sans-arabic"
+          "font-ibm-plex-mono"
+          "font-ibm-plex-math"
+          "font-jetbrains-mono-nerd-font"
+
         ];
         masApps = {
           infuse = 1136220934;
@@ -68,10 +86,6 @@
         onActivation.autoUpdate = true;
         onActivation.upgrade = true;
       };
-
-      fonts.packages = [
-        (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-      ];
 
       # TODO: This symlink the apps, won't shown in spotlight
       system.activationScripts.applications.text = let

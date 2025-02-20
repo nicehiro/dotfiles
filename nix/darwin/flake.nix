@@ -16,6 +16,7 @@
   let
     configuration = { pkgs, config, ... }: {
 
+      nix.enable = true;
       nixpkgs.config.allowUnfree = true;
 
       # List packages installed in system profile. To search by name, run:
@@ -32,6 +33,9 @@
           pkgs.coreutils
           pkgs.dict
           pkgs.cloudflared
+          pkgs.nodejs_23
+          pkgs.yarn
+          pkgs.aria2
         ];
 
       homebrew = {
@@ -40,6 +44,8 @@
           "mas"
           "emacs-plus@30"
           "aspell"
+          "xcodes"
+          "pngpaste"
         ];
         casks = [
           # development
@@ -52,6 +58,7 @@
           # graphics
           "gimp"
           "inkscape"
+          "figma"
           # game
           "steam"
           # other
@@ -64,8 +71,10 @@
           "appcleaner"
           "tencent-meeting"
           "microsoft-office"
-          "free-download-manager"
-          "motrix"
+          "alt-tab"
+          "calibre"
+          # "free-download-manager"
+          # "motrix"
           # fonts
           "font-lxgw-wenkai"
           "font-ibm-plex-sans"
@@ -74,13 +83,17 @@
           "font-ibm-plex-mono"
           "font-ibm-plex-math"
           "font-jetbrains-mono-nerd-font"
-
         ];
         masApps = {
           infuse = 1136220934;
           opencat = 6445999201;
           WeChat = 836500024;
           WhatsApp = 310633997;
+          # from Sindre Sorhus
+          PlainTextEditor = 1572202501;
+          PurePaste = 1611378436;
+          OneThing = 1604176982;
+          Gifski = 1351639930;
         };
         onActivation.cleanup = "zap";
         onActivation.autoUpdate = true;
@@ -114,8 +127,9 @@
         dock.persistent-apps = [
           "/System/Applications/Launchpad.app"
           "/System/Cryptexes/App/System/Applications/Safari.app"
-          "${pkgs.alacritty}/Applications/Alacritty.app"
-          "/opt/homebrew/Cellar/emacs-plus@30/30.0.92/Emacs.app"
+          # "${pkgs.alacritty}/Applications/Alacritty.app"
+          "/Applications/Ghostty.app"
+          "/opt/homebrew/Cellar/emacs-plus@30/30.0.93/Emacs.app"
           "/System/Applications/Music.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
@@ -128,7 +142,7 @@
       };
 
       # Auto upgrade nix package and the daemon service.
-      services.nix-daemon.enable = true;
+      # services.nix-daemon.enable = true;
       # nix.package = pkgs.nix;
 
       # Necessary for using flakes on this system.

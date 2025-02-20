@@ -91,4 +91,5 @@ export FZF_DEFAULT_OPTS=" \
 --multi"
 
 # mactex bin
-export PATH=$PATH:/Library/TeX/texbin
+# export PATH=$PATH:/Library/TeX/texbin
+export PATH=$PATH:/usr/local/texlive/2024/bin/universal-darwin/

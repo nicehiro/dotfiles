@@ -55,6 +55,7 @@
           "visual-studio-code"
           "zed"
           "ghostty"
+          "cursor"
           # graphics
           "gimp"
           "inkscape"
@@ -73,6 +74,7 @@
           "microsoft-office"
           "alt-tab"
           "calibre"
+          "lyric-fever"
           # "free-download-manager"
           # "motrix"
           # fonts

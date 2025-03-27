@@ -36,6 +36,10 @@
           pkgs.nodejs_23
           pkgs.yarn
           pkgs.aria2
+          pkgs.hledger
+          pkgs.uv
+          pkgs.wget
+          pkgs.p7zip
         ];
 
       homebrew = {
@@ -56,13 +60,17 @@
           "zed"
           "ghostty"
           "cursor"
+          "wakatime"
+          "chatwise"
           # graphics
           "gimp"
           "inkscape"
           "figma"
+          "blender"
           # game
           "steam"
           # other
+          "logi-options+"
           "mactex"
           "squirrel"
           "iina"
@@ -75,6 +83,7 @@
           "alt-tab"
           "calibre"
           "lyric-fever"
+          "dingtalk"
           # "free-download-manager"
           # "motrix"
           # fonts
@@ -85,6 +94,10 @@
           "font-ibm-plex-mono"
           "font-ibm-plex-math"
           "font-jetbrains-mono-nerd-font"
+          "font-maple-mono"
+          "font-maple-mono-nf"
+          "font-maple-mono-cn"
+          "font-maple-mono-nf-cn"
         ];
         masApps = {
           infuse = 1136220934;

@@ -92,4 +92,7 @@ export FZF_DEFAULT_OPTS=" \
 
 # mactex bin
 # export PATH=$PATH:/Library/TeX/texbin
-export PATH=$PATH:/usr/local/texlive/2024/bin/universal-darwin/
+export PATH=$PATH:/usr/local/texlive/2025/bin/universal-darwin/
+
+# hledger main file
+export LEDGER_FILE=/Users/fangyuan/Documents/account.journal

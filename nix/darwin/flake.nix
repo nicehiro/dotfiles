@@ -5,18 +5,26 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-emacsplus = {
       url = "github:d12frosted/homebrew-emacs-plus";
       flake = false;
     };
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus, homebrew-core, homebrew-cask }:
   let
     configuration = { pkgs, config, ... }: {
 
-      nix.enable = true;
+      nix.enable = false;
       nixpkgs.config.allowUnfree = true;
 
       # List packages installed in system profile. To search by name, run:
@@ -39,7 +47,8 @@
           pkgs.hledger
           pkgs.uv
           pkgs.wget
-          pkgs.p7zip
+          pkgs.ghostscript
+          pkgs.pdf2svg
         ];
 
       homebrew = {
@@ -49,24 +58,26 @@
           "emacs-plus@30"
           "aspell"
           "xcodes"
-          "pngpaste"
+          # "pngpaste"
         ];
         casks = [
           # development
-          "alacritty"
+          # "alacritty"
           "google-chrome"
-          "orbstack"
+          # "orbstack"
           "visual-studio-code"
           "zed"
           "ghostty"
-          "cursor"
+          # "cursor"
           "wakatime"
           "chatwise"
+          "chatgpt"
+          "linearmouse"
           # graphics
           "gimp"
           "inkscape"
-          "figma"
-          "blender"
+          # "figma"
+          # "blender"
           # game
           "steam"
           # other
@@ -75,24 +86,15 @@
           "squirrel"
           "iina"
           "the-unarchiver"
-          "zotero@beta"
+          "zotero"
           "google-drive"
           "appcleaner"
           "tencent-meeting"
           "microsoft-office"
           "alt-tab"
           "calibre"
-          "lyric-fever"
-          "dingtalk"
-          # "free-download-manager"
-          # "motrix"
           # fonts
           "font-lxgw-wenkai"
-          "font-ibm-plex-sans"
-          "font-ibm-plex-sans-sc"
-          "font-ibm-plex-sans-arabic"
-          "font-ibm-plex-mono"
-          "font-ibm-plex-math"
           "font-jetbrains-mono-nerd-font"
           "font-maple-mono"
           "font-maple-mono-nf"
@@ -115,45 +117,41 @@
         onActivation.upgrade = true;
       };
 
-      # TODO: This symlink the apps, won't shown in spotlight
-      system.activationScripts.applications.text = let
-        env = pkgs.buildEnv {
-          name = "system-applications";
-          paths = config.environment.systemPackages;
-          pathsToLink = "/Applications";
-        };
-      in
-        pkgs.lib.mkForce ''
-          # Set up applications.
-          echo "setting up /Applications..." >&2
-          rm -rf /Applications/Nix\ Apps
-          mkdir -p /Applications/Nix\ Apps
-          find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-          while read -r src; do
-            app_name=$(basename "$src")
-            echo "copying $src" >&2
-            ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-          done
-        '';
-
       system.defaults = {
         dock.autohide  = true;
         dock.largesize = 64;
         dock.persistent-apps = [
           "/System/Applications/Launchpad.app"
           "/System/Cryptexes/App/System/Applications/Safari.app"
-          # "${pkgs.alacritty}/Applications/Alacritty.app"
           "/Applications/Ghostty.app"
-          "/opt/homebrew/Cellar/emacs-plus@30/30.0.93/Emacs.app"
+          "/opt/homebrew/Cellar/emacs-plus@30/30.1/Emacs.app"
           "/System/Applications/Music.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
           "/Applications/Zotero.app"
         ];
+        # finder settings
         finder.FXPreferredViewStyle = "clmv";
+        finder.AppleShowAllExtensions = true;
+        finder.AppleShowAllFiles = true;
+        finder.NewWindowTarget = "Documents";
+        finder.ShowPathbar = true;
+        finder.ShowStatusBar = true;
+        finder.FXDefaultSearchScope = "SCcf";
+        # control center
+        controlcenter.BatteryShowPercentage = true;
+        # clock
+        menuExtraClock.Show24Hour = true;
+        menuExtraClock.ShowAMPM = false;
+        menuExtraClock.ShowDate = 2;
+        menuExtraClock.ShowDayOfMonth = false;
         loginwindow.GuestEnabled  = false;
         NSGlobalDomain.AppleICUForce24HourTime = true;
         NSGlobalDomain.KeyRepeat = 2;
+        # trackpad settings
+        trackpad.Clicking = true;
+        trackpad.Dragging = true;
+        trackpad.TrackpadThreeFingerDrag = true;
       };
 
       # Auto upgrade nix package and the daemon service.
@@ -180,11 +178,11 @@
   in
   {
     # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#mini
-    darwinConfigurations."mini" = nix-darwin.lib.darwinSystem {
+    # $ darwin-rebuild build --flake .#mbp
+    darwinConfigurations."mbp" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
-        nix-homebrew.darwinModules.nix-homebrew
+	      nix-homebrew.darwinModules.nix-homebrew
         {
           nix-homebrew = {
             enable = true;
@@ -195,6 +193,8 @@
             user = "fangyuan";
 	    taps = {
 	      "d12frosted/homebrew-emacs-plus" = homebrew-emacsplus;
+	      "homebrew/homebrew-core" = homebrew-core;
+	      "homebrew/homebrew-cask" = homebrew-cask;
 	    };
           };
         }
@@ -202,6 +202,6 @@
     };
 
     # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations."mini".pkgs;
+    darwinPackages = self.darwinConfigurations."mbp".pkgs;
   };
 }

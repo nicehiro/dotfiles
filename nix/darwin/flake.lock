@@ -3,28 +3,60 @@
     "brew-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1731323744,
-        "narHash": "sha256-SxUQm4cTHcaoPQHoXe26ZV8cZiMWBGow8MjE4L+MckM=",
+        "lastModified": 1742457334,
+        "narHash": "sha256-Gn7ruyb3NDFr+SsHBfA2NsJI8YkkWdECqLRj/xcjt+E=",
         "owner": "Homebrew",
         "repo": "brew",
-        "rev": "254bf3fe9d8fa2e1b2fb55dbcf535b2d870180c4",
+        "rev": "f3bd91d3afe086824d24708230e1f0c7f943135a",
         "type": "github"
       },
       "original": {
         "owner": "Homebrew",
-        "ref": "4.4.5",
+        "ref": "4.4.25",
         "repo": "brew",
+        "type": "github"
+      }
+    },
+    "homebrew-cask": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1743070857,
+        "narHash": "sha256-AuQs5EBmqB6uGERNIc01VRtzF9U3C7l1/I8X8esipHI=",
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "rev": "5f15a64ed68e633656b39d524280aebc14664e7c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "type": "github"
+      }
+    },
+    "homebrew-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1743064911,
+        "narHash": "sha256-8P7dwL5isookDKS5fs0X/tvVqlK4BR0P+3UNqTfX8Es=",
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "rev": "b1496364eacea9b910d31dba96ca1aff9707bca3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-core",
         "type": "github"
       }
     },
     "homebrew-emacsplus": {
       "flake": false,
       "locked": {
-        "lastModified": 1739265324,
-        "narHash": "sha256-srTYx/AUyx24UyH+7nLsNsPxu5MySLweOlVib+1x0p8=",
+        "lastModified": 1740817593,
+        "narHash": "sha256-CUdpejciqG0xqvHt6tRDjIQkVlLUImkOfw1enyFGYfQ=",
         "owner": "d12frosted",
         "repo": "homebrew-emacs-plus",
-        "rev": "3e61ee44f4cfc43dce292047aff5e9277e7d1bd4",
+        "rev": "245b6edf56fe48f3a431b7f01b3bbcc121a50f34",
         "type": "github"
       },
       "original": {
@@ -40,11 +72,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1739933872,
-        "narHash": "sha256-UhuvTR4OrWR+WBaRCZm4YMkvjJhZ1KZo/jRjE41m+Ek=",
+        "lastModified": 1742869675,
+        "narHash": "sha256-rgwUZJZVztaNYPTsf6MIqirPL5r2JTMMyHuzk1ezyYk=",
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "rev": "6ab392f626a19f1122d1955c401286e1b7cf6b53",
+        "rev": "bb81755a3674951724d79b8cba6bbff01409d44d",
         "type": "github"
       },
       "original": {
@@ -78,15 +110,15 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1736041957,
-        "narHash": "sha256-Kk/cVtkxwfHNoB6nINUarMLTtyAEvH+ohzxKBptMzzg=",
-        "owner": "zhaofengli-wip",
+        "lastModified": 1742619394,
+        "narHash": "sha256-8uwIBjbKxeJ7u0VACSNs634HwtgRLxP6/+cIkUXmuyI=",
+        "owner": "zhaofengli",
         "repo": "nix-homebrew",
-        "rev": "a6d99cc7436fc18c097b3536d9c45c0548c694c8",
+        "rev": "04b0536479d2d2e8d71dc8c8ee97c2b61f0c9987",
         "type": "github"
       },
       "original": {
-        "owner": "zhaofengli-wip",
+        "owner": "zhaofengli",
         "repo": "nix-homebrew",
         "type": "github"
       }
@@ -122,11 +154,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1739863612,
-        "narHash": "sha256-UbtgxplOhFcyjBcNbTVO8+HUHAl/WXFDOb6LvqShiZo=",
+        "lastModified": 1742923925,
+        "narHash": "sha256-biPjLws6FiBVUUDHEMFq5pUQL84Wf7PntPYdo3oKkFw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "632f04521e847173c54fa72973ec6c39a371211c",
+        "rev": "25d1b84f5c90632a623c48d83a2faf156451e6b1",
         "type": "github"
       },
       "original": {
@@ -138,6 +170,8 @@
     },
     "root": {
       "inputs": {
+        "homebrew-cask": "homebrew-cask",
+        "homebrew-core": "homebrew-core",
         "homebrew-emacsplus": "homebrew-emacsplus",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",

@@ -26,6 +26,7 @@
 
       nix.enable = false;
       nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.allowBroken = true;
 
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
@@ -68,6 +69,7 @@
           "visual-studio-code"
           "zed"
           "ghostty"
+          "windows-app"
           # "cursor"
           "wakatime"
           "chatwise"
@@ -76,7 +78,7 @@
           # graphics
           "gimp"
           "inkscape"
-          # "figma"
+          "figma"
           # "blender"
           # game
           "steam"
@@ -93,6 +95,11 @@
           "microsoft-office"
           "alt-tab"
           "calibre"
+          "jordanbaird-ice"
+          # music
+          "lyric-fever"
+          "qqmusic"
+          "spotify"
           # fonts
           "font-lxgw-wenkai"
           "font-jetbrains-mono-nerd-font"
@@ -106,6 +113,7 @@
           opencat = 6445999201;
           WeChat = 836500024;
           WhatsApp = 310633997;
+          RunCat = 1429033973;
           # from Sindre Sorhus
           PlainTextEditor = 1572202501;
           PurePaste = 1611378436;
@@ -126,9 +134,12 @@
           "/Applications/Ghostty.app"
           "/opt/homebrew/Cellar/emacs-plus@30/30.1/Emacs.app"
           "/System/Applications/Music.app"
+          "/Applications/Spotify.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
           "/Applications/Zotero.app"
+          "/System/Applications/Books.app"
+          "/Applications/ChatGPT.app"
         ];
         # finder settings
         finder.FXPreferredViewStyle = "clmv";
@@ -152,6 +163,10 @@
         trackpad.Clicking = true;
         trackpad.Dragging = true;
         trackpad.TrackpadThreeFingerDrag = true;
+        # hot corner
+        dock.wvous-tl-corner = 13;
+        # others
+        NSGlobalDomain.ApplePressAndHoldEnabled = false;
       };
 
       # Auto upgrade nix package and the daemon service.

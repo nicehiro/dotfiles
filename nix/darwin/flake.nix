@@ -42,7 +42,7 @@
           pkgs.coreutils
           pkgs.dict
           pkgs.cloudflared
-          pkgs.nodejs_23
+          pkgs.nodejs_24
           pkgs.yarn
           pkgs.aria2
           pkgs.hledger
@@ -68,6 +68,7 @@
           # "orbstack"
           "visual-studio-code"
           "zed"
+          "cursor"
           "ghostty"
           "windows-app"
           # "cursor"
@@ -76,9 +77,10 @@
           "chatgpt"
           "linearmouse"
           # graphics
-          "gimp"
+          # "gimp"
           "inkscape"
           "figma"
+          "zoom"
           # "blender"
           # game
           "steam"
@@ -96,6 +98,7 @@
           "alt-tab"
           "calibre"
           "jordanbaird-ice"
+          "input-source-pro"
           # music
           "lyric-fever"
           "qqmusic"
@@ -125,6 +128,7 @@
         onActivation.upgrade = true;
       };
 
+      system.primaryUser = "fangyuan";
       system.defaults = {
         dock.autohide  = true;
         dock.largesize = 64;

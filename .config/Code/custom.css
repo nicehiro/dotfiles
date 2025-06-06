@@ -1,0 +1,28 @@
+/* Code comment style */
+
+/* Code canvas top shadow */
+.monaco-editor .scroll-decoration {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, .75) !important;
+    top: -6px !important;
+}
+
+/* Match Text */
+.currentFindMatchInline {
+    background: #000 !important;
+}
+
+/* Side bar */
+.part.sidebar {
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, .25);
+}
+
+.quick-input-widget {
+    transform: translateY(-80%) !important;
+    top: 50% !important;
+}
+
+.quick-input-widget .monaco-inputbox {
+    border-radius: 12px !important;
+    padding: 8px !important;
+    border: none !important;
+}

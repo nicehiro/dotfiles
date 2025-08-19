@@ -1,3 +1,6 @@
+# Usage:
+# sudo darwin-rebuild switch --flake ~/dotfiles/nix/darwin#mbp
+# nix flake update
 {
   description = "FY's flakes of nix-darwin";
 
@@ -42,7 +45,6 @@
           pkgs.coreutils
           pkgs.dict
           pkgs.cloudflared
-          pkgs.nodejs_24
           pkgs.yarn
           pkgs.aria2
           pkgs.hledger
@@ -50,6 +52,12 @@
           pkgs.wget
           pkgs.ghostscript
           pkgs.pdf2svg
+          pkgs.claude-code
+          pkgs.cmake
+          pkgs.glibtool
+          pkgs.julia-mono
+          pkgs.imagemagick
+          pkgs.starship
         ];
 
       homebrew = {
@@ -59,7 +67,10 @@
           "emacs-plus@30"
           "aspell"
           "xcodes"
+          "node"
           # "pngpaste"
+          "lua-language-server"
+          "gh"
         ];
         casks = [
           # development
@@ -67,20 +78,22 @@
           "google-chrome"
           # "orbstack"
           "visual-studio-code"
+          # "github-copilot-for-xcode"
           "zed"
           "cursor"
           "ghostty"
           "windows-app"
-          # "cursor"
           "wakatime"
           "chatwise"
           "chatgpt"
+          "claude"
           "linearmouse"
           # graphics
           # "gimp"
           "inkscape"
           "figma"
           "zoom"
+          "clop"
           # "blender"
           # game
           "steam"
@@ -98,7 +111,6 @@
           "alt-tab"
           "calibre"
           "jordanbaird-ice"
-          "input-source-pro"
           # music
           "lyric-fever"
           "qqmusic"
@@ -110,18 +122,16 @@
           "font-maple-mono-nf"
           "font-maple-mono-cn"
           "font-maple-mono-nf-cn"
+          "font-juliamono"
+          "font-libertinus"
+          "font-monaspace-nerd-font"
         ];
         masApps = {
           infuse = 1136220934;
-          opencat = 6445999201;
+          # opencat = 6445999201;
           WeChat = 836500024;
           WhatsApp = 310633997;
           RunCat = 1429033973;
-          # from Sindre Sorhus
-          PlainTextEditor = 1572202501;
-          PurePaste = 1611378436;
-          OneThing = 1604176982;
-          Gifski = 1351639930;
         };
         onActivation.cleanup = "zap";
         onActivation.autoUpdate = true;
@@ -133,7 +143,7 @@
         dock.autohide  = true;
         dock.largesize = 64;
         dock.persistent-apps = [
-          "/System/Applications/Launchpad.app"
+          # "/System/Applications/Launchpad.app"
           "/System/Cryptexes/App/System/Applications/Safari.app"
           "/Applications/Ghostty.app"
           "/opt/homebrew/Cellar/emacs-plus@30/30.1/Emacs.app"
@@ -143,7 +153,7 @@
           "/System/Applications/Calendar.app"
           "/Applications/Zotero.app"
           "/System/Applications/Books.app"
-          "/Applications/ChatGPT.app"
+          "/Applications/Claude.app"
         ];
         # finder settings
         finder.FXPreferredViewStyle = "clmv";

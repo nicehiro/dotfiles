@@ -161,6 +161,51 @@ require("lazy").setup({
     end,
   },
   
+  -- File tree
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup({
+        sort = {
+          sorter = "case_sensitive",
+        },
+        view = {
+          width = 30,
+          side = "left",
+        },
+        renderer = {
+          group_empty = true,
+          icons = {
+            show = {
+              file = true,
+              folder = true,
+              folder_arrow = true,
+              git = true,
+            },
+          },
+        },
+        filters = {
+          dotfiles = false,
+          custom = { "__pycache__", "*.pyc", ".pytest_cache", ".coverage" },
+        },
+        git = {
+          enable = true,
+          ignore = false,
+        },
+        actions = {
+          open_file = {
+            quit_on_open = false,
+          },
+        },
+      })
+    end,
+  },
+
   -- Terminal
   {
     "akinsho/toggleterm.nvim",

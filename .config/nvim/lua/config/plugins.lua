@@ -78,18 +78,6 @@ require("lazy").setup({
     config = function()
       local lspconfig = require("lspconfig")
       
-      -- Lua LSP
-      lspconfig.lua_ls.setup({
-        settings = {
-          Lua = {
-            runtime = { version = "LuaJIT" },
-            diagnostics = { globals = {"vim"} },
-            workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-            telemetry = { enable = false },
-          },
-        },
-      })
-      
       -- Python LSP
       lspconfig.pyright.setup{}
     end,

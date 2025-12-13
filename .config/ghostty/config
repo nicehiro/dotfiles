@@ -1,5 +1,15 @@
-font-family = Maple Mono NF
+font-family = JuliaMono
 font-size = 16
-# theme = light:tokyonight-day,dark:tokyonight
-theme = tokyonight
+# theme = light:Catppuccin Latte,dark:tokyonight
+theme = Atom One Dark
 keybind = shift+enter=text:\n
+background-opacity = 0.8
+background-opacity-cells = true
+background-blur = true
+alpha-blending = native
+
+window-padding-balance = true
+window-padding-x = 1
+window-padding-y = 0
+
+macos-titlebar-style = tabs

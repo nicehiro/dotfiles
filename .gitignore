@@ -3,3 +3,5 @@ github-copilot
 zed
 gtk-2.0/
 *.bak
+node_modules/
+bun.lock

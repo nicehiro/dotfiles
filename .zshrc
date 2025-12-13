@@ -90,3 +90,8 @@ export LEDGER_FILE=/Users/fangyuan/Documents/account.journal
 if [[ -f ~/Documents/keys/claude.key ]]; then
     source ~/Documents/keys/claude.key
 fi
+
+# gemini
+if [[ -f ~/Documents/keys/gemini.key ]]; then
+    source ~/Documents/keys/gemini.key
+fi

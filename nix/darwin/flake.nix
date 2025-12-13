@@ -21,9 +21,14 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+    homebrew-tw93 = {
+      url = "github:tw93/homebrew-tap";
+      flake = false;
+    };
+    claude-code.url = "github:sadjow/claude-code-nix";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus, homebrew-core, homebrew-cask }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus, homebrew-core, homebrew-cask, homebrew-tw93, claude-code }:
   let
     configuration = { pkgs, config, ... }: {
 
@@ -36,6 +41,7 @@
       environment.systemPackages =
         [
           pkgs.stow
+          pkgs.go
           pkgs.git
           pkgs.mkalias
           pkgs.neovim
@@ -52,34 +58,50 @@
           pkgs.wget
           pkgs.ghostscript
           pkgs.pdf2svg
-          pkgs.claude-code
           pkgs.cmake
           pkgs.glibtool
           pkgs.julia-mono
           pkgs.imagemagick
           pkgs.starship
+          pkgs.android-tools
+          pkgs.claude-code
         ];
 
       homebrew = {
         enable = true;
+        onActivation = {
+          autoUpdate = true;   # runs `brew update`
+          upgrade    = true;   # upgrades outdated formulae
+          cleanup    = "zap";  # optional: removes old versions/casks
+        };
+        taps  = [ "homebrew/core" "homebrew/cask" "tw93/tap" ];
         brews = [
           "mas"
           "emacs-plus@30"
           "aspell"
           "xcodes"
           "node"
-          # "pngpaste"
+          "ttfautohint"
+          "pngpaste"
           "lua-language-server"
           "gh"
+					"sing-box"
+					"codex"
+          "ffmpeg"
+          # "yt-dlp"
+          "opencode"
+          "mole"
         ];
         casks = [
           # development
           # "alacritty"
-          "google-chrome"
-          # "orbstack"
+          "thebrowsercompany-dia"
+          "google-chrome@dev"
+					"firefox"
+          "orbstack"
           "visual-studio-code"
-          # "github-copilot-for-xcode"
           "zed"
+          "typora"
           "cursor"
           "ghostty"
           "windows-app"
@@ -88,16 +110,19 @@
           "chatgpt"
           "claude"
           "linearmouse"
+          "bambu-connect"
+          "slack"
           # graphics
           # "gimp"
           "inkscape"
           "figma"
           "zoom"
-          "clop"
           # "blender"
           # game
           "steam"
           # other
+          "transmission"
+          "telegram"
           "logi-options+"
           "mactex"
           "squirrel"
@@ -110,7 +135,6 @@
           "microsoft-office"
           "alt-tab"
           "calibre"
-          "jordanbaird-ice"
           # music
           "lyric-fever"
           "qqmusic"
@@ -118,24 +142,17 @@
           # fonts
           "font-lxgw-wenkai"
           "font-jetbrains-mono-nerd-font"
-          "font-maple-mono"
           "font-maple-mono-nf"
-          "font-maple-mono-cn"
           "font-maple-mono-nf-cn"
           "font-juliamono"
-          "font-libertinus"
-          "font-monaspace-nerd-font"
+          "font-monaspice-nerd-font"
+          "font-zed-mono-nerd-font"
+          "font-zed-sans"
         ];
         masApps = {
+          Shadowrocket = 932747118;
           infuse = 1136220934;
-          # opencat = 6445999201;
-          WeChat = 836500024;
-          WhatsApp = 310633997;
-          RunCat = 1429033973;
         };
-        onActivation.cleanup = "zap";
-        onActivation.autoUpdate = true;
-        onActivation.upgrade = true;
       };
 
       system.primaryUser = "fangyuan";
@@ -143,17 +160,19 @@
         dock.autohide  = true;
         dock.largesize = 64;
         dock.persistent-apps = [
-          # "/System/Applications/Launchpad.app"
-          "/System/Cryptexes/App/System/Applications/Safari.app"
+          # "/System/Cryptexes/App/System/Applications/Safari.app"
+					# "/Applications/Google Chrome.app"
+          "/Applications/Dia.app"
           "/Applications/Ghostty.app"
-          "/opt/homebrew/Cellar/emacs-plus@30/30.1/Emacs.app"
+          "/opt/homebrew/Cellar/emacs-plus@30/30.2/Emacs.app"
           "/System/Applications/Music.app"
           "/Applications/Spotify.app"
-          "/System/Applications/Mail.app"
-          "/System/Applications/Calendar.app"
+          # "/System/Applications/Mail.app"
+          # "/System/Applications/Calendar.app"
           "/Applications/Zotero.app"
-          "/System/Applications/Books.app"
+          # "/System/Applications/Books.app"
           "/Applications/Claude.app"
+					"/Applications/ChatGPT.app"
         ];
         # finder settings
         finder.FXPreferredViewStyle = "clmv";
@@ -213,6 +232,8 @@
         configuration
 	      nix-homebrew.darwinModules.nix-homebrew
         {
+          nixpkgs.overlays = [ claude-code.overlays.default ];
+
           nix-homebrew = {
             enable = true;
             # Apple Silicon Only
@@ -220,11 +241,12 @@
             enableRosetta = true;
             # User owning the Homebrew prefix
             user = "fangyuan";
-	    taps = {
-	      "d12frosted/homebrew-emacs-plus" = homebrew-emacsplus;
-	      "homebrew/homebrew-core" = homebrew-core;
-	      "homebrew/homebrew-cask" = homebrew-cask;
-	    };
+	          taps = {
+	            "d12frosted/homebrew-emacs-plus" = homebrew-emacsplus;
+	            "homebrew/homebrew-core" = homebrew-core;
+	            "homebrew/homebrew-cask" = homebrew-cask;
+	            "tw93/homebrew-tap" = homebrew-tw93;
+	          };
           };
         }
       ];

@@ -14,30 +14,25 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Plugin setup
 require("lazy").setup({
-  -- Colorscheme
+  -- Colorscheme (Atom One Dark)
   {
-    "folke/tokyonight.nvim",
+    "navarasu/onedark.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      require("tokyonight").setup({
-        style = "night", -- The theme comes in four styles: storm, moon, night, day
-        light_style = "day",
+      require("onedark").setup({
+        style = "dark", -- dark, darker, cool, deep, warm, warmer
         transparent = false,
-        terminal_colors = true,
-        styles = {
-          comments = { italic = true },
-          keywords = { italic = true },
-          functions = {},
-          variables = {},
+        term_colors = true,
+        code_style = {
+          comments = "italic",
+          keywords = "italic",
+          functions = "none",
+          strings = "none",
+          variables = "none",
         },
-        sidebars = { "qf", "help" },
-        day_brightness = 0.3,
-        hide_inactive_statusline = false,
-        dim_inactive = false,
-        lualine_bold = false,
       })
-      vim.cmd[[colorscheme tokyonight]]
+      require("onedark").load()
     end,
   },
   

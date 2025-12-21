@@ -67,14 +67,12 @@ require("lazy").setup({
     end,
   },
   
-  -- LSP
+  -- LSP (Neovim 0.11+ native config)
   {
     "neovim/nvim-lspconfig",
     config = function()
-      local lspconfig = require("lspconfig")
-      
-      -- Python LSP
-      lspconfig.pyright.setup{}
+      -- ty: Astral's Python type checker and language server
+      vim.lsp.enable("ty")
     end,
   },
   
@@ -184,6 +182,30 @@ require("lazy").setup({
           open_file = {
             quit_on_open = false,
           },
+        },
+      })
+    end,
+  },
+
+  -- Statusline
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("lualine").setup({
+        options = {
+          theme = "onedark",
+          section_separators = { left = "", right = "" },
+          component_separators = { left = "", right = "" },
+          globalstatus = true,
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = { "branch", "diff" },
+          lualine_c = { "filename" },
+          lualine_x = { "diagnostics", "filetype" },
+          lualine_y = { "location" },
+          lualine_z = { "progress" },
         },
       })
     end,

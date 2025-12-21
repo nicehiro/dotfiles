@@ -11,7 +11,3 @@ vim.o.ignorecase = true
 vim.o.hlsearch = false
 vim.o.incsearch = true
 vim.o.showmatch = true
-
--- Status line
-vim.o.laststatus = 2
-vim.o.statusline = "%f %m %r %h %w %= %y [%l,%c] %p%%"

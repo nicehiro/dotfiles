@@ -1,9 +1,9 @@
-font-family = JuliaMono
+font-family = Input Mono
 font-size = 16
-# theme = light:Catppuccin Latte,dark:tokyonight
-theme = Atom One Dark
+theme = light:Atom One Light,dark:Atom One Dark
+# theme = Atom One Dark
 keybind = shift+enter=text:\n
-background-opacity = 0.8
+background-opacity = 1.0
 background-opacity-cells = true
 background-blur = true
 alpha-blending = native

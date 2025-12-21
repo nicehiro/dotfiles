@@ -91,6 +91,7 @@
           # "yt-dlp"
           "opencode"
           "mole"
+          "ty"
         ];
         casks = [
           # development
@@ -107,7 +108,7 @@
           "windows-app"
           "wakatime"
           "chatwise"
-          "chatgpt"
+          # "chatgpt"
           "claude"
           "linearmouse"
           "bambu-connect"
@@ -148,6 +149,7 @@
           "font-monaspice-nerd-font"
           "font-zed-mono-nerd-font"
           "font-zed-sans"
+          "font-literata"
         ];
         masApps = {
           Shadowrocket = 932747118;
@@ -172,7 +174,7 @@
           "/Applications/Zotero.app"
           # "/System/Applications/Books.app"
           "/Applications/Claude.app"
-					"/Applications/ChatGPT.app"
+					# "/Applications/ChatGPT.app"
         ];
         # finder settings
         finder.FXPreferredViewStyle = "clmv";

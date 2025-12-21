@@ -12,7 +12,6 @@ Complete minimal Neovim setup with essential development features in `init.lua`.
 - Line numbers, 2-space indentation
 - Smart case-insensitive search with incremental search
 - Bracket matching and auto-save on focus loss
-- Custom status line showing file info and position
 
 ### Key Mappings
 - Leader key: `<Space>`
@@ -21,17 +20,20 @@ Complete minimal Neovim setup with essential development features in `init.lua`.
 - LSP: `gd` (definition), `K` (hover), `<leader>rn` (rename), `<leader>ca` (code actions)
 - Terminal: `<C-\>` (toggle floating terminal)
 
-### Plugins (8 total)
+### Plugins (13 total)
 1. **lazy.nvim** - Plugin manager
-2. **telescope.nvim** - Fuzzy finder and file navigation
-3. **nvim-treesitter** - Syntax highlighting
-4. **nvim-autopairs** - Auto-close brackets/quotes
-5. **nvim-lspconfig** - Language server integration (Lua + Python)
-6. **nvim-cmp** - Code completion with LSP/buffer/path sources
-7. **gitsigns.nvim** - Git status indicators in gutter
-8. **indent-blankline.nvim** - Visual indent guides
-9. **which-key.nvim** - Keybinding discovery
-10. **toggleterm.nvim** - Floating terminal integration
+2. **onedark.nvim** - Atom One Dark colorscheme
+3. **telescope.nvim** - Fuzzy finder and file navigation
+4. **nvim-treesitter** - Syntax highlighting
+5. **nvim-autopairs** - Auto-close brackets/quotes
+6. **nvim-lspconfig** - Language server integration (Python)
+7. **nvim-cmp** - Code completion with LSP/buffer/path sources
+8. **gitsigns.nvim** - Git status indicators in gutter
+9. **indent-blankline.nvim** - Visual indent guides
+10. **which-key.nvim** - Keybinding discovery
+11. **nvim-tree.lua** - File tree explorer
+12. **lualine.nvim** - Statusline with rounded separators
+13. **toggleterm.nvim** - Floating terminal integration
 
 ### Language Support
 - **Lua**: lua_ls language server (install: `brew install lua-language-server`)

@@ -1,0 +1,16 @@
+# Rime default settings customization
+# encoding: utf-8
+
+patch:
+  # Only use Xiaohe double pinyin
+  schema_list:
+    - schema: double_pinyin_flypy
+
+  # Candidate count per page
+  menu/page_size: 9
+
+  # Remember these options across sessions (via schema switcher, not hotkeys)
+  switcher/save_options:
+    - ascii_punct
+    - traditionalization
+    - emoji

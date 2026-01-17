@@ -1,0 +1,58 @@
+# Squirrel (macOS) customization
+# encoding: utf-8
+
+patch:
+  # Notification behavior
+  show_notifications_when: appropriate
+
+  # Auto light/dark theme switching
+  style/color_scheme: atom_one_light
+  style/color_scheme_dark: atom_one_dark
+
+  # Modern, clean appearance
+  style/candidate_list_layout: linear
+  style/inline_preedit: true
+  style/corner_radius: 6
+  style/hilited_corner_radius: 4
+  style/border_width: 0
+  style/border_height: 0
+  style/line_spacing: 5
+  style/spacing: 10
+  style/font_point: 16
+  style/label_font_point: 14
+
+  # Atom One color schemes
+  preset_color_schemes:
+    atom_one_light:
+      name: "Atom One Light"
+      author: "Atom/GitHub"
+      color_space: srgb
+      back_color: 0xFAFAFA
+      border_color: 0xDCDBDB
+      preedit_back_color: 0xFAFAFA
+      text_color: 0xA7A1A0
+      hilited_text_color: 0x423A38
+      candidate_text_color: 0x423A38
+      hilited_candidate_text_color: 0xFFFFFF
+      hilited_candidate_back_color: 0xFF6F52
+      label_color: 0xA7A1A0
+      hilited_candidate_label_color: 0xFFFFFF
+      comment_text_color: 0xA7A1A0
+      hilited_comment_text_color: 0xE6E5E5
+
+    atom_one_dark:
+      name: "Atom One Dark"
+      author: "Atom/GitHub"
+      color_space: srgb
+      back_color: 0x342C28
+      border_color: 0x1F1A18
+      preedit_back_color: 0x342C28
+      text_color: 0x70635C
+      hilited_text_color: 0xBFB2AB
+      candidate_text_color: 0xBFB2AB
+      hilited_candidate_text_color: 0xFFFFFF
+      hilited_candidate_back_color: 0xFF8B52
+      label_color: 0x70635C
+      hilited_candidate_label_color: 0xFFFFFF
+      comment_text_color: 0x70635C
+      hilited_comment_text_color: 0xBFB2AB

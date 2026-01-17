@@ -6,3 +6,16 @@ yt-dlp/
 *.bak
 node_modules/
 bun.lock
+.DS_Store
+
+# Mole (generated)
+.config/mole/mole.log
+.config/mole/clean-list.txt
+
+# OpenCode (backups)
+.config/opencode/*.bak.*
+
+# Rime (generated / user state)
+.config/rime/build/
+.config/rime/*.userdb
+.config/rime/user.yaml

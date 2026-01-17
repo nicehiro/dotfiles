@@ -1,46 +1,95 @@
 {
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.2",
   "schemes" : [
     {
-      "scrolling" : {
-        "reverse" : {
-          "vertical" : true
-        },
-        "acceleration" : {
-          "vertical" : 2
-        },
-        "speed" : {
-          "vertical" : 5
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0xa09f",
+          "productName" : "USB Gaming Mouse",
+          "vendorID" : "0x4d9"
         }
       },
       "pointer" : {
         "acceleration" : 1,
         "speed" : 0.2
       },
-      "if" : {
-        "device" : {
-          "category" : "mouse",
-          "vendorID" : "0x4d9",
-          "productID" : "0xa09f",
-          "productName" : "USB Gaming Mouse"
+      "scrolling" : {
+        "acceleration" : {
+          "vertical" : 2
+        },
+        "reverse" : {
+          "vertical" : true
+        },
+        "speed" : {
+          "vertical" : 5
         }
       }
     },
     {
+      "if" : {
+        "device" : {
+          "category" : "trackpad",
+          "productID" : "0x0",
+          "productName" : "Apple Internal Keyboard \/ Trackpad",
+          "vendorID" : "0x0"
+        }
+      },
       "scrolling" : {
         "acceleration" : {
           "vertical" : 1
         }
-      },
-      "if" : {
-        "device" : {
-          "productName" : "Apple Internal Keyboard \/ Trackpad",
-          "vendorID" : "0x0",
-          "category" : "trackpad",
-          "productID" : "0x0"
-        }
       }
     },
     {
+      "buttons" : {
+        "mappings" : [
+          {
+            "action" : "media.previous",
+            "button" : 3,
+            "command" : false,
+            "control" : false,
+            "option" : false,
+            "shift" : false
+          },
+          {
+            "action" : "media.next",
+            "button" : 4,
+            "command" : false,
+            "control" : false,
+            "option" : false,
+            "shift" : false
+          },
+          {
+            "action" : "media.volumeDown",
+            "command" : false,
+            "control" : false,
+            "option" : false,
+            "scroll" : "left",
+            "shift" : false
+          },
+          {
+            "action" : "media.volumeUp",
+            "command" : false,
+            "control" : false,
+            "option" : false,
+            "scroll" : "right",
+            "shift" : false
+          }
+        ]
+      },
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0xb023",
+          "productName" : "MX Master 3",
+          "serialNumber" : "A491D00E994AA1BB",
+          "vendorID" : "0x46d"
+        }
+      },
+      "pointer" : {
+        "speed" : 0.25
+      },
       "scrolling" : {
         "acceleration" : {
           "vertical" : 1
@@ -48,17 +97,7 @@
         "reverse" : {
           "vertical" : true
         }
-      },
-      "if" : {
-        "device" : {
-          "productName" : "MX Master 3",
-          "productID" : "0xb023",
-          "serialNumber" : "A491D00E994AA1BB",
-          "category" : "mouse",
-          "vendorID" : "0x46d"
-        }
       }
     }
-  ],
-  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.0"
+  ]
 }

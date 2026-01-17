@@ -92,26 +92,30 @@
           "opencode"
           "mole"
           "ty"
+          "cocoapods"
         ];
         casks = [
           # development
           # "alacritty"
           "thebrowsercompany-dia"
           "google-chrome@dev"
-					"firefox"
+					# "firefox"
           "orbstack"
           "visual-studio-code"
           "zed"
           "typora"
-          "cursor"
+          # "cursor"
           "ghostty"
+          "kitty"
           "windows-app"
           "wakatime"
-          "chatwise"
-          # "chatgpt"
+          # "chatwise"
+          # "alma"
+          "chatgpt"
           "claude"
+          # "conductor"
           "linearmouse"
-          "bambu-connect"
+          # "bambu-connect"
           "slack"
           # graphics
           # "gimp"
@@ -122,11 +126,11 @@
           # game
           "steam"
           # other
-          "transmission"
+          # "transmission"
           "telegram"
-          "logi-options+"
+          # "logi-options+"
           "mactex"
-          "squirrel"
+          "squirrel-app"
           "iina"
           "the-unarchiver"
           "zotero"
@@ -138,7 +142,7 @@
           "calibre"
           # music
           "lyric-fever"
-          "qqmusic"
+          # "qqmusic"
           "spotify"
           # fonts
           "font-lxgw-wenkai"
@@ -162,17 +166,12 @@
         dock.autohide  = true;
         dock.largesize = 64;
         dock.persistent-apps = [
-          # "/System/Cryptexes/App/System/Applications/Safari.app"
-					# "/Applications/Google Chrome.app"
           "/Applications/Dia.app"
           "/Applications/Ghostty.app"
+          "/Applications/OpenCode.app"
           "/opt/homebrew/Cellar/emacs-plus@30/30.2/Emacs.app"
-          "/System/Applications/Music.app"
           "/Applications/Spotify.app"
-          # "/System/Applications/Mail.app"
-          # "/System/Applications/Calendar.app"
           "/Applications/Zotero.app"
-          # "/System/Applications/Books.app"
           "/Applications/Claude.app"
 					# "/Applications/ChatGPT.app"
         ];

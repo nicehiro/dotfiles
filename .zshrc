@@ -18,6 +18,10 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 # Add in zsh plugins
+# Autosuggestions: style the inline "ghost text" so it's readable.
+# (This is the suggestion you see without pressing Tab.)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#5c6370'
+
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
@@ -58,9 +62,24 @@ setopt hist_ignore_dups
 setopt hist_find_no_dups
 
 # Completion styling
+# Enable colored completion listings (needed for "menu select" to be readable).
+zmodload -i zsh/complist 2>/dev/null || true
+
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
+
+# If you have LS_COLORS from elsewhere, use it. Otherwise enable the zsh defaults
+# by setting an empty value (per zshmodules/zshcompsys docs).
+if [[ -n "${LS_COLORS:-}" ]]; then
+  zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}"
+else
+  zstyle ':completion:*:default' list-colors ''
+fi
+
+# Make the completion menu actually visible.
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-prompt '%S%M matches%s'
+zstyle ':completion:*' select-prompt '%SScrolling: current selection at %p%s'
+
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
 # Aliases

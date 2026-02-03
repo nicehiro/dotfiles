@@ -22,7 +22,7 @@ require("lazy").setup({
     config = function()
       require("onedark").setup({
         style = "dark", -- dark, darker, cool, deep, warm, warmer
-        transparent = false,
+        transparent = true,
         term_colors = true,
         code_style = {
           comments = "italic",

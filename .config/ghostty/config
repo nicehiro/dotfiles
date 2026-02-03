@@ -1,18 +1,24 @@
-shell-integration-features = ssh-terminfo,ssh-env
+shell-integration-features = ssh-terminfo,ssh-env,sudo,no-title
 
 font-family = Input Mono
 font-size = 16
 # theme = light:Atom One Light,dark:Atom One Dark
 theme = Atom One Dark
+cursor-style = block
+adjust-cell-height = 35%
+
+mouse-hide-while-typing = true
+mouse-scroll-multiplier = 2
+
 keybind = shift+enter=text:\n
-background-opacity = 1.0
+background-opacity = 0.8
 background-opacity-cells = true
 background-blur = true
 alpha-blending = native
 
 window-padding-balance = true
-window-padding-x = 1
-window-padding-y = 0
+window-padding-x = 20
+window-padding-y = 10
+window-save-state = always
 
 macos-titlebar-style = tabs
-

@@ -1,7 +1,7 @@
 ---
 description: Simulate rigorous peer review to find weaknesses before submission
 mode: subagent
-model: anthropic/claude-opus-4-5
+model: openai/gpt-5.2
 temperature: 0.4
 tools:
   write: true

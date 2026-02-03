@@ -65,6 +65,8 @@
           pkgs.starship
           pkgs.android-tools
           pkgs.claude-code
+          pkgs.codex
+          pkgs.opencode
         ];
 
       homebrew = {
@@ -86,49 +88,35 @@
           "lua-language-server"
           "gh"
 					"sing-box"
-					"codex"
           "ffmpeg"
           # "yt-dlp"
-          "opencode"
           "mole"
           "ty"
           "cocoapods"
+          "librime"
+          "poppler"
         ];
         casks = [
-          # development
-          # "alacritty"
           "thebrowsercompany-dia"
           "google-chrome@dev"
-					# "firefox"
+          "tailscale-app"
+          "opencode-desktop"
           "orbstack"
           "visual-studio-code"
           "zed"
-          "typora"
-          # "cursor"
           "ghostty"
-          "kitty"
           "windows-app"
           "wakatime"
-          # "chatwise"
-          # "alma"
           "chatgpt"
           "claude"
-          # "conductor"
+          "conductor"
           "linearmouse"
-          # "bambu-connect"
-          "slack"
-          # graphics
-          # "gimp"
           "inkscape"
           "figma"
           "zoom"
           # "blender"
-          # game
           "steam"
-          # other
-          # "transmission"
           "telegram"
-          # "logi-options+"
           "mactex"
           "squirrel-app"
           "iina"
@@ -140,9 +128,7 @@
           "microsoft-office"
           "alt-tab"
           "calibre"
-          # music
           "lyric-fever"
-          # "qqmusic"
           "spotify"
           # fonts
           "font-lxgw-wenkai"

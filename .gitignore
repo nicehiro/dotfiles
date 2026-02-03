@@ -20,6 +20,11 @@ bun.lock
 .config/rime/*.userdb
 .config/rime/user.yaml
 
+# emacs-rime (generated / user state)
+.config/emacs-rime/build/
+.config/emacs-rime/installation.yaml
+.config/emacs-rime/user.yaml
+
 # Claude Code - exclude sensitive/generated content
 .claude/settings.local.json
 .claude/history.jsonl

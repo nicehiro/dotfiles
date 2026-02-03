@@ -1,0 +1,8 @@
+# encoding: utf-8
+# emacs-rime configuration - Xiaohe double pinyin only
+
+patch:
+  schema_list:
+    - schema: double_pinyin_flypy
+
+  menu/page_size: 9

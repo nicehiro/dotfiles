@@ -1,0 +1,22 @@
+# Auto-generated data (400MB+)
+cache/
+debug/
+file-history/
+ide/
+plans/
+plugins/
+projects/
+session-env/
+shell-snapshots/
+statsig/
+telemetry/
+todos/
+transcripts/
+
+# Auto-generated files
+history.jsonl
+stats-cache.json
+
+# Keep these tracked:
+# settings.json
+# statusline.sh

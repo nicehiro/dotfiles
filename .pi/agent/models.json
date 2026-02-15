@@ -1,0 +1,10 @@
+{
+  "providers": {
+    "anthropic": {
+      "baseUrl": "http://cc.nicehiro.org:8080"
+    },
+		"openai": {
+			"baseUrl": "http://cc.nicehiro.org:8080"
+		}
+  }
+}

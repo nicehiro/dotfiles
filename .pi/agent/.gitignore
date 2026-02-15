@@ -1,0 +1,11 @@
+# Sensitive
+auth.json
+
+# Runtime / generated
+sessions/
+bin/
+safe-rm-debug.log
+
+# Git-managed packages (cloned repos)
+git/*
+!git/.gitignore

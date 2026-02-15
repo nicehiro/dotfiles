@@ -1,0 +1,25 @@
+{
+  "theme": "dark-transparent",
+  "lastChangelogVersion": "0.52.12",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-4-6",
+  "hideThinkingBlock": false,
+  "defaultThinkingLevel": "high",
+  "safeGit": {
+    "enabledByDefault": true,
+    "promptLevel": "medium"
+  },
+  "enableSkillCommands": true,
+  "skills": [
+    "~/.codex/skills"
+  ],
+  "packages": [
+    "https://github.com/qualisero/rhubarb-pi"
+  ],
+  "enabledModels": [
+    "anthropic/claude-opus-4-6",
+    "openai/gpt-5.2",
+    "openai/gpt-5.3-codex",
+    "openai/gpt-5.3-codex-spark"
+  ]
+}

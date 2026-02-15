@@ -44,3 +44,12 @@ bun.lock
 .claude/telemetry/
 .claude/todos/
 .claude/transcripts/
+
+# Pi - exclude sensitive/generated content
+.pi/safe-rm-debug.log
+.pi/.pi/
+.pi/agent/auth.json
+.pi/agent/bin/
+.pi/agent/sessions/
+.pi/agent/git/*
+!.pi/agent/git/.gitignore

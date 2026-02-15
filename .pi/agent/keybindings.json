@@ -1,0 +1,9 @@
+{
+  "cursorUp": ["up", "ctrl+p"],
+  "cursorDown": ["down", "ctrl+n"],
+  "selectUp": ["up", "ctrl+p"],
+  "selectDown": ["down", "ctrl+n"],
+  "cycleModelForward": ["ctrl+shift+p"],
+  "cycleModelBackward": ["ctrl+shift+alt+p"],
+  "toggleSessionNamedFilter": ["ctrl+shift+n"]
+}

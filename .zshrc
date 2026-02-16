@@ -98,6 +98,8 @@ export FZF_DEFAULT_OPTS=" \
 --color=selected-bg:#51576d \
 --multi"
 
+export EDITOR=nvim
+
 # mactex bin
 # export PATH=$PATH:/Library/TeX/texbin
 export PATH=$PATH:/usr/local/texlive/2025/bin/universal-darwin/
@@ -110,7 +112,8 @@ if [[ -f ~/Documents/keys/claude.key ]]; then
     source ~/Documents/keys/claude.key
 fi
 
-# gemini
-if [[ -f ~/Documents/keys/gemini.key ]]; then
-    source ~/Documents/keys/gemini.key
+# cc
+if [[ -f ~/Documents/keys/openai.key ]]; then
+    source ~/Documents/keys/openai.key
 fi
+

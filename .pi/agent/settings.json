@@ -13,9 +13,6 @@
   "skills": [
     "~/.codex/skills"
   ],
-  "packages": [
-    "https://github.com/qualisero/rhubarb-pi"
-  ],
   "enabledModels": [
     "anthropic/claude-opus-4-6",
     "openai/gpt-5.2",

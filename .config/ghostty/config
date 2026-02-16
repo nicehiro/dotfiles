@@ -1,6 +1,6 @@
 shell-integration-features = ssh-terminfo,ssh-env,sudo,no-title
 
-font-family = Input Mono
+font-family = Maple Mono NF
 font-size = 16
 # theme = light:Atom One Light,dark:Atom One Dark
 theme = Atom One Dark
@@ -11,7 +11,7 @@ mouse-hide-while-typing = true
 mouse-scroll-multiplier = 2
 
 keybind = shift+enter=text:\n
-background-opacity = 0.8
+background-opacity = 0.85
 background-opacity-cells = true
 background-blur = true
 alpha-blending = native

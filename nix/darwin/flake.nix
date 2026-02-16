@@ -65,8 +65,8 @@
           pkgs.starship
           pkgs.android-tools
           pkgs.claude-code
-          pkgs.codex
           pkgs.opencode
+          pkgs.ripgrep
         ];
 
       homebrew = {
@@ -79,7 +79,6 @@
         taps  = [ "homebrew/core" "homebrew/cask" "tw93/tap" ];
         brews = [
           "mas"
-          "emacs-plus@30"
           "aspell"
           "xcodes"
           "node"
@@ -95,8 +94,19 @@
           "cocoapods"
           "librime"
           "poppler"
+					"jpeg"
+					"gcc"
+					"gdk-pixbuf"
+					"isl"
+					"libgccjit"
+					"libmpc"
+					"librsvg"
+					"mpfr"
+					"tree-sitter"
+					"zlib"
         ];
         casks = [
+					"emacs-plus-app@master"
           "thebrowsercompany-dia"
           "google-chrome@dev"
           "tailscale-app"
@@ -108,12 +118,16 @@
           "windows-app"
           "wakatime"
           "chatgpt"
+          "codex"
+          "codex-app"
           "claude"
           "conductor"
+          "commander"
           "linearmouse"
           "inkscape"
           "figma"
           "zoom"
+          "netnewswire"
           # "blender"
           "steam"
           "telegram"
@@ -140,6 +154,10 @@
           "font-zed-mono-nerd-font"
           "font-zed-sans"
           "font-literata"
+          "font-libre-baskerville"
+          "font-source-serif-4"
+          "font-geist"
+          "font-geist-mono-nerd-font"
         ];
         masApps = {
           Shadowrocket = 932747118;
@@ -154,12 +172,10 @@
         dock.persistent-apps = [
           "/Applications/Dia.app"
           "/Applications/Ghostty.app"
-          "/Applications/OpenCode.app"
-          "/opt/homebrew/Cellar/emacs-plus@30/30.2/Emacs.app"
+					"/Applications/Emacs.app"
+          "/Applications/Figma.app"
           "/Applications/Spotify.app"
           "/Applications/Zotero.app"
-          "/Applications/Claude.app"
-					# "/Applications/ChatGPT.app"
         ];
         # finder settings
         finder.FXPreferredViewStyle = "clmv";

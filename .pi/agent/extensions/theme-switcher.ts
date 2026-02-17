@@ -1,4 +1,20 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { homedir } from "node:os";
+
+function saveThemeToSettings(themeName: string): boolean {
+	const settingsPath = join(homedir(), ".pi", "agent", "settings.json");
+	let settings: Record<string, unknown> = {};
+	try {
+		settings = JSON.parse(readFileSync(settingsPath, "utf-8"));
+	} catch (e: any) {
+		if (e?.code !== "ENOENT") return false;
+	}
+	settings.theme = themeName;
+	writeFileSync(settingsPath, JSON.stringify(settings, null, "  ") + "\n");
+	return true;
+}
 
 export default function (pi: ExtensionAPI) {
 	pi.registerCommand("theme", {
@@ -16,7 +32,11 @@ export default function (pi: ExtensionAPI) {
 			if (args.trim()) {
 				const result = ctx.ui.setTheme(args.trim());
 				if (result.success) {
-					ctx.ui.notify(`Theme: ${args.trim()}`, "success");
+					if (!saveThemeToSettings(args.trim())) {
+						ctx.ui.notify(`Theme: ${args.trim()} (failed to save)`, "warning");
+					} else {
+						ctx.ui.notify(`Theme: ${args.trim()}`, "success");
+					}
 				} else {
 					ctx.ui.notify(result.error ?? "Failed to set theme", "error");
 				}
@@ -33,7 +53,11 @@ export default function (pi: ExtensionAPI) {
 			const themeName = selected.replace(" (current)", "");
 			const result = ctx.ui.setTheme(themeName);
 			if (result.success) {
-				ctx.ui.notify(`Theme: ${themeName}`, "success");
+				if (!saveThemeToSettings(themeName)) {
+					ctx.ui.notify(`Theme: ${themeName} (failed to save)`, "warning");
+				} else {
+					ctx.ui.notify(`Theme: ${themeName}`, "success");
+				}
 			} else {
 				ctx.ui.notify(result.error ?? "Failed to set theme", "error");
 			}

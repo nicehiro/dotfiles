@@ -52,7 +52,7 @@
 		"mdLink": "blue",
 		"mdLinkUrl": "commentGray",
 		"mdCode": "cyan",
-		"mdCodeBlock": "green",
+		"mdCodeBlock": "purple",
 		"mdCodeBlockBorder": "darkGray",
 		"mdQuote": "commentGray",
 		"mdQuoteBorder": "darkGray",

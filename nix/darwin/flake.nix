@@ -104,6 +104,7 @@
 					"mpfr"
 					"tree-sitter"
 					"zlib"
+					"rustup"
         ];
         casks = [
 					"emacs-plus-app@master"

@@ -52,4 +52,4 @@ bun.lock
 .pi/agent/bin/
 .pi/agent/sessions/
 .pi/agent/git/*
-!.pi/agent/git/.gitignore
+!.pi/agent/git/.gitignore.config/fish/fish_variables

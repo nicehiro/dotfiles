@@ -12,6 +12,11 @@
       "modelId": "claude-opus-4-6",
       "thinkingLevel": "off"
     },
+    "research": {
+      "provider": "openai",
+      "modelId": "gpt-5.3-codex",
+      "thinkingLevel": "xhigh"
+    },
     "oracle": {
       "provider": "openai",
       "modelId": "gpt-5.3-codex",

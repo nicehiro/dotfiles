@@ -1,0 +1,11 @@
+{
+  "name": "pi-extension-arxiv",
+  "private": true,
+  "type": "module",
+  "pi": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.2.0"
+  }
+}

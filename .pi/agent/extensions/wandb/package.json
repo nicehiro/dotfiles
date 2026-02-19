@@ -1,0 +1,8 @@
+{
+  "name": "pi-extension-wandb",
+  "private": true,
+  "type": "module",
+  "pi": {
+    "extensions": ["./index.ts"]
+  }
+}

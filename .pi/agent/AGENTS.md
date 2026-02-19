@@ -4,6 +4,16 @@
 
 PhD student in robotics. Research areas: reinforcement learning, vision-language-action models, large language models, diffusion models, and other learning related or AI related.
 
+## Research Stack
+
+- **Framework**: PyTorch
+- **Experiment tracking**: Weights & Biases (W&B)
+- **Compute**: Remote HPC cluster
+- **Paper management**: Zotero + Better-BibTeX → `~/Documents/roam/library.bib` → Citar/Org-Roam in Emacs
+- **Paper discovery**: FreshRSS → Emacs Elfeed with elfeed-score (`~/.config/emacs/elfeed.score`)
+- **Paper writing**: LaTeX in Emacs (AUCTeX + cdlatex + reftex + yasnippet)
+- **Target venues**: NeurIPS, ICML, ICLR, CoRL (conferences); TRO, TASE, RAL (journals)
+
 ## Languages & Tools
 
 - **Research**: Python (primary), LaTeX for papers

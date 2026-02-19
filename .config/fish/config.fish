@@ -43,6 +43,9 @@ if status is-interactive
     if test -f ~/Documents/keys/openai.fish.key
         source ~/Documents/keys/openai.fish.key
     end
+    if test -f ~/Documents/keys/wandb.fish.key
+        source ~/Documents/keys/wandb.fish.key
+    end
 
     # Starship prompt
     starship init fish | source

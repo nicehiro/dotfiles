@@ -161,6 +161,7 @@
           "font-source-serif-4"
           "font-geist"
           "font-geist-mono-nerd-font"
+          "font-iosevka-etoile"
         ];
         masApps = {
           Shadowrocket = 932747118;
@@ -174,7 +175,7 @@
         dock.largesize = 64;
         dock.persistent-apps = [
           "/Applications/Dia.app"
-          "/Applications/Ghostty.app"
+          "/Applications/WezTerm.app/"
 					"/Applications/Emacs.app"
           "/Applications/Figma.app"
           "/Applications/Spotify.app"

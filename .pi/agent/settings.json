@@ -1,6 +1,6 @@
 {
-  "theme": "nightowl",
-  "lastChangelogVersion": "0.53.0",
+  "theme": "zed-one-dark",
+  "lastChangelogVersion": "0.55.0",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-4-6",
   "hideThinkingBlock": false,

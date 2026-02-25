@@ -1,7 +1,7 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
-config.font = wezterm.font("Maple Mono NF")
+config.font = wezterm.font("GeistMono Nerd Font")
 config.font_size = 16
 config.line_height = 1.2
 
@@ -15,13 +15,13 @@ config.initial_rows = 34
 config.initial_cols = 97
 
 config.window_padding = {
-  left = 20,
-  right = 20,
-  top = 60,
-  bottom = 10,
+  left = 40,
+  right = 40,
+  top = 40,
+  bottom = 40,
 }
 
-config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false

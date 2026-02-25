@@ -32,6 +32,22 @@ curl -s "http://export.arxiv.org/api/query?search_query=cat:cs.RO+AND+all:manipu
 
 Relevant categories: cs.RO (robotics), cs.LG (machine learning), cs.CV (computer vision), cs.AI (AI)
 
+### Zotero Library (via `zotero` tool)
+
+The user's Zotero library is accessible through the `zotero` custom tool (requires Zotero + Better BibTeX running). Use this to:
+- Check if papers are already in the library before recommending them
+- Retrieve existing cite keys for papers the user already has
+- Get BibTeX entries in the user's preferred format (Better BibTeX)
+- Access PDF annotations and notes on papers
+
+Actions:
+- `zotero(action="search", query="...")` — search the library
+- `zotero(action="cite", citekeys=["key1", "key2"])` — get BibTeX entries
+- `zotero(action="details", citekeys=["key1"])` — get full metadata, notes, and annotations
+- `zotero(action="collections", citekeys=["key1"])` — get collection membership
+
+Falls back to searching the local BibTeX file (`~/Documents/roam/library.bib`) when Zotero is offline.
+
 ## Workflow
 
 ### 1. Scope Definition
@@ -42,25 +58,33 @@ Clarify before searching:
 - Target venues?
 - Known seed papers to start from?
 
-### 2. Search Execution
+### 2. Library Check
+
+Before external search, check what the user already has:
+- Use `zotero(action="search", query="...")` with the topic keywords
+- Note which relevant papers are already in the library (with their cite keys)
+- This avoids recommending papers the user already knows and provides ready-to-use cite keys
+
+### 3. Search Execution
 
 Run searches via bash using the APIs above:
 - Use multiple query variations to catch different terminology
 - Filter by citation count for influential papers
 - Check both Semantic Scholar (broader coverage) and arXiv (recent preprints)
+- Cross-reference results with Zotero to flag papers already in the library
 
-### 3. Paper Synthesis
+### 4. Paper Synthesis
 
 For each relevant paper, extract into a table:
 
-| Paper | Year | Venue | Key Contribution | Method | Results | Limitations |
-|-------|------|-------|------------------|--------|---------|-------------|
+| Paper | Year | Venue | Key Contribution | Method | Results | Limitations | In Library? |
+|-------|------|-------|------------------|--------|---------|-------------|-------------|
 
-### 4. Thematic Grouping
+### 5. Thematic Grouping
 
 Organize papers by approach or theme, not chronologically. Each group gets a paragraph explaining the line of work, common techniques, strengths, and where it falls short.
 
-### 5. Gap Analysis
+### 6. Gap Analysis
 
 Based on the literature:
 - What problems remain unsolved?
@@ -68,9 +92,11 @@ Based on the literature:
 - What assumptions are commonly made but rarely questioned?
 - What combinations haven't been tried?
 
-### 6. BibTeX Generation
+### 7. BibTeX Generation
 
-Provide BibTeX entries for all cited papers:
+For papers already in the user's Zotero library, use `zotero(action="cite", citekeys=[...])` to get BibTeX in their preferred Better BibTeX format.
+
+For new papers not in the library, provide BibTeX entries:
 ```bibtex
 @inproceedings{author2024title,
   title={Paper Title},

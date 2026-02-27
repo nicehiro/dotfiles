@@ -46,7 +46,11 @@ if status is-interactive
     if test -f ~/Documents/keys/wandb.fish.key
         source ~/Documents/keys/wandb.fish.key
     end
+    if test -f ~/Documents/keys/brave.fish.key
+        source ~/Documents/keys/brave.fish.key
+    end
 
     # Starship prompt
     starship init fish | source
 end
+

@@ -1,7 +1,21 @@
 {
-  "name": "pi-extension-wandb",
-  "private": true,
+  "name": "pi-wandb",
+  "version": "0.1.0",
+  "description": "Weights & Biases run tracking and metric history tools for pi",
   "type": "module",
+  "keywords": ["pi-package"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pufanyi/dotfiles",
+    "directory": ".pi/agent/extensions/wandb"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-tui": "*",
+    "@sinclair/typebox": "*"
+  },
   "pi": {
     "extensions": ["./index.ts"]
   }

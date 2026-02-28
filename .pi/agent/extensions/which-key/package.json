@@ -1,23 +1,18 @@
 {
-  "name": "pi-arxiv",
+  "name": "pi-which-key",
   "version": "0.1.0",
-  "description": "arXiv paper search and lookup tools for pi",
+  "description": "Searchable keybinding cheatsheet panel for pi (Ctrl+/ or /which-key)",
   "type": "module",
   "keywords": ["pi-package"],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/pufanyi/dotfiles",
-    "directory": ".pi/agent/extensions/arxiv"
+    "directory": ".pi/agent/extensions/which-key"
   },
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "*",
-    "@mariozechner/pi-ai": "*",
-    "@mariozechner/pi-tui": "*",
-    "@sinclair/typebox": "*"
-  },
-  "dependencies": {
-    "fast-xml-parser": "^5.2.0"
+    "@mariozechner/pi-tui": "*"
   },
   "pi": {
     "extensions": ["./index.ts"]

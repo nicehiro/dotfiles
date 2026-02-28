@@ -1,23 +1,20 @@
 {
-  "name": "pi-arxiv",
+  "name": "pi-zotero",
   "version": "0.1.0",
-  "description": "arXiv paper search and lookup tools for pi",
+  "description": "Zotero library search, citation export, and PDF annotation tools for pi via Better BibTeX",
   "type": "module",
   "keywords": ["pi-package"],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/pufanyi/dotfiles",
-    "directory": ".pi/agent/extensions/arxiv"
+    "directory": ".pi/agent/extensions/zotero"
   },
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "*",
     "@mariozechner/pi-ai": "*",
     "@mariozechner/pi-tui": "*",
     "@sinclair/typebox": "*"
-  },
-  "dependencies": {
-    "fast-xml-parser": "^5.2.0"
   },
   "pi": {
     "extensions": ["./index.ts"]

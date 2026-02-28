@@ -107,6 +107,9 @@ export PATH=$PATH:/usr/local/texlive/2025/bin/universal-darwin/
 # hledger main file
 export LEDGER_FILE=/Users/fangyuan/Documents/account.journal
 
+# Zotero BibTeX fallback
+export BIBTEX_PATH=~/Documents/roam/library.bib
+
 # cc
 if [[ -f ~/Documents/keys/claude.key ]]; then
     source ~/Documents/keys/claude.key

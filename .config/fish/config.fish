@@ -34,6 +34,7 @@ if status is-interactive
     # Environment
     set -gx EDITOR nvim
     set -gx LEDGER_FILE /Users/fangyuan/Documents/account.journal
+    set -gx BIBTEX_PATH ~/Documents/roam/library.bib
     fish_add_path /usr/local/texlive/2025/bin/universal-darwin
 
     # API keys

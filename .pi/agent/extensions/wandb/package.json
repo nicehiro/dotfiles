@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pufanyi/dotfiles",
+    "url": "https://github.com/nicehiro/dotfiles",
     "directory": ".pi/agent/extensions/wandb"
   },
   "peerDependencies": {

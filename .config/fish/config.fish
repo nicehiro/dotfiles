@@ -19,6 +19,7 @@ if status is-interactive
     alias ls 'ls --color'
     alias vim nvim
     alias c clear
+    alias wandb 'uvx wandb'
 
     # fzf
     fzf --fish | source
@@ -35,7 +36,7 @@ if status is-interactive
     set -gx EDITOR nvim
     set -gx LEDGER_FILE /Users/fangyuan/Documents/account.journal
     set -gx BIBTEX_PATH ~/Documents/roam/library.bib
-    fish_add_path /usr/local/texlive/2025/bin/universal-darwin
+    fish_add_path /usr/local/texlive/2026/bin/universal-darwin
 
     # API keys
     if test -f ~/Documents/keys/claude.fish.key

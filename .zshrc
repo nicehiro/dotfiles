@@ -86,6 +86,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 alias ls='ls --color'
 alias vim='nvim'
 alias c='clear'
+alias wandb='uvx wandb'
 
 # Shell integrations
 eval "$(fzf --zsh)"
@@ -102,7 +103,7 @@ export EDITOR=nvim
 
 # mactex bin
 # export PATH=$PATH:/Library/TeX/texbin
-export PATH=$PATH:/usr/local/texlive/2025/bin/universal-darwin/
+export PATH=$PATH:/usr/local/texlive/2026/bin/universal-darwin/
 
 # hledger main file
 export LEDGER_FILE=/Users/fangyuan/Documents/account.journal

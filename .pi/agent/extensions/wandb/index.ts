@@ -3,6 +3,9 @@ import { truncateHead, DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, formatSize } from "
 import { Text } from "@mariozechner/pi-tui";
 import { Type } from "@sinclair/typebox";
 import { StringEnum } from "@mariozechner/pi-ai";
+import { promises as fs } from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 const DEFAULT_BASE_URL = "https://api.wandb.ai";
 
@@ -115,15 +118,70 @@ query RunDetail($entity: String!, $project: String!, $runName: String!) {
 }`;
 
 const HISTORY_QUERY = `
-query RunHistory($entity: String!, $project: String!, $runName: String!, $samples: Int) {
+query RunHistory($entity: String!, $project: String!, $runName: String!, $specs: JSONString!) {
   project(name: $project, entityName: $entity) {
     run(name: $runName) {
       name
       displayName
-      sampledHistory(specs: [{key: "*", samples: $samples}])
+      sampledHistory(specs: $specs)
     }
   }
 }`;
+
+const HISTORY_PY = `import os
+import sys
+import json
+
+os.environ.setdefault("WANDB_SILENT", "true")
+
+import wandb
+
+
+def main() -> None:
+    if len(sys.argv) < 5:
+        print(json.dumps({"error": "usage", "message": "entity project run_id samples [metric ...]"}))
+        return
+
+    entity, project, run_id, samples_str, *metrics = sys.argv[1:]
+    try:
+        samples = int(samples_str)
+    except ValueError:
+        samples = 500
+
+    api = wandb.Api()
+    run = api.run("{}/{}/{}".format(entity, project, run_id))
+    history = run.history(samples=samples, pandas=False)
+
+    # Ensure list
+    if not isinstance(history, list):
+        history = list(history)
+
+    all_keys = set()
+    for row in history:
+        if not isinstance(row, dict):
+            continue
+        for k in row.keys():
+            if not k.startswith("_"):
+                all_keys.add(k)
+
+    result = {
+        "run": {
+            "name": getattr(run, "name", run_id),
+            "displayName": getattr(run, "display_name", None) or getattr(run, "name", run_id),
+        },
+        "history": history,
+        "all_keys": sorted(all_keys),
+    }
+
+    if metrics:
+        result["metrics"] = metrics
+
+    print(json.dumps(result))
+
+
+if __name__ == "__main__":
+    main()
+`;
 
 // --- Extension ---
 
@@ -140,16 +198,16 @@ export default function (pi: ExtensionAPI) {
 			filters: Type.Optional(
 				Type.String({
 					description:
-						'W&B run filters as JSON string, e.g. \'{"state":"finished"}\' or \'{"tags":{"$in":["baseline"]}}\'',
-				})
+						"W&B run filters as JSON string, e.g. '{\"state\":\"finished\"}' or '{\"tags\":{\"$in\":[\"baseline\"]}}'",
+				}),
 			),
 			order: Type.Optional(
 				Type.String({
 					description: 'Sort order, e.g. "+created_at", "-summary_metrics.loss" (default: "-created_at")',
-				})
+				}),
 			),
 			max_results: Type.Optional(
-				Type.Number({ description: "Max runs to return (default 20, max 100)", default: 20 })
+				Type.Number({ description: "Max runs to return (default 20, max 100)", default: 20 }),
 			),
 		}),
 
@@ -164,7 +222,7 @@ export default function (pi: ExtensionAPI) {
 					order: params.order ?? "-created_at",
 					first,
 				},
-				signal
+				signal,
 			);
 
 			const runs = data.project?.runs?.edges?.map((e: any) => e.node) ?? [];
@@ -231,7 +289,7 @@ export default function (pi: ExtensionAPI) {
 			const data = await graphql(
 				RUN_DETAIL_QUERY,
 				{ entity: params.entity, project: params.project, runName: params.run_id },
-				signal
+				signal,
 			);
 
 			const run = data.project?.run;
@@ -298,82 +356,158 @@ export default function (pi: ExtensionAPI) {
 		description:
 			"Get metric history (training curves) for a W&B run. Returns sampled datapoints for specified metrics over training steps. " +
 			"Useful for analyzing loss curves, learning rates, and evaluation metrics over time. " +
-			"Requires WANDB_API_KEY env var.",
+			"Requires WANDB_API_KEY env var, uvx, and the Python 'wandb' package.",
 		parameters: Type.Object({
 			entity: Type.String({ description: "W&B entity (username or team name)" }),
 			project: Type.String({ description: "W&B project name" }),
 			run_id: Type.String({ description: "Run ID" }),
 			samples: Type.Optional(
-				Type.Number({ description: "Number of sampled datapoints to return (default 500, max 10000)", default: 500 })
+				Type.Number({ description: "Number of datapoints to return (default 500, max 10000)", default: 500 }),
+			),
+			metrics: Type.Optional(
+				Type.Array(Type.String(), {
+					description:
+						"Optional list of metric keys to focus on in the summary.",
+				}),
 			),
 		}),
 
-		async execute(_toolCallId, params, signal) {
+		async execute(_toolCallId, params) {
 			const samples = Math.min(params.samples ?? 500, 10000);
-			const data = await graphql(
-				HISTORY_QUERY,
-				{ entity: params.entity, project: params.project, runName: params.run_id, samples },
-				signal
+			const metrics: string[] = params.metrics ?? [];
+
+			const tmpDir = os.tmpdir();
+			const scriptPath = path.join(
+				tmpDir,
+				`pi_wandb_history_${Date.now()}_${Math.random().toString(36).slice(2)}.py`,
 			);
 
-			const run = data.project?.run;
-			if (!run) {
-				return {
-					content: [{ type: "text", text: `Run not found: ${params.run_id}` }],
-					details: { run: null, history: [] },
-					isError: true,
-				};
-			}
+			await fs.writeFile(scriptPath, HISTORY_PY, "utf8");
 
-			const history: Record<string, any>[] = run.sampledHistory?.[0] ?? [];
-			if (history.length === 0) {
-				return {
-					content: [{ type: "text", text: `No history data for run ${params.run_id}` }],
-					details: { run: { name: run.name, displayName: run.displayName }, history: [] },
-				};
-			}
+			try {
+				const args = [
+					"--from",
+					"wandb",
+					"python",
+					scriptPath,
+					params.entity,
+					params.project,
+					params.run_id,
+					String(samples),
+					...metrics,
+				];
 
-			// Collect all metric keys
-			const keys = new Set<string>();
-			for (const row of history) {
-				for (const k of Object.keys(row)) {
-					if (!k.startsWith("_")) keys.add(k);
+				const { stdout, stderr, code } = await pi.exec("uvx", args);
+
+				if (code !== 0) {
+					const msg = (stderr || stdout || `uvx exited with code ${code}`).trim();
+					return {
+						content: [{ type: "text", text: `Failed to fetch history via wandb (uvx): ${msg}` }],
+						details: { run: null, history: [] },
+						isError: true,
+					};
 				}
-			}
-			const sortedKeys = Array.from(keys).sort();
 
-			// Build table header
-			const header = `Run: ${run.displayName ?? run.name} (${history.length} samples)\n`;
-			const colHeader = ["_step", ...sortedKeys].join("\t");
+				const trimmed = stdout.trim();
+				const jsonLine =
+					trimmed
+						.split("\n")
+						.map((l) => l.trim())
+						.filter((l) => l.startsWith("{") && l.endsWith("}"))
+						.pop() ?? "";
 
-			// Build rows
-			const rows = history.map((row) => {
-				const step = row._step ?? "";
-				const vals = sortedKeys.map((k) => {
-					const v = row[k];
-					if (v === undefined || v === null) return "";
-					if (typeof v === "number") return Number.isInteger(v) ? String(v) : v.toFixed(6);
-					return String(v);
+				if (!jsonLine) {
+					const msg = (stderr || trimmed || "No JSON output from wandb history script").trim();
+					return {
+						content: [{ type: "text", text: `Failed to parse wandb history output: ${msg}` }],
+						details: { run: null, history: [] },
+						isError: true,
+					};
+				}
+
+				let parsed: any;
+				try {
+					parsed = JSON.parse(jsonLine);
+				} catch (err) {
+					const errMsg = err instanceof Error ? err.message : String(err);
+					const msg = (stderr || trimmed || "").trim();
+					return {
+						content: [{ type: "text", text: `Invalid JSON from wandb history script: ${errMsg}\n${msg}` }],
+						details: { run: null, history: [] },
+						isError: true,
+					};
+				}
+
+				if (parsed.error) {
+					const message =
+						typeof parsed.message === "string"
+							? parsed.message
+							: "wandb history script reported an error";
+					return {
+						content: [{ type: "text", text: `W&B history error: ${message}` }],
+						details: { run: null, history: [] },
+						isError: true,
+					};
+				}
+
+				const history: Record<string, any>[] = parsed.history ?? [];
+				const runInfo = parsed.run ?? { name: params.run_id, displayName: params.run_id };
+
+				if (history.length === 0) {
+					return {
+						content: [{ type: "text", text: `No history data for run ${params.run_id}` }],
+						details: { run: { name: runInfo.name, displayName: runInfo.displayName }, history: [] },
+					};
+				}
+
+				const allKeys: string[] = parsed.all_keys ?? [];
+				let keys: string[] = allKeys;
+
+				if (metrics.length) {
+					const wanted = new Set(metrics);
+					const filtered = allKeys.filter((k) => wanted.has(k));
+					if (filtered.length) keys = filtered;
+				}
+
+				const header = `Run: ${runInfo.displayName ?? runInfo.name} (${history.length} samples)\n`;
+
+				const hasTrainerStep = history.some((row) => typeof row["trainer/global_step"] === "number");
+				const stepKey = hasTrainerStep ? "trainer/global_step" : "_step";
+
+				const colHeader = [stepKey, ...keys].join("\t");
+
+				const rows = history.map((row) => {
+					const stepValue = row[stepKey] ?? row["_step"] ?? "";
+					const vals = keys.map((k) => {
+						const v = row[k];
+						if (v === undefined || v === null) return "";
+						if (typeof v === "number") return Number.isInteger(v) ? String(v) : v.toFixed(6);
+						return String(v);
+					});
+					return [stepValue, ...vals].join("\t");
 				});
-				return [step, ...vals].join("\t");
-			});
 
-			let text = header + colHeader + "\n" + rows.join("\n");
+				let text = header + colHeader + "\n" + rows.join("\n");
 
-			const trunc = truncateHead(text, { maxLines: DEFAULT_MAX_LINES, maxBytes: DEFAULT_MAX_BYTES });
-			text = trunc.content;
-			if (trunc.truncated) {
-				text += `\n\n[Truncated: ${formatSize(trunc.outputBytes)} of ${formatSize(trunc.totalBytes)}]`;
+				const trunc = truncateHead(text, { maxLines: DEFAULT_MAX_LINES, maxBytes: DEFAULT_MAX_BYTES });
+				text = trunc.content;
+				if (trunc.truncated) {
+					text += `\n\n[Truncated: ${formatSize(trunc.outputBytes)} of ${formatSize(trunc.totalBytes)}]`;
+				}
+
+				return {
+					content: [{ type: "text", text }],
+					details: {
+						run: { name: runInfo.name, displayName: runInfo.displayName },
+						history,
+						keys,
+					},
+				};
+			} finally {
+				fs.unlink(scriptPath).catch(() => {
+					// ignore
+				});
 			}
-
-			return {
-				content: [{ type: "text", text }],
-				details: {
-					run: { name: run.name, displayName: run.displayName },
-					history,
-					keys: sortedKeys,
-				},
-			};
 		},
 
 		renderCall(args, theme) {

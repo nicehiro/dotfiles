@@ -43,6 +43,6 @@ agent/
 
 ## Skills
 
-- `code-review` — Confidence-scored code review
+- `org-roam` — Org-roam note and graph management
 - `code-simplifier` — Code cleanup and simplification
 - `feature-dev` — Guided multi-phase feature development

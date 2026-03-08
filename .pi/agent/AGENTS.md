@@ -48,3 +48,6 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 - Don't add type: ignore or noqa comments to silence warnings — fix the root cause
 - Don't suggest degraded solutions to preserve compatibility when a clean break is better
 - Never commit secrets, API keys, or credentials
+- Don't start implementing, designing, or modifying code unless explicitly asked
+- When user mentions an issue or topic, just summarize/discuss it, don't jump into action
+- Wait for explicit instructions like "implement it", "fix this", "create this"

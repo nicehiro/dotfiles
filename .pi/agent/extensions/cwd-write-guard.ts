@@ -13,11 +13,36 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { resolve } from "node:path";
 import { homedir } from "node:os";
+import { realpathSync } from "node:fs";
 
 export default function (pi: ExtensionAPI) {
+  function safeRealpath(p: string): string {
+    try {
+      return realpathSync(p);
+    } catch {
+      // Path may not exist yet (e.g. new file); fall back to resolved path
+      return resolve(p);
+    }
+  }
+
   function isOutsideCwd(path: string, cwd: string): boolean {
-    const cwdPrefix = cwd.endsWith("/") ? cwd : cwd + "/";
-    return !path.startsWith(cwdPrefix) && path !== cwd;
+    const realCwd = safeRealpath(cwd);
+    const realPath = safeRealpath(path);
+    const cwdPrefix = realCwd.endsWith("/") ? realCwd : realCwd + "/";
+    return !realPath.startsWith(cwdPrefix) && realPath !== realCwd;
+  }
+
+  function normalizeToolPath(inputPath: string, cwd: string): string {
+    let p = inputPath;
+    if (p.startsWith("@")) p = p.slice(1);
+    if (p === "~") {
+      p = homedir();
+    } else if (p.startsWith("~/")) {
+      p = resolve(homedir(), p.slice(2));
+    } else if (!p.startsWith("/")) {
+      p = resolve(cwd, p);
+    }
+    return resolve(p);
   }
 
   /**
@@ -76,7 +101,8 @@ export default function (pi: ExtensionAPI) {
 
     // --- edit / write ---
     if (event.toolName === "write" || event.toolName === "edit") {
-      const targetPath = resolve(cwd, event.input.path as string);
+      const rawPath = event.input.path as string;
+      const targetPath = normalizeToolPath(rawPath, cwd);
       if (isOutsideCwd(targetPath, cwd)) {
         return askPermission(ctx, event.toolName, [targetPath]);
       }

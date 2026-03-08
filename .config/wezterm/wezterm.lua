@@ -1,7 +1,7 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
-config.font = wezterm.font("GeistMono Nerd Font")
+config.font = wezterm.font("Ioskeley Mono")
 config.font_size = 16
 config.line_height = 1.2
 
@@ -18,7 +18,7 @@ config.window_padding = {
   left = 40,
   right = 40,
   top = 40,
-  bottom = 40,
+  bottom = 0,
 }
 
 config.window_decorations = "RESIZE"
@@ -81,6 +81,7 @@ config.keys = {
   { key = "d", mods = "CMD", action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
   { key = "d", mods = "CMD|SHIFT", action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
   { key = "k", mods = "CMD", action = wezterm.action.SendString("clear\n") },
+  { key = "N", mods = "CTRL|SHIFT", action = wezterm.action.DisableDefaultAssignment },
 }
 
 return config

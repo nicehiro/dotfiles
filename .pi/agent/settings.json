@@ -1,12 +1,13 @@
 {
   "packages": [
     "https://github.com/default-anton/pi-librarian",
-    "npm:@calesennett/pi-codex-usage"
+    "npm:@calesennett/pi-codex-usage",
+    "https://github.com/nicehiro/pi-relay"
   ],
   "theme": "zed-one-dark",
   "lastChangelogVersion": "0.57.1",
-  "defaultProvider": "openai",
-  "defaultModel": "gpt-5.4",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-4-6",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "high",
   "safeGit": {

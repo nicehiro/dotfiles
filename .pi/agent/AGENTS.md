@@ -51,3 +51,10 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 - Don't start implementing, designing, or modifying code unless explicitly asked
 - When user mentions an issue or topic, just summarize/discuss it, don't jump into action
 - Wait for explicit instructions like "implement it", "fix this", "create this"
+
+## Zotero & Pi Integration
+
+- Implement a Node-based Zotero Web API tool as the primary backend for future Zotero/pi integration.
+- For now, leave the existing Better BibTeX / local .bib workflow untouched; plan to drop it once the Web API tool is stable.
+- Planned Web API actions (v1): search_items, get_item(s), list_collections, get_collection_items, list_tags, get_citation, add_tags/remove_tags/set_tags, add_to_collections/remove_from_collections, create_collection.
+- Do not build auto-category or other complex workflows into the tool itself; only expose simple read/write primitives so prompts can orchestrate higher-level behavior.

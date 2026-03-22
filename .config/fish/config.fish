@@ -1,9 +1,36 @@
-if status is-interactive
+# Environment for login shells (interactive terminals and tools like Emacs)
+if status is-login
     # Homebrew
     if test -f /opt/homebrew/bin/brew
         eval (/opt/homebrew/bin/brew shellenv)
     end
 
+    # Environment
+    set -gx EDITOR nvim
+    set -gx LEDGER_FILE /Users/fangyuan/Documents/account.journal
+    set -gx BIBTEX_PATH ~/Documents/roam/library.bib
+    fish_add_path /usr/local/texlive/2026/bin/universal-darwin
+
+    # API keys (make available to Emacs and other tools)
+    if test -f ~/Documents/keys/claude.fish.key
+        source ~/Documents/keys/claude.fish.key
+    end
+    if test -f ~/Documents/keys/openai.fish.key
+        source ~/Documents/keys/openai.fish.key
+    end
+    if test -f ~/Documents/keys/wandb.fish.key
+        source ~/Documents/keys/wandb.fish.key
+    end
+    if test -f ~/Documents/keys/brave.fish.key
+        source ~/Documents/keys/brave.fish.key
+    end
+    if test -f ~/Documents/keys/zotero.fish.key
+        source ~/Documents/keys/zotero.fish.key
+    end
+end
+
+# Interactive-only configuration (UI, aliases, prompt, fzf, etc.)
+if status is-interactive
     # Autosuggestion color (brighter for transparent bg)
     set -g fish_color_autosuggestion 808080
 
@@ -32,27 +59,6 @@ if status is-interactive
 --color=selected-bg:#51576d \
 --multi"
 
-    # Environment
-    set -gx EDITOR nvim
-    set -gx LEDGER_FILE /Users/fangyuan/Documents/account.journal
-    set -gx BIBTEX_PATH ~/Documents/roam/library.bib
-    fish_add_path /usr/local/texlive/2026/bin/universal-darwin
-
-    # API keys
-    if test -f ~/Documents/keys/claude.fish.key
-        source ~/Documents/keys/claude.fish.key
-    end
-    if test -f ~/Documents/keys/openai.fish.key
-        source ~/Documents/keys/openai.fish.key
-    end
-    if test -f ~/Documents/keys/wandb.fish.key
-        source ~/Documents/keys/wandb.fish.key
-    end
-    if test -f ~/Documents/keys/brave.fish.key
-        source ~/Documents/keys/brave.fish.key
-    end
-
     # Starship prompt
     starship init fish | source
 end
-

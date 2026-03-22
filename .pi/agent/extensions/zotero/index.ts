@@ -122,6 +122,7 @@ export default function (pi: ExtensionAPI) {
 - details: Get full metadata, notes, and PDF annotations for a cite key.
 - collections: Get which collections a cite key belongs to.
 Falls back to searching the local BibTeX file (~474 entries) if Zotero is not running.`,
+		promptSnippet: "Search and query the user's Zotero library via Better BibTeX. Actions: search, cite, details, collections.",
 		parameters: Type.Object({
 			action: StringEnum(["search", "cite", "details", "collections"] as const),
 			query: Type.Optional(Type.String({ description: "Search terms (for search action)" })),

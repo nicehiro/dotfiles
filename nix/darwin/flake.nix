@@ -109,7 +109,7 @@
           "pi-coding-agent" # CLI + TUI AI coding agent
         ];
         casks = [
-				"emacs-plus-app@master"
+				  "emacs-plus-app@master"
           "thebrowsercompany-dia"
           "google-chrome@dev"
           "tailscale-app"
@@ -127,6 +127,7 @@
           "claude"
           "conductor"
           "commander"
+          "alma"
           "linearmouse"
           "inkscape"
           "figma"

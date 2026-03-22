@@ -1,11 +1,12 @@
 {
   "packages": [
     "https://github.com/default-anton/pi-librarian",
-    "npm:@calesennett/pi-codex-usage",
-    "https://github.com/nicehiro/pi-relay"
+    "https://github.com/nicehiro/pi-relay",
+    "https://github.com/davebcn87/pi-autoresearch.git",
+    "npm:pi-subagents"
   ],
   "theme": "zed-one-dark",
-  "lastChangelogVersion": "0.57.1",
+  "lastChangelogVersion": "0.61.1",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-4-6",
   "hideThinkingBlock": false,
@@ -21,9 +22,5 @@
   "enabledModels": [
     "anthropic/claude-opus-4-6",
     "openai/gpt-5.4"
-  ],
-  "pi-codex-usage": {
-    "usageMode": "left",
-    "refreshWindow": "7d"
-  }
+  ]
 }

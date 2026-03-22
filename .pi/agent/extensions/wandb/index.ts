@@ -192,6 +192,7 @@ export default function (pi: ExtensionAPI) {
 		description:
 			"List runs from a Weights & Biases project. Returns run names, states, summary metrics, and configs. " +
 			"Requires WANDB_API_KEY env var.",
+		promptSnippet: "List runs from a Weights & Biases project. Returns run names, states, summary metrics, and configs. Requires WANDB_API_KEY env var.",
 		parameters: Type.Object({
 			entity: Type.String({ description: "W&B entity (username or team name)" }),
 			project: Type.String({ description: "W&B project name" }),
@@ -279,6 +280,7 @@ export default function (pi: ExtensionAPI) {
 		description:
 			"Get full details of a specific W&B run including config, summary metrics, notes, and system metrics. " +
 			"Requires WANDB_API_KEY env var.",
+		promptSnippet: "Get full details of a specific W&B run including config, summary metrics, notes, and system metrics. Requires WANDB_API_KEY env var.",
 		parameters: Type.Object({
 			entity: Type.String({ description: "W&B entity (username or team name)" }),
 			project: Type.String({ description: "W&B project name" }),
@@ -357,6 +359,7 @@ export default function (pi: ExtensionAPI) {
 			"Get metric history (training curves) for a W&B run. Returns sampled datapoints for specified metrics over training steps. " +
 			"Useful for analyzing loss curves, learning rates, and evaluation metrics over time. " +
 			"Requires WANDB_API_KEY env var, uvx, and the Python 'wandb' package.",
+		promptSnippet: "Get metric history (training curves) for a W&B run. Returns sampled datapoints for specified metrics over training steps. Useful for analyzing loss curves, learning rates, and evaluation metrics over time. Requires WANDB_API_KEY env var.",
 		parameters: Type.Object({
 			entity: Type.String({ description: "W&B entity (username or team name)" }),
 			project: Type.String({ description: "W&B project name" }),

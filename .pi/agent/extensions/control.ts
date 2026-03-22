@@ -1068,6 +1068,7 @@ Wait behavior (only for action=send):
 Note: If you ask the target session to reply back via sender_info, do not use wait_until; waiting is redundant and can duplicate responses.
 
 Messages automatically include sender session info for replies. When you want a response, instruct the target session to reply directly to the sender by calling send_to_session with the sender_info reference (do not poll get_message).`,
+		promptSnippet: "Interact with another running pi session via its control socket. Actions: send, get_message, get_summary, clear.",
 		parameters: Type.Object({
 			sessionId: Type.Optional(Type.String({ description: "Target session id (UUID)" })),
 			sessionName: Type.Optional(Type.String({ description: "Target session name (alias)" })),
@@ -1439,6 +1440,7 @@ function registerListSessionsTool(pi: ExtensionAPI): void {
 		name: "list_sessions",
 		label: "List Sessions",
 		description: "List live sessions that expose a control socket (optionally with session names).",
+		promptSnippet: "List live pi sessions that expose a control socket.",
 		parameters: Type.Object({}),
 		async execute(_toolCallId, _params, _signal, _onUpdate, _ctx) {
 			const sessions = await getLiveSessions();

@@ -112,6 +112,7 @@ export default function (pi: ExtensionAPI) {
 		label: "arXiv Search",
 		description:
 			"Search arXiv papers. Supports query terms, category filters (cs.RO, cs.LG, cs.CV, cs.AI, cs.CL, stat.ML, etc.), and sorting. Returns titles, authors, abstracts, dates, and PDF links.",
+		promptSnippet: "Search arXiv papers. Supports query terms, category filters (cs.RO, cs.LG, cs.CV, cs.AI, cs.CL, stat.ML, etc.), and sorting. Returns titles, authors, abstracts, dates, and PDF links.",
 		parameters: Type.Object({
 			query: Type.String({ description: 'Search query, e.g. "vision language action model"' }),
 			category: Type.Optional(
@@ -204,6 +205,7 @@ export default function (pi: ExtensionAPI) {
 		label: "arXiv Paper",
 		description:
 			"Fetch details of a specific arXiv paper by ID. Accepts arXiv IDs like '2401.12345' or '2401.12345v2', or full URLs like 'https://arxiv.org/abs/2401.12345'.",
+		promptSnippet: "Fetch details of a specific arXiv paper by ID. Accepts arXiv IDs like '2401.12345' or '2401.12345v2', or full URLs like 'https://arxiv.org/abs/2401.12345'.",
 		parameters: Type.Object({
 			id: Type.String({ description: 'arXiv paper ID, e.g. "2401.12345" or full arXiv URL' }),
 		}),

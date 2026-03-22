@@ -1,6 +1,6 @@
 shell-integration-features = ssh-terminfo,ssh-env,sudo,no-title
 
-font-family = Maple Mono NF
+font-family = IoskeleyMono Nerd Font
 font-size = 16
 # theme = light:Atom One Light,dark:Atom One Dark
 theme = Atom One Dark

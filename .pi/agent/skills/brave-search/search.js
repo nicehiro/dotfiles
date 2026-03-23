@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 
-import { Readability } from "@mozilla/readability";
-import { JSDOM } from "jsdom";
-import TurndownService from "turndown";
-import { gfm } from "turndown-plugin-gfm";
+import { proxyFetch } from "./proxy.js";
+
+let Readability, JSDOM, TurndownService, gfm;
+async function loadContentDeps() {
+	({ Readability } = await import("@mozilla/readability"));
+	({ JSDOM } = await import("jsdom"));
+	TurndownService = (await import("turndown")).default;
+	({ gfm } = await import("turndown-plugin-gfm"));
+}
 
 const args = process.argv.slice(2);
 
@@ -73,7 +78,7 @@ async function fetchBraveResults(query, numResults, country, freshness) {
 
 	const url = `https://api.search.brave.com/res/v1/web/search?${params.toString()}`;
 
-	const response = await fetch(url, {
+	const response = await proxyFetch(url, {
 		headers: {
 			"Accept": "application/json",
 			"Accept-Encoding": "gzip",
@@ -126,7 +131,7 @@ function htmlToMarkdown(html) {
 
 async function fetchPageContent(url) {
 	try {
-		const response = await fetch(url, {
+		const response = await proxyFetch(url, {
 			headers: {
 				"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
 				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -174,6 +179,7 @@ try {
 	}
 
 	if (fetchContent) {
+		await loadContentDeps();
 		for (const result of results) {
 			result.content = await fetchPageContent(result.link);
 		}

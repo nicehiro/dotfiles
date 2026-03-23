@@ -224,22 +224,25 @@ export function replaceMessageTemplates(message: string): string {
 }
 
 export function playBeep(soundName: string = "Tink"): void {
+  const bellFallback = () => child_process.exec("echo -e '\\a'");
+  const safeSpawn = (...args: Parameters<typeof child_process.spawn>) => {
+    const proc = child_process.spawn(...args);
+    proc.on("error", bellFallback);
+    proc.unref();
+  };
+
   if (isMacOS()) {
-    child_process.spawn("afplay", [`/System/Library/Sounds/${soundName}.aiff`], {
+    safeSpawn("afplay", [`/System/Library/Sounds/${soundName}.aiff`], {
       detached: true,
       stdio: "ignore",
-    }).unref();
+    });
   } else if (process.platform === "linux") {
-    try {
-      child_process.spawn("paplay", ["/usr/share/sounds/freedesktop/stereo/bell.oga"], {
-        detached: true,
-        stdio: "ignore",
-      }).unref();
-    } catch {
-      child_process.exec("echo -e '\\a'");
-    }
+    safeSpawn("paplay", ["/usr/share/sounds/freedesktop/stereo/bell.oga"], {
+      detached: true,
+      stdio: "ignore",
+    });
   } else {
-    child_process.exec("echo -e '\\a'");
+    bellFallback();
   }
 }
 

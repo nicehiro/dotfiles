@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "arXiv paper search and lookup tools for pi",
   "type": "module",
-  "keywords": ["pi-package"],
+  "keywords": [
+    "pi-package"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -11,15 +13,17 @@
     "directory": ".pi/agent/extensions/arxiv"
   },
   "peerDependencies": {
-    "@mariozechner/pi-coding-agent": "*",
     "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*",
     "@mariozechner/pi-tui": "*",
     "@sinclair/typebox": "*"
   },
   "dependencies": {
-    "fast-xml-parser": "^5.2.0"
+    "fast-xml-parser": "^5.5.1"
   },
   "pi": {
-    "extensions": ["./index.ts"]
+    "extensions": [
+      "./index.ts"
+    ]
   }
 }

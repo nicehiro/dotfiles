@@ -54,5 +54,6 @@ bun.lock
 .pi/agent/git/*
 !.pi/agent/git/.gitignore
 .pi/agent/relay.yaml
+.pi/agent/relay-mappings.json
 .pi/msg-bridge.json
 .config/fish/fish_variables

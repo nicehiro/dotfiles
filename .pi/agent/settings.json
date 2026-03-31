@@ -5,10 +5,10 @@
     "https://github.com/davebcn87/pi-autoresearch.git",
     "npm:pi-subagents"
   ],
-  "theme": "zed-one-dark",
-  "lastChangelogVersion": "0.62.0",
-  "defaultProvider": "anthropic",
-  "defaultModel": "claude-opus-4-6",
+  "theme": "nightowl",
+  "lastChangelogVersion": "0.64.0",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.4-pro",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "high",
   "safeGit": {
@@ -21,6 +21,9 @@
   ],
   "enabledModels": [
     "anthropic/claude-opus-4-6",
-    "openai/gpt-5.4"
+    "anthropic/claude-sonnet-4-6",
+    "openai/gpt-5.3-codex",
+    "openai/gpt-5.3-codex-spark",
+    "openai/gpt-5.4-pro"
   ]
 }

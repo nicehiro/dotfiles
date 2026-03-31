@@ -13,7 +13,7 @@
 
 import { complete, type Model, type Api, type UserMessage } from "@mariozechner/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
-import { BorderedLoader } from "@mariozechner/pi-coding-agent";
+import { BorderedLoader, type Theme } from "@mariozechner/pi-coding-agent";
 import {
 	type Component,
 	Editor,
@@ -78,13 +78,13 @@ async function selectExtractionModel(
 	currentModel: Model<Api>,
 	modelRegistry: {
 		find: (provider: string, modelId: string) => Model<Api> | undefined;
-		getApiKey: (model: Model<Api>) => Promise<string | undefined>;
+		getApiKeyAndHeaders: (model: Model<Api>) => Promise<{ ok: true; apiKey?: string; headers?: Record<string, string> } | { ok: false; error: string }>;
 	},
 ): Promise<Model<Api>> {
 	const codexModel = modelRegistry.find("openai-codex", CODEX_MODEL_ID);
 	if (codexModel) {
-		const apiKey = await modelRegistry.getApiKey(codexModel);
-		if (apiKey) {
+		const auth = await modelRegistry.getApiKeyAndHeaders(codexModel);
+		if (auth.ok) {
 			return codexModel;
 		}
 	}
@@ -94,8 +94,8 @@ async function selectExtractionModel(
 		return currentModel;
 	}
 
-	const apiKey = await modelRegistry.getApiKey(haikuModel);
-	if (!apiKey) {
+	const auth = await modelRegistry.getApiKeyAndHeaders(haikuModel);
+	if (!auth.ok) {
 		return currentModel;
 	}
 
@@ -135,6 +135,7 @@ class QnAComponent implements Component {
 	private currentIndex: number = 0;
 	private editor: Editor;
 	private tui: TUI;
+	private theme: Theme;
 	private onDone: (result: string | null) => void;
 	private showingConfirmation: boolean = false;
 
@@ -142,31 +143,24 @@ class QnAComponent implements Component {
 	private cachedWidth?: number;
 	private cachedLines?: string[];
 
-	// Colors - using proper reset sequences
-	private dim = (s: string) => `\x1b[2m${s}\x1b[0m`;
-	private bold = (s: string) => `\x1b[1m${s}\x1b[0m`;
-	private cyan = (s: string) => `\x1b[36m${s}\x1b[0m`;
-	private green = (s: string) => `\x1b[32m${s}\x1b[0m`;
-	private yellow = (s: string) => `\x1b[33m${s}\x1b[0m`;
-	private gray = (s: string) => `\x1b[90m${s}\x1b[0m`;
-
 	constructor(
 		questions: ExtractedQuestion[],
 		tui: TUI,
+		theme: Theme,
 		onDone: (result: string | null) => void,
 	) {
 		this.questions = questions;
 		this.answers = questions.map(() => "");
 		this.tui = tui;
+		this.theme = theme;
 		this.onDone = onDone;
 
-		// Create a minimal theme for the editor
 		const editorTheme: EditorTheme = {
-			borderColor: this.dim,
+			borderColor: (s: string) => theme.fg("borderMuted", s),
 			selectList: {
-				selectedBg: (s: string) => `\x1b[44m${s}\x1b[0m`,
-				matchHighlight: this.cyan,
-				itemSecondary: this.gray,
+				selectedBg: (s: string) => theme.bg("selectedBg", s),
+				matchHighlight: (s: string) => theme.fg("accent", s),
+				itemSecondary: (s: string) => theme.fg("muted", s),
 			},
 		};
 
@@ -307,23 +301,22 @@ class QnAComponent implements Component {
 			return this.cachedLines;
 		}
 
+		const t = this.theme;
 		const lines: string[] = [];
-		const boxWidth = Math.min(width - 4, 120); // Allow wider box
-		const contentWidth = boxWidth - 4; // 2 chars padding on each side
+		const boxWidth = Math.min(width - 4, 120);
+		const contentWidth = boxWidth - 4;
 
-		// Helper to create horizontal lines (dim the whole thing at once)
 		const horizontalLine = (count: number) => "─".repeat(count);
 
-		// Helper to create a box line
 		const boxLine = (content: string, leftPad: number = 2): string => {
 			const paddedContent = " ".repeat(leftPad) + content;
 			const contentLen = visibleWidth(paddedContent);
 			const rightPad = Math.max(0, boxWidth - contentLen - 2);
-			return this.dim("│") + paddedContent + " ".repeat(rightPad) + this.dim("│");
+			return t.fg("border", "│") + paddedContent + " ".repeat(rightPad) + t.fg("border", "│");
 		};
 
 		const emptyBoxLine = (): string => {
-			return this.dim("│") + " ".repeat(boxWidth - 2) + this.dim("│");
+			return t.fg("border", "│") + " ".repeat(boxWidth - 2) + t.fg("border", "│");
 		};
 
 		const padToWidth = (line: string): string => {
@@ -332,10 +325,10 @@ class QnAComponent implements Component {
 		};
 
 		// Title
-		lines.push(padToWidth(this.dim("╭" + horizontalLine(boxWidth - 2) + "╮")));
-		const title = `${this.bold(this.cyan("Questions"))} ${this.dim(`(${this.currentIndex + 1}/${this.questions.length})`)}`;
+		lines.push(padToWidth(t.fg("border", "╭" + horizontalLine(boxWidth - 2) + "╮")));
+		const title = `${t.bold(t.fg("accent", "Questions"))} ${t.fg("muted", `(${this.currentIndex + 1}/${this.questions.length})`)}`;
 		lines.push(padToWidth(boxLine(title)));
-		lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
+		lines.push(padToWidth(t.fg("border", "├" + horizontalLine(boxWidth - 2) + "┤")));
 
 		// Progress indicator
 		const progressParts: string[] = [];
@@ -343,11 +336,11 @@ class QnAComponent implements Component {
 			const answered = (this.answers[i]?.trim() || "").length > 0;
 			const current = i === this.currentIndex;
 			if (current) {
-				progressParts.push(this.cyan("●"));
+				progressParts.push(t.fg("accent", "●"));
 			} else if (answered) {
-				progressParts.push(this.green("●"));
+				progressParts.push(t.fg("success", "●"));
 			} else {
-				progressParts.push(this.dim("○"));
+				progressParts.push(t.fg("dim", "○"));
 			}
 		}
 		lines.push(padToWidth(boxLine(progressParts.join(" "))));
@@ -355,7 +348,7 @@ class QnAComponent implements Component {
 
 		// Current question
 		const q = this.questions[this.currentIndex];
-		const questionText = `${this.bold("Q:")} ${q.question}`;
+		const questionText = `${t.bold("Q:")} ${q.question}`;
 		const wrappedQuestion = wrapTextWithAnsi(questionText, contentWidth);
 		for (const line of wrappedQuestion) {
 			lines.push(padToWidth(boxLine(line)));
@@ -364,7 +357,7 @@ class QnAComponent implements Component {
 		// Context if present
 		if (q.context) {
 			lines.push(padToWidth(emptyBoxLine()));
-			const contextText = this.gray(`> ${q.context}`);
+			const contextText = t.fg("muted", `> ${q.context}`);
 			const wrappedContext = wrapTextWithAnsi(contextText, contentWidth - 2);
 			for (const line of wrappedContext) {
 				lines.push(padToWidth(boxLine(line)));
@@ -373,34 +366,31 @@ class QnAComponent implements Component {
 
 		lines.push(padToWidth(emptyBoxLine()));
 
-		// Render the editor component (multi-line input) with padding
-		// Skip the first and last lines (editor's own border lines)
-		const answerPrefix = this.bold("A: ");
-		const editorWidth = contentWidth - 4 - 3; // Extra padding + space for "A: "
+		// Render the editor
+		const answerPrefix = t.bold("A: ");
+		const editorWidth = contentWidth - 4 - 3;
 		const editorLines = this.editor.render(editorWidth);
 		for (let i = 1; i < editorLines.length - 1; i++) {
 			if (i === 1) {
-				// First content line gets the "A: " prefix
 				lines.push(padToWidth(boxLine(answerPrefix + editorLines[i])));
 			} else {
-				// Subsequent lines get padding to align with the first line
 				lines.push(padToWidth(boxLine("   " + editorLines[i])));
 			}
 		}
 
 		lines.push(padToWidth(emptyBoxLine()));
 
-		// Confirmation dialog or footer with controls
+		// Confirmation dialog or footer
 		if (this.showingConfirmation) {
-			lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
-			const confirmMsg = `${this.yellow("Submit all answers?")} ${this.dim("(Enter/y to confirm, Esc/n to cancel)")}`;
+			lines.push(padToWidth(t.fg("border", "├" + horizontalLine(boxWidth - 2) + "┤")));
+			const confirmMsg = `${t.fg("warning", "Submit all answers?")} ${t.fg("muted", "(Enter/y to confirm, Esc/n to cancel)")}`;
 			lines.push(padToWidth(boxLine(truncateToWidth(confirmMsg, contentWidth))));
 		} else {
-			lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
-			const controls = `${this.dim("Tab/Enter")} next · ${this.dim("Shift+Tab")} prev · ${this.dim("Shift+Enter")} newline · ${this.dim("Esc")} cancel`;
+			lines.push(padToWidth(t.fg("border", "├" + horizontalLine(boxWidth - 2) + "┤")));
+			const controls = `${t.fg("muted", "Tab/Enter")} next · ${t.fg("muted", "Shift+Tab")} prev · ${t.fg("muted", "Shift+Enter")} newline · ${t.fg("muted", "Esc")} cancel`;
 			lines.push(padToWidth(boxLine(truncateToWidth(controls, contentWidth))));
 		}
-		lines.push(padToWidth(this.dim("╰" + horizontalLine(boxWidth - 2) + "╯")));
+		lines.push(padToWidth(t.fg("border", "╰" + horizontalLine(boxWidth - 2) + "╯")));
 
 		this.cachedWidth = width;
 		this.cachedLines = lines;
@@ -458,7 +448,8 @@ export default function (pi: ExtensionAPI) {
 				loader.onAbort = () => done(null);
 
 				const doExtract = async () => {
-					const apiKey = await ctx.modelRegistry.getApiKey(extractionModel);
+					const auth = await ctx.modelRegistry.getApiKeyAndHeaders(extractionModel);
+					if (!auth.ok) throw new Error(auth.error);
 					const userMessage: UserMessage = {
 						role: "user",
 						content: [{ type: "text", text: lastAssistantText! }],
@@ -468,7 +459,7 @@ export default function (pi: ExtensionAPI) {
 					const response = await complete(
 						extractionModel,
 						{ systemPrompt: SYSTEM_PROMPT, messages: [userMessage] },
-						{ apiKey, signal: loader.signal },
+						{ apiKey: auth.apiKey, headers: auth.headers, signal: loader.signal },
 					);
 
 					if (response.stopReason === "aborted") {
@@ -501,8 +492,8 @@ export default function (pi: ExtensionAPI) {
 			}
 
 			// Show the Q&A component
-			const answersResult = await ctx.ui.custom<string | null>((tui, _theme, _kb, done) => {
-				return new QnAComponent(extractionResult.questions, tui, done);
+			const answersResult = await ctx.ui.custom<string | null>((tui, theme, _kb, done) => {
+				return new QnAComponent(extractionResult.questions, tui, theme, done);
 			});
 
 			if (answersResult === null) {

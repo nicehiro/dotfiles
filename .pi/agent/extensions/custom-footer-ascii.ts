@@ -33,32 +33,28 @@ export default function (pi: ExtensionAPI) {
 						return `${(n / 1000).toFixed(1)}k`;
 					};
 
-					// Line 1: current working directory + optional git branch
 					let cwd = ctx.cwd as string;
 					const home = process.env.HOME || process.env.USERPROFILE;
 					if (home && cwd.startsWith(home)) {
 						cwd = `~${cwd.slice(home.length)}`;
 					}
 					const branch = footerData.getGitBranch();
-					const branchSuffix = branch ? ` (${branch})` : "";
-					const cwdLine = truncateToWidth(theme.fg("dim", `${cwd}${branchSuffix}`), width);
+					const leftRaw = branch ? `${cwd} (${branch})` : cwd;
 
-					// Line 2: ASCII token stats + model id + thinking level (if supported)
-					const leftRaw = `in:${fmtTokens(input)} out:${fmtTokens(output)} $${cost.toFixed(3)}`;
-					const left = theme.fg("dim", leftRaw);
-
-					let rightRaw = ctx.model?.id || "no-model";
+					const statusParts = [`in:${fmtTokens(input)}`, `out:${fmtTokens(output)}`, `$${cost.toFixed(3)}`];
 					if (ctx.model?.reasoning) {
 						const thinkingLevel = pi.getThinkingLevel();
-						rightRaw = thinkingLevel === "off" ? `${rightRaw} • thinking off` : `${rightRaw} • ${thinkingLevel}`;
+						statusParts.push(thinkingLevel === "off" ? "thinking off" : thinkingLevel);
 					}
-					const right = theme.fg("dim", rightRaw);
+					const rightRaw = statusParts.join(" • ");
 
+					const right = theme.fg("dim", rightRaw);
+					const leftWidth = Math.max(0, width - visibleWidth(right) - 1);
+					const left = theme.fg("dim", truncateToWidth(leftRaw, leftWidth, ""));
 					const padWidth = Math.max(1, width - visibleWidth(left) - visibleWidth(right));
 					const pad = " ".repeat(padWidth);
-					const statsLine = truncateToWidth(left + pad + right, width);
 
-					return [cwdLine, statsLine];
+					return [truncateToWidth(left + pad + right, width)];
 				},
 			};
 		});

@@ -57,3 +57,6 @@ bun.lock
 .pi/agent/relay-mappings.json
 .pi/msg-bridge.json
 .config/fish/fish_variables
+
+# Koe - exclude API credentials
+.koe/config.yaml

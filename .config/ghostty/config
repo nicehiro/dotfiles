@@ -11,7 +11,7 @@ mouse-hide-while-typing = true
 mouse-scroll-multiplier = 2
 
 keybind = shift+enter=text:\n
-background-opacity = 0.85
+background-opacity = 1.0
 background-opacity-cells = true
 background-blur = true
 alpha-blending = native

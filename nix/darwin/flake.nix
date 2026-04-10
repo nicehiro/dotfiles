@@ -25,10 +25,14 @@
       url = "github:tw93/homebrew-tap";
       flake = false;
     };
+    homebrew-owo = {
+      url = "github:owo-network/homebrew-brew";
+      flake = false;
+    };
     claude-code.url = "github:sadjow/claude-code-nix";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus, homebrew-core, homebrew-cask, homebrew-tw93, claude-code }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus, homebrew-core, homebrew-cask, homebrew-tw93, homebrew-owo, claude-code }:
   let
     configuration = { pkgs, config, ... }: {
 
@@ -73,11 +77,11 @@
       homebrew = {
         enable = true;
         onActivation = {
-          autoUpdate = true;   # runs `brew update`
+          autoUpdate = false;   # runs `brew update`
           upgrade    = true;   # upgrades outdated formulae
           cleanup    = "zap";  # optional: removes old versions/casks
         };
-        taps  = [ "homebrew/core" "homebrew/cask" "tw93/tap" ];
+        taps  = [ "homebrew/core" "homebrew/cask" "tw93/tap" "owo-network/brew" ];
         brews = [
           "mas"
           "aspell"
@@ -87,7 +91,7 @@
           "pngpaste"
           "lua-language-server"
           "gh"
-				"sing-box"
+				  "sing-box"
           "ffmpeg"
           # "yt-dlp"
           "mole"
@@ -95,17 +99,17 @@
           "cocoapods"
           "librime"
           "poppler"
-				"jpeg"
-				"gcc"
-				"gdk-pixbuf"
-				"isl"
-				"libgccjit"
-				"libmpc"
-				"librsvg"
-				"mpfr"
-				"tree-sitter"
-				"zlib"
-				"rustup"
+				  "jpeg"
+				  "gcc"
+				  "gdk-pixbuf"
+				  "isl"
+				  "libgccjit"
+				  "libmpc"
+				  "librsvg"
+				  "mpfr"
+				  "tree-sitter"
+				  "zlib"
+				  "rustup"
           "pi-coding-agent" # CLI + TUI AI coding agent
         ];
         casks = [
@@ -121,6 +125,7 @@
           "wezterm"
           "windows-app"
           "wakatime"
+          "kitlangton-hex"
           "chatgpt"
           "codex"
           "codex-app"
@@ -151,6 +156,7 @@
           "spotify"
           "ticktick" # Task and calendar client
           # fonts
+          "koe"
           "font-lxgw-wenkai"
           "font-jetbrains-mono-nerd-font"
           "font-maple-mono-nf"
@@ -257,6 +263,7 @@
 	            "homebrew/homebrew-core" = homebrew-core;
 	            "homebrew/homebrew-cask" = homebrew-cask;
 	            "tw93/homebrew-tap" = homebrew-tw93;
+	            "owo-network/homebrew-brew" = homebrew-owo;
 	          };
           };
         }

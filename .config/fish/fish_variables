@@ -1,4 +1,4 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR __fish_initialized:4300
-SETUVAR fish_user_paths:/root/\x2elocal/bin\x1e/usr/local/texlive/2026/bin/universal\x2ddarwin\x1e/usr/local/texlive/2025/bin/universal\x2ddarwin
+SETUVAR fish_user_paths:/Users/fangyuan/\x2elocal/bin\x1e/root/\x2elocal/bin\x1e/usr/local/texlive/2026/bin/universal\x2ddarwin\x1e/usr/local/texlive/2025/bin/universal\x2ddarwin

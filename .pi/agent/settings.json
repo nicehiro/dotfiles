@@ -6,7 +6,7 @@
     "npm:pi-subagents"
   ],
   "theme": "nightowl",
-  "lastChangelogVersion": "0.64.0",
+  "lastChangelogVersion": "0.66.0",
   "defaultProvider": "openai",
   "defaultModel": "gpt-5.4-pro",
   "hideThinkingBlock": false,

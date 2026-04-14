@@ -4,7 +4,6 @@
 input=$(cat)
 
 # Extract values using jq
-MODEL_DISPLAY=$(echo "$input" | jq -r '.model.display_name')
 CURRENT_DIR=$(echo "$input" | jq -r '.workspace.current_dir')
 PROJECT_DIR=$(echo "$input" | jq -r '.workspace.project_dir')
 
@@ -91,5 +90,4 @@ for i in "${!components[@]}"; do
     fi
 done
 
-# Output with model name
-printf '%s | %s' "$MODEL_DISPLAY" "$status"
+printf '%s' "$status"

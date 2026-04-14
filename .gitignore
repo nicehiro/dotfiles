@@ -29,6 +29,7 @@ bun.lock
 .claude/settings.local.json
 .claude/history.jsonl
 .claude/stats-cache.json
+.claude/backups/
 .claude/cache/
 .claude/debug/
 .claude/file-history/
@@ -38,6 +39,7 @@ bun.lock
 .claude/plugins/
 .claude/projects/
 .claude/session-env/
+.claude/sessions/
 .claude/shell-snapshots/
 .claude/statsig/
 .claude/tasks/

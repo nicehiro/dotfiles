@@ -3,13 +3,13 @@
   "currentMode": "default",
   "modes": {
     "default": {
-      "provider": "anthropic",
-      "modelId": "claude-opus-4-6",
+      "provider": "openai",
+      "modelId": "gpt-5.3-codex",
       "thinkingLevel": "high"
     },
     "fast": {
-      "provider": "anthropic",
-      "modelId": "claude-opus-4-6",
+      "provider": "openai",
+      "modelId": "gpt-5.3-codex-spark",
       "thinkingLevel": "off"
     },
     "oracle": {

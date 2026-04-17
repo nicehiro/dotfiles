@@ -1,8 +1,23 @@
-eval "$(starship init zsh)"
+typeset -U path
 
-if [[ -f "/opt/homebrew/bin/brew" ]] then
-  # If you're using macOS, you'll want this enabled
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+path_prepend_if_exists() {
+  [[ -d "$1" ]] && path=("$1" $path)
+}
+
+for brew_bin in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew "$HOME/.linuxbrew/bin/brew"; do
+  if [[ -x "$brew_bin" ]]; then
+    eval "$("$brew_bin" shellenv)"
+    break
+  fi
+done
+
+path_prepend_if_exists "$HOME/.local/bin"
+for texlive_bin in /usr/local/texlive/2026/bin/*(N); do
+  path_prepend_if_exists "$texlive_bin"
+done
+
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
 fi
 
 # Set the directory we want to store zinit and plugins
@@ -80,16 +95,35 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' list-prompt '%S%M matches%s'
 zstyle ':completion:*' select-prompt '%SScrolling: current selection at %p%s'
 
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+if command -v eza >/dev/null 2>&1; then
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --color=always --group-directories-first -- $realpath'
+elif command -v gls >/dev/null 2>&1; then
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'gls --color=always -- $realpath'
+else
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color=always -- $realpath 2>/dev/null || ls -G -- $realpath'
+fi
 
 # Aliases
-alias ls='ls --color'
+if command -v gls >/dev/null 2>&1; then
+  alias ls='gls --color=auto'
+elif ls --color=auto >/dev/null 2>&1; then
+  alias ls='ls --color=auto'
+else
+  alias ls='ls -G'
+fi
+
+if command -v fdfind >/dev/null 2>&1; then
+  alias fd='fdfind'
+fi
+
 alias vim='nvim'
 alias c='clear'
 alias wandb='uvx wandb'
 
 # Shell integrations
-eval "$(fzf --zsh)"
+if command -v fzf >/dev/null 2>&1; then
+  eval "$(fzf --zsh)"
+fi
 
 # fzf theme
 export FZF_DEFAULT_OPTS=" \
@@ -100,24 +134,13 @@ export FZF_DEFAULT_OPTS=" \
 --multi"
 
 export EDITOR=nvim
+export LEDGER_FILE="$HOME/Documents/account.journal"
+export BIBTEX_PATH="$HOME/Documents/roam/library.bib"
 
-# mactex bin
-# export PATH=$PATH:/Library/TeX/texbin
-export PATH=$PATH:/usr/local/texlive/2026/bin/universal-darwin/
-
-# hledger main file
-export LEDGER_FILE=/Users/fangyuan/Documents/account.journal
-
-# Zotero BibTeX fallback
-export BIBTEX_PATH=~/Documents/roam/library.bib
-
-# cc
-if [[ -f ~/Documents/keys/claude.key ]]; then
-    source ~/Documents/keys/claude.key
+if [[ -f "$HOME/Documents/keys/claude.key" ]]; then
+  source "$HOME/Documents/keys/claude.key"
 fi
 
-# cc
-if [[ -f ~/Documents/keys/openai.key ]]; then
-    source ~/Documents/keys/openai.key
+if [[ -f "$HOME/Documents/keys/openai.key" ]]; then
+  source "$HOME/Documents/keys/openai.key"
 fi
-

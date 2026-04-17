@@ -19,6 +19,7 @@ bun.lock
 .config/rime/build/
 .config/rime/*.userdb
 .config/rime/user.yaml
+.config/rime/installation.yaml
 
 # emacs-rime (generated / user state)
 .config/emacs-rime/build/
@@ -57,6 +58,22 @@ bun.lock
 .pi/agent/relay-mappings.json
 .pi/msg-bridge.json
 .config/fish/fish_variables
+
+# Linux desktop generated files
+.config/.gsd-keyboard.settings-ported
+.config/GNOME-xdg-terminals.list
+.config/dconf/
+.config/evolution/
+.config/gnome-initial-setup-done
+.config/gtk-3.0/
+.config/ibus/
+.config/monitors.xml
+.config/pulse/
+.config/systemd/user/default.target.wants/
+.config/ubuntu-xdg-terminals.list
+.config/user-dirs.dirs
+.config/user-dirs.locale
+.config/xdg-terminals.list
 
 # Koe - exclude API credentials
 .koe/config.yaml

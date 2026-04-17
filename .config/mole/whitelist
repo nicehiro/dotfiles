@@ -11,4 +11,4 @@ FINDER_METADATA
 ~/.cache/uv/*
 ~/Library/Caches/com.apple.Safari/*
 ~/Library/Caches/com.apple.spotlight/*
-/Users/fangyuan/.cache/huggingface*
+~/.cache/huggingface*

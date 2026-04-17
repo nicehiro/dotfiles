@@ -1,30 +1,39 @@
-# Environment for login shells (interactive terminals and tools like Emacs)
-if status is-login
-    # Homebrew
-    if test -f /opt/homebrew/bin/brew
-        eval (/opt/homebrew/bin/brew shellenv)
+# Shared environment for every interactive fish shell
+for brew_bin in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew $HOME/.linuxbrew/bin/brew
+    if test -x $brew_bin
+        eval ($brew_bin shellenv)
+        break
     end
-
-    # PATH
-    fish_add_path /usr/local/texlive/2026/bin/universal-darwin
-    fish_add_path ~/.local/bin
-
-    # Environment
-    set -gx EDITOR nvim
-    set -gx LEDGER_FILE /Users/fangyuan/Documents/account.journal
-    set -gx BIBTEX_PATH ~/Documents/roam/library.bib
-
-    # API keys (make available to Emacs and other tools)
-    for keyfile in ~/Documents/keys/*.fish.key
-        source $keyfile
-    end
-
-    # Proxy (sing-box)
-		# set -gx HTTP_PROXY http://127.0.0.1:2080
-    # set -gx HTTPS_PROXY http://127.0.0.1:2080
-    # set -gx ALL_PROXY socks5://127.0.0.1:2080
-    # set -gx NO_PROXY localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 end
+
+fish_add_path $HOME/.local/bin
+
+set -l texlive_root /usr/local/texlive/2026/bin
+if test -d $texlive_root
+    for texlive_bin in $texlive_root/*
+        if test -d $texlive_bin
+            fish_add_path $texlive_bin
+        end
+    end
+end
+
+set -gx EDITOR nvim
+set -gx LEDGER_FILE $HOME/Documents/account.journal
+set -gx BIBTEX_PATH $HOME/Documents/roam/library.bib
+
+if test -d $HOME/Documents/keys
+    for keyfile in $HOME/Documents/keys/*.fish.key
+        if test -f $keyfile
+            source $keyfile
+        end
+    end
+end
+
+# Proxy (sing-box)
+# set -gx HTTP_PROXY http://127.0.0.1:2080
+# set -gx HTTPS_PROXY http://127.0.0.1:2080
+# set -gx ALL_PROXY socks5://127.0.0.1:2080
+# set -gx NO_PROXY localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
 # Interactive-only configuration (UI, aliases, prompt, fzf, etc.)
 if status is-interactive
@@ -40,7 +49,16 @@ if status is-interactive
     bind \cn history-search-forward
 
     # Aliases
-    alias ls 'ls --color'
+    if command -q gls
+        alias ls 'gls --color=auto'
+    else
+        if ls --color=auto >/dev/null 2>/dev/null
+            alias ls 'ls --color=auto'
+        else
+            alias ls 'ls -G'
+        end
+    end
+
     alias vim nvim
     alias c clear
     alias wandb 'uvx wandb'

@@ -1,5 +1,10 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
+local is_macos = wezterm.target_triple:find("darwin") ~= nil
+
+local function platform_mod(macos, other)
+  return is_macos and macos or other
+end
 
 config.font = wezterm.font("Ioskeley Mono")
 config.font_size = 16
@@ -9,7 +14,9 @@ config.color_scheme = "Atom (Gogh)"
 config.default_cursor_style = "SteadyBlock"
 
 config.window_background_opacity = 0.85
-config.macos_window_background_blur = 20
+if is_macos then
+  config.macos_window_background_blur = 20
+end
 
 config.initial_rows = 34
 config.initial_cols = 97
@@ -48,7 +55,6 @@ config.colors = {
   },
 }
 
--- Clean tab titles: process name, or remote host for SSH
 wezterm.on("format-tab-title", function(tab)
   local pane = tab.active_pane
   local domain = pane.domain_name or ""
@@ -63,6 +69,7 @@ wezterm.on("format-tab-title", function(tab)
   end
   return string.format("  %s  ", process ~= "" and process or "shell")
 end)
+
 config.hide_mouse_cursor_when_typing = true
 config.mouse_wheel_scrolls_tabs = false
 config.scroll_to_bottom_on_input = true
@@ -77,10 +84,10 @@ config.ssh_domains = {
 
 config.keys = {
   { key = "Enter", mods = "SHIFT", action = wezterm.action.SendString("\n") },
-  { key = "w", mods = "CMD", action = wezterm.action.CloseCurrentPane { confirm = false } },
-  { key = "d", mods = "CMD", action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
-  { key = "d", mods = "CMD|SHIFT", action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
-  { key = "k", mods = "CMD", action = wezterm.action.SendString("clear\n") },
+  { key = "w", mods = platform_mod("CMD", "CTRL|SHIFT"), action = wezterm.action.CloseCurrentPane { confirm = false } },
+  { key = "d", mods = platform_mod("CMD", "CTRL|SHIFT"), action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
+  { key = "d", mods = platform_mod("CMD|SHIFT", "CTRL|ALT"), action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
+  { key = "k", mods = platform_mod("CMD", "CTRL|SHIFT"), action = wezterm.action.SendString("clear\n") },
   { key = "N", mods = "CTRL|SHIFT", action = wezterm.action.DisableDefaultAssignment },
 }
 

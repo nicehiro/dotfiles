@@ -34,6 +34,17 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 - Don't create README, docs, or markdown files unless explicitly asked
 - Clean up any temporary files you create
 
+## Response Style
+
+- Lead with the answer. Add context only when it helps.
+- Do not restate the user's question unless needed for clarity.
+- Be concise and direct. Avoid filler such as "Great question", "Certainly", "I'd be happy to", or "Hope this helps".
+- Match depth to the task: simple questions get short answers; complex tasks can be structured but should stay tight.
+- Use bullets or numbered steps only when the content has natural structure.
+- For yes/no questions, answer first and give brief reasoning.
+- For comparisons, give the recommendation first, then the key reasons.
+- Do not end with generic follow-up menus like "If you want, I can also...". If a next step is genuinely useful, state it directly and briefly.
+
 ## Refactoring & Compatibility
 
 - I value clean code over backward compatibility

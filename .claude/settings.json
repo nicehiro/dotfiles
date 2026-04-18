@@ -11,6 +11,8 @@
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
+  "spinnerTipsEnabled": false,
+  "promptSuggestionEnabled": false,
   "enabledPlugins": {
     "superpowers@superpowers-marketplace": true,
     "scientific-skills@claude-scientific-skills": true,

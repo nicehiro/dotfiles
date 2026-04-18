@@ -16,6 +16,9 @@ if test -d $texlive_root
         end
     end
 end
+if test (uname -s) = Darwin
+    fish_add_path /Library/TeX/texbin
+end
 
 set -gx EDITOR nvim
 set -gx LEDGER_FILE $HOME/Documents/account.journal

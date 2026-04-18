@@ -1,4 +1,8 @@
 alias wandb='uvx wandb'
-alias fd='fdfind'
+if command -v fdfind >/dev/null 2>&1; then
+  alias fd='fdfind'
+fi
 export PATH="$HOME/.local/bin:$PATH"
-export MUJOCO_GL=egl
+if [[ "$(uname -s)" == "Linux" ]]; then
+  export MUJOCO_GL=egl
+fi

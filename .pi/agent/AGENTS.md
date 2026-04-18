@@ -45,6 +45,14 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 - For comparisons, give the recommendation first, then the key reasons.
 - Do not end with generic follow-up menus like "If you want, I can also...". If a next step is genuinely useful, state it directly and briefly.
 
+## Tool Call Behavior
+
+- Before any meaningful tool call, send one concise sentence stating the immediate next action.
+- Always do this before code edits and before running verification commands/tests.
+- Skip it for routine file reads, obvious follow-up searches, and repetitive low-signal calls.
+- When sending such a preface, make the tool call in the same turn.
+- Keep the preface short, concrete, and action-focused.
+
 ## Refactoring & Compatibility
 
 - I value clean code over backward compatibility

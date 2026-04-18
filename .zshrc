@@ -15,6 +15,9 @@ path_prepend_if_exists "$HOME/.local/bin"
 for texlive_bin in /usr/local/texlive/2026/bin/*(N); do
   path_prepend_if_exists "$texlive_bin"
 done
+if [[ "$OSTYPE" == darwin* ]]; then
+  path_prepend_if_exists "/Library/TeX/texbin"
+fi
 
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"

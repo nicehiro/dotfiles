@@ -54,7 +54,6 @@
           pkgs.hugo
           pkgs.coreutils
           pkgs.dict
-          pkgs.cloudflared
           pkgs.yarn
           pkgs.aria2
           pkgs.hledger
@@ -64,7 +63,6 @@
           pkgs.pdf2svg
           pkgs.cmake
           pkgs.glibtool
-          pkgs.julia-mono
           pkgs.imagemagick
           pkgs.starship
           pkgs.android-tools
@@ -72,6 +70,7 @@
           pkgs.opencode
           pkgs.ripgrep
           pkgs.fish
+          pkgs.pi-coding-agent
         ];
 
       homebrew = {
@@ -115,7 +114,7 @@
         casks = [
 				  "emacs-plus-app@master"
           "thebrowsercompany-dia"
-          "google-chrome@dev"
+          "google-chrome"
           "tailscale-app"
           "opencode-desktop"
           "orbstack"
@@ -127,18 +126,13 @@
           "wakatime"
           "kitlangton-hex"
           "chatgpt"
-          "codex"
           "codex-app"
           "claude"
-          "conductor"
-          "commander"
-          "alma"
           "linearmouse"
           "inkscape"
           "figma"
           "zoom"
           "netnewswire"
-          # "blender"
           "steam"
           "telegram"
           "mactex"
@@ -154,23 +148,17 @@
           "calibre"
           "lyric-fever"
           "spotify"
-          "ticktick" # Task and calendar client
-          # fonts
           "koe"
+          # fonts
           "font-lxgw-wenkai"
           "font-jetbrains-mono-nerd-font"
           "font-maple-mono-nf"
           "font-maple-mono-nf-cn"
-          "font-juliamono"
-          "font-monaspice-nerd-font"
           "font-zed-mono-nerd-font"
           "font-zed-sans"
           "font-literata"
-          "font-libre-baskerville"
-          "font-source-serif-4"
-          "font-geist"
           "font-geist-mono-nerd-font"
-          "font-iosevka-etoile"
+          "font-ioskeley-mono"
         ];
         masApps = {
           Shadowrocket = 932747118;
@@ -184,7 +172,7 @@
         dock.largesize = 64;
         dock.persistent-apps = [
           "/Applications/Dia.app"
-          "/Applications/WezTerm.app/"
+          "/Applications/Ghostty.app/"
 					"/Applications/Emacs.app"
           "/Applications/Figma.app"
           "/Applications/Spotify.app"

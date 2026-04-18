@@ -2,7 +2,7 @@
 name: coder
 description: Amp-style task executor for implementation, refactors, and multi-step coding work
 tools: read, write, edit, bash, grep, find, ls
-model: claude-sonnet-4-6
+model: gpt-5.3-codex
 thinking: medium
 ---
 

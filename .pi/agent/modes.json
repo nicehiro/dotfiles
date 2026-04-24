@@ -4,12 +4,12 @@
   "modes": {
     "default": {
       "provider": "openai",
-      "modelId": "gpt-5.3-codex",
+      "modelId": "gpt-5.5",
       "thinkingLevel": "high"
     },
     "fast": {
       "provider": "openai",
-      "modelId": "gpt-5.3-codex-spark",
+      "modelId": "gpt-5.4-mini",
       "thinkingLevel": "off"
     },
     "oracle": {

@@ -70,7 +70,6 @@
           pkgs.opencode
           pkgs.ripgrep
           pkgs.fish
-          pkgs.pi-coding-agent
         ];
 
       homebrew = {
@@ -109,7 +108,6 @@
 				  "tree-sitter"
 				  "zlib"
 				  "rustup"
-          "pi-coding-agent" # CLI + TUI AI coding agent
         ];
         casks = [
 				  "emacs-plus-app@master"

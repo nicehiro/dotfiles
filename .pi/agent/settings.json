@@ -6,9 +6,9 @@
     "npm:pi-subagents"
   ],
   "theme": "nightowl",
-  "lastChangelogVersion": "0.68.1",
+  "lastChangelogVersion": "0.70.0",
   "defaultProvider": "openai",
-  "defaultModel": "gpt-5.4-pro",
+  "defaultModel": "gpt-5.5",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "high",
   "safeGit": {
@@ -20,8 +20,8 @@
     "~/.codex/skills"
   ],
   "enabledModels": [
-    "openai/gpt-5.3-codex",
-    "openai/gpt-5.3-codex-spark",
+    "openai/gpt-5.5",
+    "openai/gpt-5.4-mini",
     "openai/gpt-5.4-pro"
   ]
 }

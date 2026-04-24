@@ -2,7 +2,7 @@
 name: writer
 description: LaTeX academic paper writing for AI/robotics venues
 tools: read, grep, find, ls, bash
-model: gpt-5.4-pro
+model: gpt-5.5
 thinking: high
 ---
 

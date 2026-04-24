@@ -6,11 +6,11 @@
     "npm:pi-subagents"
   ],
   "theme": "nightowl",
-  "lastChangelogVersion": "0.67.3",
+  "lastChangelogVersion": "0.68.1",
   "defaultProvider": "openai",
   "defaultModel": "gpt-5.4-pro",
   "hideThinkingBlock": false,
-  "defaultThinkingLevel": "xhigh",
+  "defaultThinkingLevel": "high",
   "safeGit": {
     "enabledByDefault": true,
     "promptLevel": "medium"

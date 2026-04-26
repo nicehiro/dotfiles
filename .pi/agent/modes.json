@@ -9,12 +9,17 @@
     },
     "fast": {
       "provider": "openai",
-      "modelId": "gpt-5.4-mini",
+      "modelId": "gpt-5.5",
       "thinkingLevel": "off"
     },
     "oracle": {
       "provider": "openai",
-      "modelId": "gpt-5.4-pro",
+      "modelId": "gpt-5.5",
+      "thinkingLevel": "xhigh"
+    },
+    "opus": {
+      "provider": "anthropic",
+      "modelId": "claude-opus-4-7",
       "thinkingLevel": "high"
     }
   }

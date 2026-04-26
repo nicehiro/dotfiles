@@ -8,31 +8,16 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    brew-src = {
+      url = "github:Homebrew/brew";
+      flake = false;
+    };
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    homebrew-emacsplus = {
-      url = "github:d12frosted/homebrew-emacs-plus";
-      flake = false;
-    };
-    homebrew-core = {
-      url = "github:homebrew/homebrew-core";
-      flake = false;
-    };
-    homebrew-cask = {
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
-    homebrew-tw93 = {
-      url = "github:tw93/homebrew-tap";
-      flake = false;
-    };
-    homebrew-owo = {
-      url = "github:owo-network/homebrew-brew";
-      flake = false;
-    };
+    nix-homebrew.inputs.brew-src.follows = "brew-src";
     claude-code.url = "github:sadjow/claude-code-nix";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-emacsplus, homebrew-core, homebrew-cask, homebrew-tw93, homebrew-owo, claude-code }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, claude-code, ... }:
   let
     configuration = { pkgs, config, ... }: {
 
@@ -53,7 +38,6 @@
           pkgs.fzf
           pkgs.hugo
           pkgs.coreutils
-          pkgs.dict
           pkgs.yarn
           pkgs.aria2
           pkgs.hledger
@@ -75,11 +59,11 @@
       homebrew = {
         enable = true;
         onActivation = {
-          autoUpdate = false;   # runs `brew update`
+          autoUpdate = true;   # runs `brew update`
           upgrade    = true;   # upgrades outdated formulae
           cleanup    = "zap";  # optional: removes old versions/casks
         };
-        taps  = [ "homebrew/core" "homebrew/cask" "tw93/tap" "owo-network/brew" ];
+        taps  = [ "d12frosted/emacs-plus" "tw93/tap" "owo-network/brew" ];
         brews = [
           "mas"
           "aspell"
@@ -114,7 +98,6 @@
           "thebrowsercompany-dia"
           "google-chrome"
           "tailscale-app"
-          "opencode-desktop"
           "orbstack"
           "visual-studio-code"
           "zed"
@@ -158,10 +141,6 @@
           "font-geist-mono-nerd-font"
           "font-ioskeley-mono"
         ];
-        masApps = {
-          Shadowrocket = 932747118;
-          infuse = 1136220934;
-        };
       };
 
       system.primaryUser = "fangyuan";
@@ -244,13 +223,7 @@
             enableRosetta = true;
             # User owning the Homebrew prefix
             user = "fangyuan";
-	          taps = {
-	            "d12frosted/homebrew-emacs-plus" = homebrew-emacsplus;
-	            "homebrew/homebrew-core" = homebrew-core;
-	            "homebrew/homebrew-cask" = homebrew-cask;
-	            "tw93/homebrew-tap" = homebrew-tw93;
-	            "owo-network/homebrew-brew" = homebrew-owo;
-	          };
+            mutableTaps = true;
           };
         }
       ];

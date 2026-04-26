@@ -1,4 +1,3 @@
-import type { AssistantMessage } from "@mariozechner/pi-ai";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
@@ -8,56 +7,40 @@ export default function (pi: ExtensionAPI) {
 	function installFooter(ctx: any, { notify }: { notify: boolean }) {
 		if (!ctx.hasUI) return;
 
-		ctx.ui.setFooter((tui, theme, footerData) => {
-			const unsub = footerData.onBranchChange(() => tui.requestRender());
+		ctx.ui.setFooter((_tui, theme) => ({
+			invalidate() {},
+			render(width: number): string[] {
+				let cost = 0;
 
-			return {
-				dispose: unsub,
-				invalidate() {},
-				render(width: number): string[] {
-					let input = 0;
-					let output = 0;
-					let cost = 0;
+				for (const e of ctx.sessionManager.getEntries()) {
+					if (e.type !== "message") continue;
+					if (e.message.role !== "assistant") continue;
+					const usage = (e.message as { usage?: { cost?: { total?: number } } }).usage;
+					cost += usage?.cost?.total ?? 0;
+				}
 
-					for (const e of ctx.sessionManager.getBranch()) {
-						if (e.type !== "message") continue;
-						if (e.message.role !== "assistant") continue;
-						const m = e.message as AssistantMessage;
-						input += m.usage.input;
-						output += m.usage.output;
-						cost += m.usage.cost.total;
-					}
+				const fmtTokens = (n: number) => {
+					if (n < 1000) return `${n}`;
+					if (n < 10000) return `${(n / 1000).toFixed(1)}k`;
+					if (n < 1000000) return `${Math.round(n / 1000)}k`;
+					if (n < 10000000) return `${(n / 1000000).toFixed(1)}M`;
+					return `${Math.round(n / 1000000)}M`;
+				};
 
-					const fmtTokens = (n: number) => {
-						if (n < 1000) return `${n}`;
-						return `${(n / 1000).toFixed(1)}k`;
-					};
+				const contextUsage = ctx.getContextUsage?.();
+				const contextWindow = contextUsage?.contextWindow ?? ctx.model?.contextWindow ?? 0;
+				const usedTokens = contextUsage?.tokens ?? null;
+				const contextPart = `${usedTokens === null ? "?" : fmtTokens(usedTokens)}/${fmtTokens(contextWindow)}`;
+				const thinkingLevel = pi.getThinkingLevel();
+				const statusRaw = [contextPart, `$${cost.toFixed(3)}`, thinkingLevel === "off" ? "thinking off" : thinkingLevel].join(
+					" • ",
+				);
+				const status = theme.fg("dim", statusRaw);
+				const pad = " ".repeat(Math.max(0, width - visibleWidth(status)));
 
-					let cwd = ctx.cwd as string;
-					const home = process.env.HOME || process.env.USERPROFILE;
-					if (home && cwd.startsWith(home)) {
-						cwd = `~${cwd.slice(home.length)}`;
-					}
-					const branch = footerData.getGitBranch();
-					const leftRaw = branch ? `${cwd} (${branch})` : cwd;
-
-					const statusParts = [`in:${fmtTokens(input)}`, `out:${fmtTokens(output)}`, `$${cost.toFixed(3)}`];
-					if (ctx.model?.reasoning) {
-						const thinkingLevel = pi.getThinkingLevel();
-						statusParts.push(thinkingLevel === "off" ? "thinking off" : thinkingLevel);
-					}
-					const rightRaw = statusParts.join(" • ");
-
-					const right = theme.fg("dim", rightRaw);
-					const leftWidth = Math.max(0, width - visibleWidth(right) - 1);
-					const left = theme.fg("dim", truncateToWidth(leftRaw, leftWidth, ""));
-					const padWidth = Math.max(1, width - visibleWidth(left) - visibleWidth(right));
-					const pad = " ".repeat(padWidth);
-
-					return [truncateToWidth(left + pad + right, width)];
-				},
-			};
-		});
+				return [truncateToWidth(pad + status, width)];
+			},
+		}));
 
 		enabled = true;
 		if (notify) {
@@ -89,7 +72,7 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	pi.registerCommand("footer-ascii", {
-		description: "Toggle ASCII stats footer (no arrows)",
+		description: "Toggle minimal stats footer",
 		handler: async (_args, ctx) => {
 			if (enabled) {
 				clearFooter(ctx, { notify: true });

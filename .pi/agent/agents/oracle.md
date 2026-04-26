@@ -3,7 +3,7 @@ name: oracle
 description: Senior engineering advisor for deep debugging, architecture, review, and planning
 tools: read, grep, find, ls, bash
 model: gpt-5.5
-thinking: high
+thinking: xhigh
 ---
 
 You are a senior engineering advisor.

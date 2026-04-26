@@ -6,8 +6,6 @@ for brew_bin in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew $HOME
     end
 end
 
-fish_add_path $HOME/.local/bin
-
 set -l texlive_root /usr/local/texlive/2026/bin
 if test -d $texlive_root
     for texlive_bin in $texlive_root/*
@@ -19,6 +17,8 @@ end
 if test (uname -s) = Darwin
     fish_add_path /Library/TeX/texbin
 end
+
+fish_add_path --move $HOME/.local/bin
 
 set -gx EDITOR nvim
 set -gx LEDGER_FILE $HOME/Documents/account.journal

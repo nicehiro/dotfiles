@@ -94,6 +94,7 @@
 				  "rustup"
         ];
         casks = [
+          "warp"
 				  "emacs-plus-app@master"
           "thebrowsercompany-dia"
           "google-chrome"
@@ -152,8 +153,9 @@
           "/Applications/Ghostty.app/"
 					"/Applications/Emacs.app"
           "/Applications/Figma.app"
-          "/Applications/Spotify.app"
+          "/System/Applications/Music.app"
           "/Applications/Zotero.app"
+          "/Applications/Codex.app"
         ];
         # finder settings
         finder.FXPreferredViewStyle = "clmv";

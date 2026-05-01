@@ -3,14 +3,15 @@
     "https://github.com/default-anton/pi-librarian",
     "https://github.com/nicehiro/pi-relay",
     "https://github.com/davebcn87/pi-autoresearch.git",
-    "npm:pi-subagents"
+    "npm:pi-subagents",
+    "npm:pi-mcp-adapter"
   ],
   "theme": "nightowl",
-  "lastChangelogVersion": "0.70.2",
+  "lastChangelogVersion": "0.71.0",
   "defaultProvider": "openai",
   "defaultModel": "gpt-5.5",
   "hideThinkingBlock": false,
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "xhigh",
   "safeGit": {
     "enabledByDefault": true,
     "promptLevel": "medium"

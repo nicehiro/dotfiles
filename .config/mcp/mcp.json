@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "pencil": {
+      "command": "/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
+      "args": ["--app", "desktop"],
+      "env": {},
+      "lifecycle": "lazy",
+      "directTools": true
+    },
+    "figma": {
+      "url": "https://mcp.figma.com/mcp",
+      "auth": "bearer",
+      "bearerTokenEnv": "FIGMA_OAUTH_TOKEN",
+      "headers": {
+        "X-Figma-Region": "us-east-1"
+      },
+      "lifecycle": "lazy"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 shell-integration-features = ssh-terminfo,ssh-env,sudo,no-title
 
 font-family = IoskeleyMono Nerd Font
-font-size = 16
+font-size = 12
 # theme = light:Atom One Light,dark:Atom One Dark
 theme = Atom One Dark
 cursor-style = block

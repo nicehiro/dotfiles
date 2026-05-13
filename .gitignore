@@ -61,6 +61,9 @@ bun.lock
 .pi/msg-bridge.json
 .config/fish/fish_variables
 
+# Home Manager generated files
+.config/git/config
+
 # Linux desktop generated files
 .config/.gsd-keyboard.settings-ported
 .config/GNOME-xdg-terminals.list

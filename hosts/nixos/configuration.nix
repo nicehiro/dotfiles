@@ -5,6 +5,7 @@
     ./hardware-configuration.nix
     ../../modules/nixos/nix.nix
     ../../modules/nixos/desktop-gnome.nix
+    ../../modules/nixos/desktop-hyprland.nix
     ../../modules/nixos/users.nix
     ../../modules/nixos/packages.nix
     ../../modules/nixos/services.nix

@@ -4,6 +4,7 @@
   imports = [
     ../modules/home/common.nix
     ../modules/home/dotfiles.nix
+    ../modules/home/hyprland.nix
   ];
 
   home.username = "fangyuan";

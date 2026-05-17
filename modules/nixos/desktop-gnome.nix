@@ -20,5 +20,6 @@
 
   fonts.packages = with pkgs; [
     ioskeley-mono.normal-NF
+    lxgw-wenkai
   ];
 }

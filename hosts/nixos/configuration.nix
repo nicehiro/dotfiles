@@ -25,6 +25,7 @@
   services.xserver.xkb = {
     layout = "us";
     variant = "";
+    options = "ctrl:nocaps,altwin:swap_alt_win";
   };
 
   programs.fish.enable = true;

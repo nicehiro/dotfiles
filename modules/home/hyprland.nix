@@ -26,7 +26,6 @@ let
 in
 {
   home.packages = with pkgs; [
-    alacritty
     cliphist
     hypr-power-menu
     libnotify
@@ -37,7 +36,7 @@ in
 
     settings = {
       "$mod" = "SUPER";
-      "$terminal" = "alacritty";
+      "$terminal" = "ghostty";
       "$browser" = "firefox";
       "$fileManager" = "nautilus --new-window";
 
@@ -63,7 +62,7 @@ in
 
       input = {
         kb_layout = "us";
-        kb_options = "compose:caps";
+        kb_options = "ctrl:nocaps,altwin:swap_alt_win";
         follow_mouse = 1;
 
         touchpad = {
@@ -206,7 +205,7 @@ in
     settings.mainBar = {
       layer = "top";
       position = "top";
-      height = 30;
+      height = 50;
       spacing = 8;
 
       modules-left = [
@@ -274,7 +273,7 @@ in
       cpu = {
         interval = 5;
         format = " {usage}%";
-        on-click = "alacritty -e htop";
+        on-click = "ghostty -e htop";
       };
 
       memory = {
@@ -304,7 +303,7 @@ in
         border: none;
         border-radius: 0;
         font-family: "IoskeleyMono Nerd Font", sans-serif;
-        font-size: 16px;
+        font-size: 18px;
         min-height: 0;
       }
 

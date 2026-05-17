@@ -27,9 +27,8 @@
     slurp
     hyprshot
     hyprpicker
-
-    waybar
     wofi
+
     mako
     hyprpaper
     hyprlock

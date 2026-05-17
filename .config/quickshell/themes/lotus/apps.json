@@ -1,0 +1,12 @@
+{
+  "apps": [
+    { "name": "TERMINAL", "icon": "ghostty", "exec": "ghostty" },
+    { "name": "BROWSER", "icon": "firefox", "exec": "firefox" },
+    { "name": "FILES", "icon": "system-file-manager", "exec": "nautilus --new-window" },
+    { "name": "EDITOR", "icon": "nvim", "exec": "ghostty -e nvim" },
+    { "name": "MONITOR", "icon": "utilities-system-monitor", "exec": "ghostty -e htop" },
+    { "name": "AUDIO", "icon": "multimedia-volume-control", "exec": "pavucontrol" },
+    { "name": "BLUETOOTH", "icon": "bluetooth", "exec": "blueman-manager" },
+    { "name": "NETWORK", "icon": "network-wireless", "exec": "nm-connection-editor" }
+  ]
+}

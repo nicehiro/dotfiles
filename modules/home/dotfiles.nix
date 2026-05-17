@@ -21,6 +21,10 @@
     source = ../../.config/starship.toml;
     force = true;
   };
+  xdg.configFile."quickshell" = {
+    source = ../../.config/quickshell;
+    force = true;
+  };
 
   xdg.configFile."fish/config.fish" = {
     source = ../../.config/fish/config.fish;

@@ -4,10 +4,11 @@
     "https://github.com/nicehiro/pi-relay",
     "https://github.com/davebcn87/pi-autoresearch.git",
     "npm:pi-subagents",
-    "npm:pi-mcp-adapter"
+    "npm:pi-mcp-adapter",
+    "https://github.com/nicehiro/pi-arxiv"
   ],
   "theme": "nightowl",
-  "lastChangelogVersion": "0.71.0",
+  "lastChangelogVersion": "0.74.1",
   "defaultProvider": "openai",
   "defaultModel": "gpt-5.5",
   "hideThinkingBlock": false,

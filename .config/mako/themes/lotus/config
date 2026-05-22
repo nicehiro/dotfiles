@@ -1,0 +1,31 @@
+anchor=top-right
+layer=overlay
+width=520
+height=160
+margin=16
+padding=18
+border-size=2
+border-radius=12
+background-color=#282c34ee
+text-color=#dce0e5ff
+border-color=#61afefff
+progress-color=over #98c379ff
+font=IoskeleyMono Nerd Font 20
+default-timeout=5000
+ignore-timeout=false
+max-visible=5
+sort=-time
+group-by=app-name
+icons=true
+max-icon-size=64
+markup=true
+actions=true
+format=<b>%s</b>\n%b
+
+[urgency=low]
+border-color=#3b414dff
+default-timeout=3000
+
+[urgency=critical]
+border-color=#e06c75ff
+default-timeout=0

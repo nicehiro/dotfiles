@@ -19,6 +19,7 @@ if test (uname -s) = Darwin
 end
 
 fish_add_path --move $HOME/.local/bin
+fish_add_path --move $HOME/.npm-global/bin
 
 set -gx EDITOR nvim
 set -gx LEDGER_FILE $HOME/Documents/account.journal

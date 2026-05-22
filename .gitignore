@@ -58,8 +58,12 @@ bun.lock
 !.pi/agent/git/.gitignore
 .pi/agent/relay.yaml
 .pi/agent/relay-mappings.json
+.pi/agent/mcp-cache.json
 .pi/msg-bridge.json
 .config/fish/fish_variables
+
+# Home Manager generated files
+.config/git/config
 
 # Linux desktop generated files
 .config/.gsd-keyboard.settings-ported

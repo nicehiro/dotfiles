@@ -55,7 +55,7 @@ shape = "Block"
 TERM = "xterm-256color"
 
 [font]
-size = 14
+size = 16
 
 [font.bold]
 family = "IoskeleyMono Nerd Font"
@@ -83,11 +83,15 @@ hide_when_typing = true
 action = "PasteSelection"
 mouse = "Middle"
 
+[scrolling]
+multiplier = 2
+
 [selection]
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [terminal.shell]
-program = "/bin/zsh"
+program = "/usr/bin/env"
+args = ["fish"]
 
 [window]
 decorations = "full"
@@ -100,14 +104,19 @@ columns = 80
 lines = 40
 
 [window.padding]
-x = 4
-y = 4
+x = 20
+y = 10
 
 [general]
 
 live_config_reload = true
 import = [
-  "~/.config/alacritty/themes/tokyo-night.toml"
+  "~/.config/alacritty/themes/zed-one-dark.toml"
 ]
 
 [terminal]
+
+[[keyboard.bindings]]
+key = "Enter"
+mods = "Shift"
+chars = "\n"

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+theme="${1:-reload}"
+config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+if [[ "$theme" != "reload" ]]; then
+  for dir in \
+    "$config_home/hypr/themes/$theme" \
+    "$config_home/quickshell/themes/$theme" \
+    "$config_home/wofi/themes/$theme" \
+    "$config_home/mako/themes/$theme"; do
+    [[ -d "$dir" ]] || { echo "missing theme directory: $dir" >&2; exit 1; }
+  done
+
+  ln -sfn "themes/$theme/theme.conf" "$config_home/hypr/theme.conf"
+  ln -sfn "themes/$theme/hyprpaper.conf" "$config_home/hypr/hyprpaper.conf"
+  ln -sfn "themes/$theme/hyprlock.conf" "$config_home/hypr/hyprlock.conf"
+  ln -sfn "themes/$theme" "$config_home/quickshell/current"
+  ln -sfn "themes/$theme/style.css" "$config_home/wofi/style.css"
+  ln -sfn "themes/$theme/config" "$config_home/mako/config"
+fi
+
+hyprctl reload >/dev/null 2>&1 || true
+pkill quickshell >/dev/null 2>&1 || true
+quickshell --no-duplicate >/dev/null 2>&1 &
+
+pkill mako >/dev/null 2>&1 || true
+mako >/dev/null 2>&1 &
+
+pkill hyprpaper >/dev/null 2>&1 || true
+hyprpaper >/dev/null 2>&1 &

@@ -91,7 +91,7 @@ elif [[ -f "$ghostty_target" ]]; then
 else
   printf 'Ghostty theme not found; skipping terminal theme copy: %s\n' "$ghostty_dir/themes/$theme/config" >&2
 fi
-wallpaper_path=$(awk -F= '/^wallpaper[[:space:]]*=/{print $2; exit}' "$hyprpaper_target" | sed 's/^[[:space:]]*,[[:space:]]*//; s/^[[:space:]]*//; s/[[:space:]]*$//')
+wallpaper_path=$(awk -F= '/^[[:space:]]*path[[:space:]]*=/{print $2; exit}' "$hyprpaper_target" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
 wallpaper_path=${wallpaper_path/#\~/$HOME}
 
 if command -v hyprctl >/dev/null 2>&1; then
@@ -99,10 +99,8 @@ if command -v hyprctl >/dev/null 2>&1; then
 fi
 
 if [[ -n "$wallpaper_path" ]] && command -v hyprpaper >/dev/null 2>&1; then
-  hyprpaper reload ,"$wallpaper_path" >/dev/null 2>&1 || {
-    pkill hyprpaper >/dev/null 2>&1 || true
-    hyprpaper >/dev/null 2>&1 &
-  }
+  pkill hyprpaper >/dev/null 2>&1 || true
+  hyprpaper --config "$hypr_dir/hyprpaper.conf" >/dev/null 2>&1 &
 fi
 
 if command -v makoctl >/dev/null 2>&1; then

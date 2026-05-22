@@ -1,1 +1,0 @@
-- Optional future upstream-style yahr features if desired later: notification center/history, richer live status popovers, and deeper media artwork integration. Avoid adding them unless they can stay dependency-light and runtime-safe.

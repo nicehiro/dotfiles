@@ -2,7 +2,9 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.SystemTray
 import Quickshell.Wayland
+import Quickshell.Widgets
 
 Scope {
   id: root
@@ -333,6 +335,8 @@ Scope {
           onActivated: root.run("ghostty -e htop")
         }
 
+        Tray { parentWindow: bar }
+
         Module {
           glyph: root.netIcon
           onActivated: root.run("nm-connection-editor")
@@ -365,6 +369,63 @@ Scope {
     Layout.leftMargin: 4
     Layout.rightMargin: 4
     color: root.theme.sep
+  }
+
+  component Tray: RowLayout {
+    required property var parentWindow
+
+    Layout.alignment: Qt.AlignVCenter
+    spacing: 0
+    visible: SystemTray.items.values.length > 0
+
+    Repeater {
+      model: SystemTray.items
+
+      TrayItem {
+        required property var modelData
+        item: modelData
+        parentWindow: parent.parentWindow
+      }
+    }
+  }
+
+  component TrayItem: Item {
+    required property var item
+    required property var parentWindow
+
+    Layout.alignment: Qt.AlignVCenter
+    Layout.preferredWidth: 34
+    Layout.preferredHeight: root.barHeight
+
+    Rectangle {
+      anchors.fill: parent
+      anchors.topMargin: 3
+      anchors.bottomMargin: 3
+      color: mouse.containsMouse ? Qt.rgba(0.33, 0.33, 0.39, 0.06) : "transparent"
+      Behavior on color { ColorAnimation { duration: 180 } }
+    }
+
+    IconImage {
+      anchors.centerIn: parent
+      width: 22
+      height: 22
+      source: Quickshell.iconPath(parent.item.icon)
+      asynchronous: true
+    }
+
+    MouseArea {
+      id: mouse
+      anchors.fill: parent
+      hoverEnabled: true
+      acceptedButtons: Qt.LeftButton | Qt.RightButton
+      cursorShape: Qt.PointingHandCursor
+      onClicked: event => {
+        if (event.button === Qt.RightButton && parent.item.hasMenu) {
+          const point = parent.mapToItem(parent.parentWindow.contentItem, width / 2, height)
+          parent.item.display(parent.parentWindow, point.x, point.y)
+        } else parent.item.activate()
+      }
+    }
   }
 
   component Module: Item {

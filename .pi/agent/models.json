@@ -1,10 +1,10 @@
 {
   "providers": {
     "anthropic": {
-      "baseUrl": "http://cc.nicehiro.org:8080"
+      "baseUrl": "https://sub2api.nicehiro.org"
     },
 		"openai": {
-			"baseUrl": "http://cc.nicehiro.org:8080"
+			"baseUrl": "https://sub2api.nicehiro.org"
 		}
   }
 }

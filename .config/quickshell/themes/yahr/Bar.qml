@@ -2,7 +2,9 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.SystemTray
 import Quickshell.Wayland
+import Quickshell.Widgets
 
 Scope {
   id: root
@@ -110,6 +112,7 @@ Scope {
   }
 
   PanelWindow {
+    id: bar
     color: "transparent"
     anchors { top: true; left: true; right: true }
     implicitHeight: root.barHeight
@@ -150,6 +153,7 @@ Scope {
         Module { glyph: "󰎆"; color: root.theme.accentPink; onActivated: root.run("quickshell -p ~/.config/quickshell/current/Media.qml"); onRightActivated: root.run("playerctl play-pause") }
         Module { glyph: "󰒓"; color: root.theme.accentPurple; onActivated: root.run("quickshell -p ~/.config/quickshell/current/ControlCenter.qml") }
         Module { glyph: "󰂚"; color: root.theme.accentPink; onActivated: root.run("quickshell -p ~/.config/quickshell/current/Notifications.qml"); onRightActivated: root.run("makoctl dismiss --all") }
+        Tray { parentWindow: bar }
         Module { glyph: root.netIcon; onActivated: root.run("nm-connection-editor") }
         Module { glyph: root.btIcon; onActivated: root.run("blueman-manager") }
         Module { glyph: root.audioIcon; onActivated: root.run("pavucontrol"); onRightActivated: root.run("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle") }
@@ -177,6 +181,63 @@ Scope {
     border.color: root.theme.borderGlow
     Text { id: label; anchors.centerIn: parent; text: parent.text; color: root.theme.fgPrimary; font.family: root.theme.uiFont; font.pixelSize: 20 }
     MouseArea { anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: parent.activated() }
+  }
+
+  component Tray: RowLayout {
+    required property var parentWindow
+
+    Layout.alignment: Qt.AlignVCenter
+    spacing: 2
+    visible: SystemTray.items.values.length > 0
+
+    Repeater {
+      model: SystemTray.items
+
+      TrayItem {
+        required property var modelData
+        item: modelData
+        parentWindow: parent.parentWindow
+      }
+    }
+  }
+
+  component TrayItem: Item {
+    required property var item
+    required property var parentWindow
+
+    Layout.alignment: Qt.AlignVCenter
+    Layout.preferredWidth: 34
+    Layout.preferredHeight: 40
+
+    Rectangle {
+      anchors.fill: parent
+      anchors.margins: 2
+      radius: 8
+      color: mouse.containsMouse ? root.theme.hoverBg : "transparent"
+      Behavior on color { ColorAnimation { duration: 160 } }
+    }
+
+    IconImage {
+      anchors.centerIn: parent
+      width: 22
+      height: 22
+      source: Quickshell.iconPath(parent.item.icon)
+      asynchronous: true
+    }
+
+    MouseArea {
+      id: mouse
+      anchors.fill: parent
+      hoverEnabled: true
+      acceptedButtons: Qt.LeftButton | Qt.RightButton
+      cursorShape: Qt.PointingHandCursor
+      onClicked: event => {
+        if (event.button === Qt.RightButton && parent.item.hasMenu) {
+          const point = parent.mapToItem(parent.parentWindow.contentItem, width / 2, height)
+          parent.item.display(parent.parentWindow, point.x, point.y)
+        } else parent.item.activate()
+      }
+    }
   }
 
   component Module: Item {

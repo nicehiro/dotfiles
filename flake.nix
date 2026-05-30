@@ -8,16 +8,35 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    brew-src = {
+      url = "github:Homebrew/brew";
+      flake = false;
+    };
+
+    nix-homebrew = {
+      url = "github:zhaofengli/nix-homebrew";
+      inputs.brew-src.follows = "brew-src";
+    };
+
+    claude-code.url = "github:sadjow/claude-code-nix";
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-darwin, nix-homebrew, claude-code, ... }:
     let
       username = "fangyuan";
-      system = "x86_64-linux";
+      linuxSystem = "x86_64-linux";
+      darwinSystem = "aarch64-darwin";
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        inherit system;
+        system = linuxSystem;
+        specialArgs = { inherit self inputs username; };
         modules = [
           ./hosts/nixos/configuration.nix
           home-manager.nixosModules.home-manager
@@ -31,10 +50,30 @@
 
       homeConfigurations.fangyuan-ubuntu = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
-          inherit system;
+          system = linuxSystem;
           config.allowUnfree = true;
         };
-        modules = [ ./home/fangyuan-linux.nix ];
+        extraSpecialArgs = { inherit self inputs username; };
+        modules = [ ./home/ubuntu.nix ];
+      };
+
+      darwinConfigurations.mbp = nix-darwin.lib.darwinSystem {
+        system = darwinSystem;
+        specialArgs = { inherit self inputs username; };
+        modules = [
+          ./hosts/darwin/mbp.nix
+          nix-homebrew.darwinModules.nix-homebrew
+          {
+            nixpkgs.overlays = [ claude-code.overlays.default ];
+
+            nix-homebrew = {
+              enable = true;
+              enableRosetta = true;
+              user = username;
+              mutableTaps = true;
+            };
+          }
+        ];
       };
     };
 }

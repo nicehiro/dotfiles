@@ -1,25 +1,31 @@
-# nix/darwin
+# Nix configs
 
-Declarative macOS system configuration using [nix-darwin](https://github.com/LnL7/nix-darwin) and [nix-homebrew](https://github.com/zhaofengli/nix-homebrew).
+Declarative system configuration for NixOS, Ubuntu Home Manager, and macOS via nix-darwin.
 
-## Usage
+## macOS
 
 ```bash
-# Apply configuration
-sudo darwin-rebuild switch --flake ~/dotfiles/nix/darwin#mbp
+# Build without activating
+darwin-rebuild build --flake ~/dotfiles#mbp
 
-# Update flake inputs
-cd ~/dotfiles/nix/darwin && nix flake update
+# Apply configuration
+sudo darwin-rebuild switch --flake ~/dotfiles#mbp
 ```
 
-## What it manages
+## NixOS
 
-**Nix packages** — stow, neovim, tmux, fzf, go, git, uv, hugo, starship, ripgrep, claude-code, etc.
+```bash
+sudo nixos-rebuild switch --flake ~/dotfiles#nixos
+```
 
-**Homebrew formulae** — node, gh, ffmpeg, rustup, sing-box, librime, poppler, gcc, etc.
+## Ubuntu / standalone Home Manager
 
-**Homebrew casks** — Ghostty, Zed, Emacs, Chrome, Figma, Spotify, Zotero, Steam, fonts, etc.
+```bash
+home-manager switch --flake ~/dotfiles#fangyuan-ubuntu
+```
 
-**Mac App Store** — Shadowrocket, Infuse
+## Update flake inputs
 
-**macOS defaults** — dock autohide, finder settings, trackpad, hot corners, 24-hour clock, key repeat, etc.
+```bash
+cd ~/dotfiles && nix flake update
+```

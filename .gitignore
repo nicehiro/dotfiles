@@ -83,3 +83,16 @@ bun.lock
 
 # Koe - exclude API credentials
 .koe/config.yaml
+
+# Alma - generated/runtime state
+.config/alma/
+
+# Pi - generated/runtime state
+.pi/agent/mcp-onboarding.json
+.pi/agent/skills/**/__pycache__/
+
+# Nix build result symlink
+result
+
+# Generated image outputs
+images/

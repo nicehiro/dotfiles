@@ -8,7 +8,7 @@
     "https://github.com/nicehiro/pi-arxiv"
   ],
   "theme": "nightowl",
-  "lastChangelogVersion": "0.75.5",
+  "lastChangelogVersion": "0.78.0",
   "defaultProvider": "openai",
   "defaultModel": "gpt-5.5-pro",
   "hideThinkingBlock": false,

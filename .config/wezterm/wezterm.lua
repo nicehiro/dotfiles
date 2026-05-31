@@ -7,7 +7,7 @@ local function platform_mod(macos, other)
 end
 
 config.font = wezterm.font("Ioskeley Mono")
-config.font_size = 16
+config.font_size = 12
 config.line_height = 1.2
 
 config.color_scheme = "Atom (Gogh)"

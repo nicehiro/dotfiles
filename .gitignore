@@ -96,3 +96,6 @@ result
 
 # Generated image outputs
 images/
+
+# Direnv generated state
+.config/direnv/

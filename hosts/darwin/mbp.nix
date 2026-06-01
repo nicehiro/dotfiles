@@ -11,6 +11,7 @@
   ];
 
   system.primaryUser = "fangyuan";
+  users.users.fangyuan.home = "/Users/fangyuan";
   system.configurationRevision = self.rev or self.dirtyRev or null;
   system.stateVersion = 4;
 

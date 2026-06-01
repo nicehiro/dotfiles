@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/home/common.nix
+    ../modules/home/linux-programs.nix
     ../modules/home/dotfiles.nix
     ../modules/home/hyprland.nix
     ../modules/home/quickshell.nix

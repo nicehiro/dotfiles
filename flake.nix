@@ -63,6 +63,7 @@
         modules = [
           ./hosts/darwin/mbp.nix
           nix-homebrew.darwinModules.nix-homebrew
+          home-manager.darwinModules.home-manager
           {
             nixpkgs.overlays = [ claude-code.overlays.default ];
 
@@ -72,6 +73,11 @@
               user = username;
               mutableTaps = true;
             };
+
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-backup";
+            home-manager.users.${username} = import ./home/darwin.nix;
           }
         ];
       };

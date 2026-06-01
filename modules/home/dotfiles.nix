@@ -1,90 +1,90 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   xdg.configFile."nvim" = {
     source = ../../.config/nvim;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."tmux" = {
     source = ../../.config/tmux;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."ghostty" = {
     source = ../../.config/ghostty;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."alacritty" = {
     source = ../../.config/alacritty;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."starship.toml" = {
     source = ../../.config/starship.toml;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."quickshell" = {
     source = ../../.config/quickshell;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
 
   xdg.configFile."fish/config.fish" = {
     source = ../../.config/fish/config.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/fish_plugins" = {
     source = ../../.config/fish/fish_plugins;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/completions/fisher.fish" = {
     source = ../../.config/fish/completions/fisher.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/completions/nvm.fish" = {
     source = ../../.config/fish/completions/nvm.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/conf.d/nvm.fish" = {
     source = ../../.config/fish/conf.d/nvm.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/functions/fisher.fish" = {
     source = ../../.config/fish/functions/fisher.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/functions/nvm.fish" = {
     source = ../../.config/fish/functions/nvm.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/functions/_nvm_index_update.fish" = {
     source = ../../.config/fish/functions/_nvm_index_update.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/functions/_nvm_list.fish" = {
     source = ../../.config/fish/functions/_nvm_list.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/functions/_nvm_version_activate.fish" = {
     source = ../../.config/fish/functions/_nvm_version_activate.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/functions/_nvm_version_deactivate.fish" = {
     source = ../../.config/fish/functions/_nvm_version_deactivate.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   xdg.configFile."fish/functions/zj.fish" = {
     source = ../../.config/fish/functions/zj.fish;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
 
   home.file.".gitconfig" = {
     source = ../../.gitconfig;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   home.file.".zshrc" = {
     source = ../../.zshrc;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
   home.file.".p10k.zsh" = {
     source = ../../.p10k.zsh;
-    force = true;
+    force = pkgs.stdenv.isLinux;
   };
 }

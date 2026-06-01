@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/home/common.nix
+    ../modules/home/cursor.nix
     ../modules/home/dotfiles.nix
     ../modules/home/bing-wallpaper.nix
     ../modules/home/emacs.nix

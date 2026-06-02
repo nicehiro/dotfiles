@@ -5,8 +5,9 @@
     fish
     gcc
     git
-		gh
+    gh
     gnome-tweaks
+    zed-editor
     ghostty
     nodejs
     sing-box

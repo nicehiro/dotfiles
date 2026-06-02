@@ -2,7 +2,7 @@
 name: researcher
 description: Literature analysis, paper summarization, and research synthesis
 tools: read, grep, find, ls, arxiv_search, arxiv_paper, zotero_web
-model: gpt-5.5
+model: gpt-5.5-pro
 thinking: high
 ---
 

@@ -1,0 +1,70 @@
+* {
+  font-family: "IoskeleyMono Nerd Font", "Symbols Nerd Font", sans-serif;
+  font-size: 18px;
+  box-shadow: none;
+  text-shadow: none;
+  transition: none;
+}
+
+window {
+  margin: 0;
+  padding: 18px;
+  border: 1px solid rgba(84, 84, 100, 0.28);
+  border-radius: 8px;
+  background-color: rgba(241, 233, 210, 0.96);
+}
+
+#outer-box,
+#inner-box,
+#scroll {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
+
+#input {
+  margin: 0 0 14px 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(84, 84, 100, 0.26);
+  border-radius: 6px;
+  background-color: #e6dcc0;
+  color: #545464;
+}
+
+#input:focus {
+  border-color: #4d699b;
+}
+
+#entry {
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background-color: transparent;
+}
+
+#entry:selected {
+  border-color: rgba(200, 64, 83, 0.48);
+  background-color: #545464;
+}
+
+#text {
+  margin: 0;
+  color: #545464;
+}
+
+#entry:selected #text {
+  color: #f1e9d2;
+}
+
+scrollbar {
+  border: none;
+  background-color: transparent;
+}
+
+scrollbar slider {
+  min-height: 40px;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(84, 84, 100, 0.28);
+}

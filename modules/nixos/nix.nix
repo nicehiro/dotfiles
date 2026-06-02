@@ -12,5 +12,8 @@
     options = "--delete-older-than 14d";
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    input-fonts.acceptLicense = true;
+  };
 }

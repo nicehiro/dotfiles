@@ -4,17 +4,17 @@
   "modes": {
     "default": {
       "provider": "openai",
-      "modelId": "gpt-5.5",
+      "modelId": "gpt-5.5-pro",
       "thinkingLevel": "high"
     },
     "fast": {
       "provider": "openai",
-      "modelId": "gpt-5.5",
+      "modelId": "gpt-5.5-pro",
       "thinkingLevel": "off"
     },
     "oracle": {
       "provider": "openai",
-      "modelId": "gpt-5.5",
+      "modelId": "gpt-5.5-pro",
       "thinkingLevel": "xhigh"
     },
     "opus": {

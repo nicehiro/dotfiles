@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
-import "themes/lotus"
+import "current"
 
 ShellRoot {
-  LotusShell {}
+  ThemeShell {}
 }

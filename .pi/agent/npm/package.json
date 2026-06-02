@@ -1,0 +1,8 @@
+{
+  "name": "pi-extensions",
+  "private": true,
+  "dependencies": {
+    "pi-mcp-adapter": "^2.8.0",
+    "pi-subagents": "^0.25.0"
+  }
+}

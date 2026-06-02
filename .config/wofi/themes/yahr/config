@@ -1,0 +1,16 @@
+width=760
+height=520
+location=center
+show=drun
+prompt=Search
+filter_rate=60
+allow_markup=false
+no_actions=true
+halign=fill
+orientation=vertical
+content_halign=fill
+insensitive=true
+allow_images=false
+gtk_dark=true
+hide_scroll=false
+matching=fuzzy

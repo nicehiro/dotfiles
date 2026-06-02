@@ -19,7 +19,10 @@
   programs.firefox.enable = true;
 
   fonts.packages = with pkgs; [
+    input-fonts
     ioskeley-mono.normal-NF
+    julia-mono
     lxgw-wenkai
+    maple-mono.NF-CN
   ];
 }

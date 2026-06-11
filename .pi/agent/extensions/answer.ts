@@ -1,4 +1,3 @@
-// this extension is from https://github.com/mitsuhiko/agent-stuff/blob/main/pi-extensions/answer.ts
 /**
  * Q&A extraction hook - extracts questions from assistant responses
  *
@@ -11,9 +10,9 @@
  * 4. Submits the compiled answers when done
  */
 
-import { complete, type Model, type Api, type UserMessage } from "@mariozechner/pi-ai";
-import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
-import { BorderedLoader, type Theme } from "@mariozechner/pi-coding-agent";
+import { complete, type Model, type Api, type UserMessage } from "@earendil-works/pi-ai";
+import type { ExtensionAPI, ExtensionContext, ModelRegistry } from "@earendil-works/pi-coding-agent";
+import { BorderedLoader } from "@earendil-works/pi-coding-agent";
 import {
 	type Component,
 	Editor,
@@ -24,7 +23,7 @@ import {
 	type TUI,
 	visibleWidth,
 	wrapTextWithAnsi,
-} from "@mariozechner/pi-tui";
+} from "@earendil-works/pi-tui";
 
 // Structured output format for question extraction
 interface ExtractedQuestion {
@@ -68,24 +67,21 @@ Example output:
   ]
 }`;
 
-const EXTRACTION_MODEL_ID = "gpt-5.4-mini";
+const CODEX_MODEL_ID = "gpt-5.3";
 const HAIKU_MODEL_ID = "claude-haiku-4-5";
 
 /**
- * Prefer GPT-5.4 mini for extraction when available, otherwise fallback to haiku or the current model.
+ * Prefer GPT-5.3 for extraction when available, otherwise fallback to haiku or the current model.
  */
 async function selectExtractionModel(
 	currentModel: Model<Api>,
-	modelRegistry: {
-		find: (provider: string, modelId: string) => Model<Api> | undefined;
-		getApiKeyAndHeaders: (model: Model<Api>) => Promise<{ ok: true; apiKey?: string; headers?: Record<string, string> } | { ok: false; error: string }>;
-	},
+	modelRegistry: ModelRegistry,
 ): Promise<Model<Api>> {
-	const extractionModel = modelRegistry.find("openai", EXTRACTION_MODEL_ID);
-	if (extractionModel) {
-		const auth = await modelRegistry.getApiKeyAndHeaders(extractionModel);
+	const codexModel = modelRegistry.find("openai-codex", CODEX_MODEL_ID);
+	if (codexModel) {
+		const auth = await modelRegistry.getApiKeyAndHeaders(codexModel);
 		if (auth.ok) {
-			return extractionModel;
+			return codexModel;
 		}
 	}
 
@@ -95,7 +91,7 @@ async function selectExtractionModel(
 	}
 
 	const auth = await modelRegistry.getApiKeyAndHeaders(haikuModel);
-	if (!auth.ok) {
+	if (auth.ok === false) {
 		return currentModel;
 	}
 
@@ -135,7 +131,6 @@ class QnAComponent implements Component {
 	private currentIndex: number = 0;
 	private editor: Editor;
 	private tui: TUI;
-	private theme: Theme;
 	private onDone: (result: string | null) => void;
 	private showingConfirmation: boolean = false;
 
@@ -143,24 +138,33 @@ class QnAComponent implements Component {
 	private cachedWidth?: number;
 	private cachedLines?: string[];
 
+	// Colors - using proper reset sequences
+	private dim = (s: string) => `\x1b[2m${s}\x1b[0m`;
+	private bold = (s: string) => `\x1b[1m${s}\x1b[0m`;
+	private cyan = (s: string) => `\x1b[36m${s}\x1b[0m`;
+	private green = (s: string) => `\x1b[32m${s}\x1b[0m`;
+	private yellow = (s: string) => `\x1b[33m${s}\x1b[0m`;
+	private gray = (s: string) => `\x1b[90m${s}\x1b[0m`;
+
 	constructor(
 		questions: ExtractedQuestion[],
 		tui: TUI,
-		theme: Theme,
 		onDone: (result: string | null) => void,
 	) {
 		this.questions = questions;
 		this.answers = questions.map(() => "");
 		this.tui = tui;
-		this.theme = theme;
 		this.onDone = onDone;
 
+		// Create a minimal theme for the editor
 		const editorTheme: EditorTheme = {
-			borderColor: (s: string) => theme.fg("borderMuted", s),
+			borderColor: this.dim,
 			selectList: {
-				selectedBg: (s: string) => theme.bg("selectedBg", s),
-				matchHighlight: (s: string) => theme.fg("accent", s),
-				itemSecondary: (s: string) => theme.fg("muted", s),
+				selectedPrefix: this.cyan,
+				selectedText: (s: string) => `\x1b[44m${s}\x1b[0m`,
+				description: this.gray,
+				scrollInfo: this.dim,
+				noMatch: this.yellow,
 			},
 		};
 
@@ -301,22 +305,23 @@ class QnAComponent implements Component {
 			return this.cachedLines;
 		}
 
-		const t = this.theme;
 		const lines: string[] = [];
-		const boxWidth = Math.min(width - 4, 120);
-		const contentWidth = boxWidth - 4;
+		const boxWidth = Math.min(width - 4, 120); // Allow wider box
+		const contentWidth = boxWidth - 4; // 2 chars padding on each side
 
+		// Helper to create horizontal lines (dim the whole thing at once)
 		const horizontalLine = (count: number) => "─".repeat(count);
 
+		// Helper to create a box line
 		const boxLine = (content: string, leftPad: number = 2): string => {
 			const paddedContent = " ".repeat(leftPad) + content;
 			const contentLen = visibleWidth(paddedContent);
 			const rightPad = Math.max(0, boxWidth - contentLen - 2);
-			return t.fg("border", "│") + paddedContent + " ".repeat(rightPad) + t.fg("border", "│");
+			return this.dim("│") + paddedContent + " ".repeat(rightPad) + this.dim("│");
 		};
 
 		const emptyBoxLine = (): string => {
-			return t.fg("border", "│") + " ".repeat(boxWidth - 2) + t.fg("border", "│");
+			return this.dim("│") + " ".repeat(boxWidth - 2) + this.dim("│");
 		};
 
 		const padToWidth = (line: string): string => {
@@ -325,10 +330,10 @@ class QnAComponent implements Component {
 		};
 
 		// Title
-		lines.push(padToWidth(t.fg("border", "╭" + horizontalLine(boxWidth - 2) + "╮")));
-		const title = `${t.bold(t.fg("accent", "Questions"))} ${t.fg("muted", `(${this.currentIndex + 1}/${this.questions.length})`)}`;
+		lines.push(padToWidth(this.dim("╭" + horizontalLine(boxWidth - 2) + "╮")));
+		const title = `${this.bold(this.cyan("Questions"))} ${this.dim(`(${this.currentIndex + 1}/${this.questions.length})`)}`;
 		lines.push(padToWidth(boxLine(title)));
-		lines.push(padToWidth(t.fg("border", "├" + horizontalLine(boxWidth - 2) + "┤")));
+		lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
 
 		// Progress indicator
 		const progressParts: string[] = [];
@@ -336,11 +341,11 @@ class QnAComponent implements Component {
 			const answered = (this.answers[i]?.trim() || "").length > 0;
 			const current = i === this.currentIndex;
 			if (current) {
-				progressParts.push(t.fg("accent", "●"));
+				progressParts.push(this.cyan("●"));
 			} else if (answered) {
-				progressParts.push(t.fg("success", "●"));
+				progressParts.push(this.green("●"));
 			} else {
-				progressParts.push(t.fg("dim", "○"));
+				progressParts.push(this.dim("○"));
 			}
 		}
 		lines.push(padToWidth(boxLine(progressParts.join(" "))));
@@ -348,7 +353,7 @@ class QnAComponent implements Component {
 
 		// Current question
 		const q = this.questions[this.currentIndex];
-		const questionText = `${t.bold("Q:")} ${q.question}`;
+		const questionText = `${this.bold("Q:")} ${q.question}`;
 		const wrappedQuestion = wrapTextWithAnsi(questionText, contentWidth);
 		for (const line of wrappedQuestion) {
 			lines.push(padToWidth(boxLine(line)));
@@ -357,7 +362,7 @@ class QnAComponent implements Component {
 		// Context if present
 		if (q.context) {
 			lines.push(padToWidth(emptyBoxLine()));
-			const contextText = t.fg("muted", `> ${q.context}`);
+			const contextText = this.gray(`> ${q.context}`);
 			const wrappedContext = wrapTextWithAnsi(contextText, contentWidth - 2);
 			for (const line of wrappedContext) {
 				lines.push(padToWidth(boxLine(line)));
@@ -366,31 +371,34 @@ class QnAComponent implements Component {
 
 		lines.push(padToWidth(emptyBoxLine()));
 
-		// Render the editor
-		const answerPrefix = t.bold("A: ");
-		const editorWidth = contentWidth - 4 - 3;
+		// Render the editor component (multi-line input) with padding
+		// Skip the first and last lines (editor's own border lines)
+		const answerPrefix = this.bold("A: ");
+		const editorWidth = contentWidth - 4 - 3; // Extra padding + space for "A: "
 		const editorLines = this.editor.render(editorWidth);
 		for (let i = 1; i < editorLines.length - 1; i++) {
 			if (i === 1) {
+				// First content line gets the "A: " prefix
 				lines.push(padToWidth(boxLine(answerPrefix + editorLines[i])));
 			} else {
+				// Subsequent lines get padding to align with the first line
 				lines.push(padToWidth(boxLine("   " + editorLines[i])));
 			}
 		}
 
 		lines.push(padToWidth(emptyBoxLine()));
 
-		// Confirmation dialog or footer
+		// Confirmation dialog or footer with controls
 		if (this.showingConfirmation) {
-			lines.push(padToWidth(t.fg("border", "├" + horizontalLine(boxWidth - 2) + "┤")));
-			const confirmMsg = `${t.fg("warning", "Submit all answers?")} ${t.fg("muted", "(Enter/y to confirm, Esc/n to cancel)")}`;
+			lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
+			const confirmMsg = `${this.yellow("Submit all answers?")} ${this.dim("(Enter/y to confirm, Esc/n to cancel)")}`;
 			lines.push(padToWidth(boxLine(truncateToWidth(confirmMsg, contentWidth))));
 		} else {
-			lines.push(padToWidth(t.fg("border", "├" + horizontalLine(boxWidth - 2) + "┤")));
-			const controls = `${t.fg("muted", "Tab/Enter")} next · ${t.fg("muted", "Shift+Tab")} prev · ${t.fg("muted", "Shift+Enter")} newline · ${t.fg("muted", "Esc")} cancel`;
+			lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
+			const controls = `${this.dim("Tab/Enter")} next · ${this.dim("Shift+Tab")} prev · ${this.dim("Shift+Enter")} newline · ${this.dim("Esc")} cancel`;
 			lines.push(padToWidth(boxLine(truncateToWidth(controls, contentWidth))));
 		}
-		lines.push(padToWidth(t.fg("border", "╰" + horizontalLine(boxWidth - 2) + "╯")));
+		lines.push(padToWidth(this.dim("╰" + horizontalLine(boxWidth - 2) + "╯")));
 
 		this.cachedWidth = width;
 		this.cachedLines = lines;
@@ -439,7 +447,7 @@ export default function (pi: ExtensionAPI) {
 				return;
 			}
 
-			// Select the best model for extraction (prefer Codex mini, then haiku)
+			// Select the best model for extraction (prefer GPT-5.3, then haiku)
 			const extractionModel = await selectExtractionModel(ctx.model, ctx.modelRegistry);
 
 			// Run extraction with loader UI
@@ -449,7 +457,9 @@ export default function (pi: ExtensionAPI) {
 
 				const doExtract = async () => {
 					const auth = await ctx.modelRegistry.getApiKeyAndHeaders(extractionModel);
-					if (!auth.ok) throw new Error(auth.error);
+					if (auth.ok === false) {
+						throw new Error(auth.error);
+					}
 					const userMessage: UserMessage = {
 						role: "user",
 						content: [{ type: "text", text: lastAssistantText! }],
@@ -492,8 +502,8 @@ export default function (pi: ExtensionAPI) {
 			}
 
 			// Show the Q&A component
-			const answersResult = await ctx.ui.custom<string | null>((tui, theme, _kb, done) => {
-				return new QnAComponent(extractionResult.questions, tui, theme, done);
+			const answersResult = await ctx.ui.custom<string | null>((tui, _theme, _kb, done) => {
+				return new QnAComponent(extractionResult.questions, tui, done);
 			});
 
 			if (answersResult === null) {

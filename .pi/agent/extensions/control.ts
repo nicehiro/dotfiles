@@ -7,6 +7,7 @@
  *
  * Features:
  * - Send messages to other running pi sessions (steer or follow-up mode)
+ *   via tool (`send_to_session`) or startup CLI flags (`--control-session`, `--send-session-message`)
  * - Retrieve the last assistant message from a session
  * - Get AI-generated summaries of session activity
  * - Clear/rewind sessions to their initial state
@@ -17,6 +18,12 @@
  *
  * Usage:
  *   pi --session-control
+ *
+ * One-shot startup send:
+ *   pi -p --session-control --control-session <session-name|session-id> --send-session-message <text>
+ *     [--send-session-mode steer|follow_up] [--send-session-wait turn_end|message_processed]
+ *     [--send-session-include-sender-info]
+ *   (startup send is one-way by default; use --send-session-wait turn_end to capture response on stdout)
  *
  * Environment:
  *   Sets PI_SESSION_ID when enabled, allowing child processes to discover
@@ -35,18 +42,29 @@
  *   Events are JSON objects with { type: "event", event, data?, subscriptionId? }
  */
 
-import type { ExtensionAPI, ExtensionContext, TurnEndEvent, MessageRenderer } from "@mariozechner/pi-coding-agent";
-import { getMarkdownTheme } from "@mariozechner/pi-coding-agent";
-import { complete, type Model, type Api, type UserMessage, type TextContent } from "@mariozechner/pi-ai";
-import { StringEnum } from "@mariozechner/pi-ai";
-import { Box, Container, Markdown, Spacer, Text } from "@mariozechner/pi-tui";
-import { Type } from "@sinclair/typebox";
+import type {
+	ExtensionAPI,
+	ExtensionContext,
+	TurnEndEvent,
+	MessageRenderer,
+	ModelRegistry,
+} from "@earendil-works/pi-coding-agent";
+import { getMarkdownTheme } from "@earendil-works/pi-coding-agent";
+import { complete, type Model, type Api, type UserMessage, type TextContent } from "@earendil-works/pi-ai";
+import { StringEnum } from "@earendil-works/pi-ai";
+import { Box, Container, Markdown, Spacer, Text } from "@earendil-works/pi-tui";
+import { Type } from "typebox";
 import { promises as fs } from "node:fs";
 import * as net from "node:net";
 import * as os from "node:os";
 import * as path from "node:path";
 
 const CONTROL_FLAG = "session-control";
+const CONTROL_TARGET_FLAG = "control-session";
+const CONTROL_SEND_MESSAGE_FLAG = "send-session-message";
+const CONTROL_SEND_MODE_FLAG = "send-session-mode";
+const CONTROL_SEND_WAIT_FLAG = "send-session-wait";
+const CONTROL_SEND_INCLUDE_SENDER_FLAG = "send-session-include-sender-info";
 const CONTROL_DIR = path.join(os.homedir(), ".pi", "session-control");
 const SOCKET_SUFFIX = ".sock";
 const SESSION_MESSAGE_TYPE = "session-message";
@@ -137,7 +155,7 @@ interface SocketState {
 // Summarization
 // ============================================================================
 
-const SUMMARIZATION_MODEL_ID = "gpt-5.4-mini";
+const CODEX_MODEL_ID = "gpt-5.1-codex-mini";
 const HAIKU_MODEL_ID = "claude-haiku-4-5";
 
 const SUMMARIZATION_SYSTEM_PROMPT = `You are a conversation summarizer. Create concise, accurate summaries that preserve key information, decisions, and outcomes.`;
@@ -153,15 +171,12 @@ Be concise but comprehensive. Preserve exact file paths, function names, and err
 
 async function selectSummarizationModel(
 	currentModel: Model<Api> | undefined,
-	modelRegistry: {
-		find: (provider: string, modelId: string) => Model<Api> | undefined;
-		getApiKeyAndHeaders: (model: Model<Api>) => Promise<{ ok: true; apiKey?: string; headers?: Record<string, string> } | { ok: false; error: string }>;
-	},
+	modelRegistry: ModelRegistry,
 ): Promise<Model<Api> | undefined> {
-	const summarizationModel = modelRegistry.find("openai", SUMMARIZATION_MODEL_ID);
-	if (summarizationModel) {
-		const auth = await modelRegistry.getApiKeyAndHeaders(summarizationModel);
-		if (auth.ok) return summarizationModel;
+	const codexModel = modelRegistry.find("openai-codex", CODEX_MODEL_ID);
+	if (codexModel) {
+		const auth = await modelRegistry.getApiKeyAndHeaders(codexModel);
+		if (auth.ok) return codexModel;
 	}
 
 	const haikuModel = modelRegistry.find("anthropic", HAIKU_MODEL_ID);
@@ -424,7 +439,8 @@ function getLastAssistantMessage(ctx: ExtensionContext): ExtractedMessage | unde
 		if (entry.type === "message") {
 			const msg = entry.message;
 			if ("role" in msg && msg.role === "assistant") {
-				const textParts = msg.content
+				const content = Array.isArray(msg.content) ? msg.content : [{ type: "text", text: msg.content }];
+				const textParts = content
 					.filter((c): c is { type: "text"; text: string } => c.type === "text")
 					.map((c) => c.text);
 				if (textParts.length > 0) {
@@ -460,7 +476,8 @@ function getMessagesSinceLastPrompt(ctx: ExtensionContext): ExtractedMessage[] {
 		if (entry.type === "message") {
 			const msg = entry.message;
 			if ("role" in msg && (msg.role === "user" || msg.role === "assistant")) {
-				const textParts = msg.content
+				const content = Array.isArray(msg.content) ? msg.content : [{ type: "text", text: msg.content }];
+				const textParts = content
 					.filter((c): c is { type: "text"; text: string } => c.type === "text")
 					.map((c) => c.text);
 				if (textParts.length > 0) {
@@ -646,8 +663,8 @@ async function handleCommand(
 		}
 
 		const auth = await ctx.modelRegistry.getApiKeyAndHeaders(model);
-		if (!auth.ok) {
-			respond(false, "get_summary", undefined, "No API key available for summarization model");
+		if (auth.ok === false) {
+			respond(false, "get_summary", undefined, auth.error);
 			return;
 		}
 
@@ -752,7 +769,8 @@ async function handleCommand(
 		return;
 	}
 
-	respond(false, command.type, undefined, `Unsupported command: ${command.type}`);
+	const unsupportedType = (command as { type: string }).type;
+	respond(false, unsupportedType, undefined, `Unsupported command: ${unsupportedType}`);
 }
 
 // ============================================================================
@@ -952,6 +970,17 @@ function updateSessionEnv(ctx: ExtensionContext | null, enabled: boolean): void 
 	process.env.PI_SESSION_ID = ctx.sessionManager.getSessionId();
 }
 
+// Extension factories run before extension flag values are hydrated into runtime.flagValues,
+// so we inspect argv directly when deciding whether to register tools at load time.
+function wasBooleanFlagPassed(flagName: string): boolean {
+	const flag = `--${flagName}`;
+	return process.argv.slice(2).includes(flag);
+}
+
+function shouldRegisterControlTools(pi: ExtensionAPI): boolean {
+	return pi.getFlag(CONTROL_FLAG) === true || wasBooleanFlagPassed(CONTROL_FLAG);
+}
+
 // ============================================================================
 // Extension Export
 // ============================================================================
@@ -961,6 +990,29 @@ export default function (pi: ExtensionAPI) {
 		description: "Enable per-session control socket under ~/.pi/session-control",
 		type: "boolean",
 	});
+	pi.registerFlag(CONTROL_TARGET_FLAG, {
+		description: "Target session name or session id for startup control send",
+		type: "string",
+	});
+	pi.registerFlag(CONTROL_SEND_MESSAGE_FLAG, {
+		description: "Message to send to --control-session at startup",
+		type: "string",
+	});
+	pi.registerFlag(CONTROL_SEND_MODE_FLAG, {
+		description: "Startup send mode: steer or follow_up",
+		type: "string",
+		default: "steer",
+	});
+	pi.registerFlag(CONTROL_SEND_WAIT_FLAG, {
+		description: "Startup send wait mode: turn_end or message_processed",
+		type: "string",
+	});
+	pi.registerFlag(CONTROL_SEND_INCLUDE_SENDER_FLAG, {
+		description: "Include <sender_info> in startup messages (advanced; default: false)",
+		type: "boolean",
+	});
+
+	let cliSendHandled = false;
 
 	const state: SocketState = {
 		server: null,
@@ -973,8 +1025,10 @@ export default function (pi: ExtensionAPI) {
 
 	pi.registerMessageRenderer(SESSION_MESSAGE_TYPE, renderSessionMessage);
 
-	registerSessionTool(pi, state);
-	registerListSessionsTool(pi);
+	if (shouldRegisterControlTools(pi)) {
+		registerSessionTool(pi, state);
+		registerListSessionsTool(pi);
+	}
 	registerControlSessionsCommand(pi);
 
 	const refreshServer = async (ctx: ExtensionContext) => {
@@ -1002,10 +1056,10 @@ export default function (pi: ExtensionAPI) {
 
 	pi.on("session_start", async (_event, ctx) => {
 		await refreshServer(ctx);
-	});
-
-	pi.on("session_switch", async (_event, ctx) => {
-		await refreshServer(ctx);
+		if (!cliSendHandled) {
+			cliSendHandled = true;
+			await maybeHandleStartupControlSend(pi, ctx);
+		}
 	});
 
 	pi.on("session_shutdown", async () => {
@@ -1065,10 +1119,27 @@ Wait behavior (only for action=send):
 - wait_until=turn_end: Wait for the turn to complete, returns last assistant message.
 - wait_until=message_processed: Returns immediately after message is queued.
 
+CLI bridge (for shell scripts/background jobs):
+- Current session id is available in shell/bash as $PI_SESSION_ID (set when --session-control is enabled).
+- Use $PI_SESSION_ID when you need the current session; do not call list_sessions just to discover your own id.
+- Target session must be running with --session-control.
+- One-shot startup send is available via extension flags:
+  --session-control
+  --control-session <session-name|session-id>
+  --send-session-message <text>
+  --send-session-mode <steer|follow_up> (optional, default: steer)
+  --send-session-wait <turn_end|message_processed> (optional)
+  --send-session-include-sender-info (optional, advanced; default: off)
+- Startup sends are one-way by default (no sender_info), which avoids reply attempts to short-lived 'pi -p' sender sessions.
+- If a script needs a response, use --send-session-wait turn_end and read stdout.
+- Example script usage (one-way):
+  pi -p --session-control --control-session "$PI_SESSION_ID" --send-session-message "Background task finished" --send-session-mode follow_up --send-session-wait message_processed
+- Example request/response usage:
+  pi -p --session-control --control-session "$PI_SESSION_ID" --send-session-message "What is the current time?" --send-session-wait turn_end
+
 Note: If you ask the target session to reply back via sender_info, do not use wait_until; waiting is redundant and can duplicate responses.
 
 Messages automatically include sender session info for replies. When you want a response, instruct the target session to reply directly to the sender by calling send_to_session with the sender_info reference (do not poll get_message).`,
-		promptSnippet: "Interact with another running pi session via its control socket. Actions: send, get_message, get_summary, clear.",
 		parameters: Type.Object({
 			sessionId: Type.Optional(Type.String({ description: "Target session id (UUID)" })),
 			sessionName: Type.Optional(Type.String({ description: "Target session name (alias)" })),
@@ -1334,7 +1405,7 @@ Messages automatically include sender session info for replies. When you want a 
 
 		renderResult(result, { expanded }, theme) {
 			const details = result.details as Record<string, unknown> | undefined;
-			const isError = result.isError === true;
+			const isError = (result as { isError?: boolean }).isError === true;
 
 			// Error case
 			if (isError || details?.error) {
@@ -1439,8 +1510,7 @@ function registerListSessionsTool(pi: ExtensionAPI): void {
 	pi.registerTool({
 		name: "list_sessions",
 		label: "List Sessions",
-		description: "List live sessions that expose a control socket (optionally with session names).",
-		promptSnippet: "List live pi sessions that expose a control socket.",
+		description: "List live sessions that expose a control socket (optionally with session names). Use this for discovery only; for the current session id in shell/bash use $PI_SESSION_ID.",
 		parameters: Type.Object({}),
 		async execute(_toolCallId, _params, _signal, _onUpdate, _ctx) {
 			const sessions = await getLiveSessions();
@@ -1463,6 +1533,182 @@ function registerListSessionsTool(pi: ExtensionAPI): void {
 			};
 		},
 	});
+}
+
+type StartupControlSendOptions = {
+	target: string;
+	message: string;
+	mode: "steer" | "follow_up";
+	waitUntil?: "turn_end" | "message_processed";
+	includeSenderInfo: boolean;
+};
+
+function normalizeMode(raw: string): "steer" | "follow_up" | null {
+	const value = raw.trim().toLowerCase();
+	if (value === "steer") return "steer";
+	if (value === "follow_up" || value === "follow-up" || value === "followup") return "follow_up";
+	return null;
+}
+
+function normalizeWaitUntil(raw: string): "turn_end" | "message_processed" | null {
+	const value = raw.trim().toLowerCase();
+	if (value === "turn_end" || value === "turn-end") return "turn_end";
+	if (value === "message_processed" || value === "message-processed") return "message_processed";
+	return null;
+}
+
+function getStringFlag(pi: ExtensionAPI, name: string): string | undefined {
+	const value = pi.getFlag(name);
+	if (typeof value !== "string") return undefined;
+	const trimmed = value.trim();
+	return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function parseStartupControlSendOptions(pi: ExtensionAPI): { options?: StartupControlSendOptions; error?: string } {
+	const target = getStringFlag(pi, CONTROL_TARGET_FLAG);
+	const message = getStringFlag(pi, CONTROL_SEND_MESSAGE_FLAG);
+
+	if (!target && !message) {
+		return {};
+	}
+	if (target && !message) {
+		return { error: `Missing --${CONTROL_SEND_MESSAGE_FLAG} (required with --${CONTROL_TARGET_FLAG})` };
+	}
+	if (!target && message) {
+		return { error: `Missing --${CONTROL_TARGET_FLAG} (required with --${CONTROL_SEND_MESSAGE_FLAG})` };
+	}
+
+	const rawMode = getStringFlag(pi, CONTROL_SEND_MODE_FLAG) ?? "steer";
+	const mode = normalizeMode(rawMode);
+	if (!mode) {
+		return { error: `Invalid --${CONTROL_SEND_MODE_FLAG}: ${rawMode}. Use steer|follow_up.` };
+	}
+
+	const rawWait = getStringFlag(pi, CONTROL_SEND_WAIT_FLAG);
+	let waitUntil: "turn_end" | "message_processed" | undefined;
+	if (rawWait) {
+		const normalized = normalizeWaitUntil(rawWait);
+		if (!normalized) {
+			return {
+				error: `Invalid --${CONTROL_SEND_WAIT_FLAG}: ${rawWait}. Use turn_end|message_processed.`,
+			};
+		}
+		waitUntil = normalized;
+	}
+
+	const includeSenderInfo = pi.getFlag(CONTROL_SEND_INCLUDE_SENDER_FLAG) === true;
+
+	return {
+		options: {
+			target: target!,
+			message: message!,
+			mode,
+			waitUntil,
+			includeSenderInfo,
+		},
+	};
+}
+
+function reportStartupControlSend(ctx: ExtensionContext, message: string, level: "info" | "warning" | "error" = "info"): void {
+	if (ctx.hasUI) {
+		ctx.ui.notify(message, level);
+		return;
+	}
+	if (level === "error") {
+		console.error(message);
+		return;
+	}
+	console.log(message);
+}
+
+async function maybeHandleStartupControlSend(pi: ExtensionAPI, ctx: ExtensionContext): Promise<void> {
+	const parsed = parseStartupControlSendOptions(pi);
+	if (!parsed.options) {
+		if (parsed.error) {
+			reportStartupControlSend(ctx, parsed.error, "error");
+		}
+		return;
+	}
+
+	const { target, message, mode, waitUntil, includeSenderInfo } = parsed.options;
+	let targetSessionId = await resolveSessionIdFromAlias(target);
+	if (!targetSessionId && isSafeSessionId(target)) {
+		targetSessionId = target;
+	}
+
+	if (!targetSessionId) {
+		reportStartupControlSend(ctx, `Unknown target session: ${target}`, "error");
+		return;
+	}
+
+	const socketPath = getSocketPath(targetSessionId);
+	const alive = await isSocketAlive(socketPath);
+	if (!alive) {
+		reportStartupControlSend(ctx, `Target session not reachable: ${target}`, "error");
+		return;
+	}
+
+	const senderInfo = includeSenderInfo
+		? (() => {
+			const senderSessionId = ctx.sessionManager.getSessionId();
+			const senderSessionName = ctx.sessionManager.getSessionName()?.trim();
+			return senderSessionId
+				? `\n\n<sender_info>${JSON.stringify({
+					sessionId: senderSessionId,
+					sessionName: senderSessionName || undefined,
+				})}</sender_info>`
+				: "";
+		})()
+		: "";
+
+	const sendCommand: RpcSendCommand = {
+		type: "send",
+		message: message + senderInfo,
+		mode,
+	};
+
+	try {
+		if (waitUntil === "turn_end") {
+			const result = await sendRpcCommand(socketPath, sendCommand, {
+				timeout: 300000,
+				waitForEvent: "turn_end",
+			});
+			if (!result.response.success) {
+				reportStartupControlSend(ctx, `Failed to send: ${result.response.error ?? "unknown error"}`, "error");
+				return;
+			}
+			const lastMessage = result.event?.message;
+			if (!lastMessage?.content) {
+				reportStartupControlSend(ctx, `Message delivered to ${target}; turn completed without assistant output.`);
+				return;
+			}
+			if (ctx.hasUI) {
+				pi.sendMessage(
+					{
+						customType: "control-send",
+						content: `Startup response from ${target}:\n\n${lastMessage.content}`,
+						display: true,
+					},
+					{ triggerTurn: false },
+				);
+			} else {
+				console.log(lastMessage.content);
+			}
+			return;
+		}
+
+		const result = await sendRpcCommand(socketPath, sendCommand, { timeout: 30000 });
+		if (!result.response.success) {
+			reportStartupControlSend(ctx, `Failed to send: ${result.response.error ?? "unknown error"}`, "error");
+			return;
+		}
+
+		const waitLabel = waitUntil === "message_processed" ? " (message processed)" : "";
+		reportStartupControlSend(ctx, `Message sent to ${target}${waitLabel}`);
+	} catch (error) {
+		const msg = error instanceof Error ? error.message : "unknown error";
+		reportStartupControlSend(ctx, `Failed to send to ${target}: ${msg}`, "error");
+	}
 }
 
 function registerControlSessionsCommand(pi: ExtensionAPI): void {

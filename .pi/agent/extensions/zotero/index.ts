@@ -6,7 +6,9 @@ import { Text } from "@mariozechner/pi-tui";
 import { readFileSync } from "node:fs";
 
 const BBT_URL = "http://localhost:23119/better-bibtex/json-rpc";
-const BIBTEX_PATH = process.env.BIBTEX_PATH;
+function getBibtexPath(): string | undefined {
+	return process.env.BIBTEX_PATH;
+}
 
 interface CSLItem {
 	id: string;
@@ -97,8 +99,9 @@ function formatItemFull(item: CSLItem): string {
 
 // Fallback: search BibTeX file directly
 function searchBibtex(query: string, maxResults: number): string[] {
-	if (!BIBTEX_PATH) throw new Error("BIBTEX_PATH not set. Export it in your shell to enable offline BibTeX search.");
-	const content = readFileSync(BIBTEX_PATH, "utf-8");
+	const bibPath = getBibtexPath();
+	if (!bibPath) throw new Error("BIBTEX_PATH not set. Export it in your shell to enable offline BibTeX search.");
+	const content = readFileSync(bibPath, "utf-8");
 	const entries = content.split(/(?=^@)/m).filter((e) => e.trim());
 	const terms = query.toLowerCase().split(/\s+/);
 	const matches: string[] = [];
@@ -166,8 +169,9 @@ Falls back to searching the local BibTeX file (~474 entries) if Zotero is not ru
 						if (!bibtex.trim()) return ok("No BibTeX entries found for the given cite keys.");
 						return truncated(bibtex);
 					} else {
-						if (!BIBTEX_PATH) return err("BIBTEX_PATH not set. Export it in your shell to enable offline BibTeX fallback.");
-						const content = readFileSync(BIBTEX_PATH, "utf-8");
+						const bibPath = getBibtexPath();
+						if (!bibPath) return err("BIBTEX_PATH not set. Export it in your shell to enable offline BibTeX fallback.");
+						const content = readFileSync(bibPath, "utf-8");
 						const entries = content.split(/(?=^@)/m).filter((e) => e.trim());
 						const found: string[] = [];
 						for (const key of citekeys) {

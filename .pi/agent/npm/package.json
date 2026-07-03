@@ -2,7 +2,8 @@
   "name": "pi-extensions",
   "private": true,
   "dependencies": {
-    "pi-mcp-adapter": "^2.8.0",
-    "pi-subagents": "^0.25.0"
+    "pi-mcp-adapter": "^2.10.0",
+    "pi-subagents": "^0.30.0",
+    "pi-web-access": "^0.10.7"
   }
 }

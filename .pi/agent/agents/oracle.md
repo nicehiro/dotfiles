@@ -2,7 +2,7 @@
 name: oracle
 description: Senior engineering advisor for deep debugging, architecture, review, and planning
 tools: read, grep, find, ls, bash
-model: gpt-5.5-pro
+model: anthropic/claude-fable-5
 thinking: xhigh
 ---
 

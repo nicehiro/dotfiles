@@ -28,7 +28,9 @@ bun.lock
 
 # Claude Code - exclude sensitive/generated content
 .claude/settings.local.json
+.claude/.last-cleanup
 .claude/history.jsonl
+.claude/mcp-needs-auth-cache.json
 .claude/stats-cache.json
 .claude/backups/
 .claude/cache/
@@ -59,8 +61,19 @@ bun.lock
 .pi/agent/relay.yaml
 .pi/agent/relay-mappings.json
 .pi/agent/mcp-cache.json
+.pi/agent/run-history.jsonl
+.pi/agent/tmp/
+.pi/agent/trust.json
 .pi/msg-bridge.json
 .config/fish/fish_variables
+
+# Proxy configs with credentials
+sing-box-*.json
+
+# OrbStack generated shell integration symlinks
+.config/fish/completions/docker.fish
+.config/fish/completions/kubectl.fish
+.config/fish/completions/orbctl.fish
 
 # Home Manager generated files
 .config/git/config

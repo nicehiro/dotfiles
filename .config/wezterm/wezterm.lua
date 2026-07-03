@@ -1,13 +1,18 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 local is_macos = wezterm.target_triple:find("darwin") ~= nil
+local home = os.getenv("HOME")
+
+if home then
+  wezterm.add_to_config_reload_watch_list(home .. "/.ssh/config")
+end
 
 local function platform_mod(macos, other)
   return is_macos and macos or other
 end
 
-config.font = wezterm.font("Ioskeley Mono")
-config.font_size = 12
+config.font = wezterm.font("IoskeleyMono Nerd Font")
+config.font_size = 14
 config.line_height = 1.2
 
 config.color_scheme = "Atom (Gogh)"
@@ -59,6 +64,9 @@ wezterm.on("format-tab-title", function(tab)
   local pane = tab.active_pane
   local domain = pane.domain_name or ""
   local ssh_name = domain:match("^SSH:(.+)$") or domain:match("^SSHMUX:(.+)$")
+  if not ssh_name and domain ~= "" and domain ~= "local" and domain ~= "localdomain" then
+    ssh_name = domain
+  end
   if ssh_name then
     return string.format("  %s  ", ssh_name)
   end
@@ -77,16 +85,44 @@ config.scroll_to_bottom_on_input = true
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 
-config.ssh_domains = {
-  { name = "aliyun", remote_address = "8.153.103.186", username = "root" },
-  { name = "eias-hpc-vla", remote_address = "hpc.eias.ac.cn:40033", username = "root" },
+local ssh_hosts = {
+  "Sub2Api",
+  "Romi-Server",
+  "Romi-UR3",
+  "IDT-503-TS",
+  "IDT-503-Local",
+  "IDT-503-TS2",
+  "IDT-503-Local2",
+  "aliyun",
+  "eias-hpc-vla",
+  "eias-hpc-vla2",
+  "eias-hpc-vla3",
+  "eias-hpc-cpu",
 }
+
+config.ssh_domains = {}
+config.launch_menu = {}
+for _, host in ipairs(ssh_hosts) do
+  table.insert(config.ssh_domains, {
+    name = host,
+    remote_address = host,
+    multiplexing = "None",
+    assume_shell = "Posix",
+  })
+  table.insert(config.launch_menu, {
+    label = host,
+    domain = { DomainName = host },
+  })
+end
 
 config.keys = {
   { key = "Enter", mods = "SHIFT", action = wezterm.action.SendString("\n") },
+  { key = "LeftArrow", mods = platform_mod("CMD|SHIFT", "CTRL|SHIFT"), action = wezterm.action.MoveTabRelative(-1) },
+  { key = "RightArrow", mods = platform_mod("CMD|SHIFT", "CTRL|SHIFT"), action = wezterm.action.MoveTabRelative(1) },
   { key = "w", mods = platform_mod("CMD", "CTRL|SHIFT"), action = wezterm.action.CloseCurrentPane { confirm = false } },
   { key = "d", mods = platform_mod("CMD", "CTRL|SHIFT"), action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
   { key = "d", mods = platform_mod("CMD|SHIFT", "CTRL|ALT"), action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
+  { key = "s", mods = platform_mod("CMD|SHIFT", "CTRL|SHIFT"), action = wezterm.action.ShowLauncherArgs { flags = "FUZZY|LAUNCH_MENU_ITEMS" } },
   { key = "k", mods = platform_mod("CMD", "CTRL|SHIFT"), action = wezterm.action.SendString("clear\n") },
   { key = "N", mods = "CTRL|SHIFT", action = wezterm.action.DisableDefaultAssignment },
 }

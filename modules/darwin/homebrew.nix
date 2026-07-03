@@ -7,6 +7,7 @@
       autoUpdate = true;
       upgrade = true;
       cleanup = "none";
+      extraEnv.HOMEBREW_FAKE_MACOS = "26";
     };
 
     taps = [

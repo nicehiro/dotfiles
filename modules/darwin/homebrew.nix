@@ -58,6 +58,7 @@
       "windows-app"
       "wakatime"
       "kitlangton-hex"
+      "opencode-desktop"
       "chatgpt"
       "codex-app"
       "claude"

@@ -10,7 +10,7 @@ import type { Dirent } from "node:fs";
 // =============================================================================
 
 type ModeName = string;
-type ThinkingLevel = "off" | "minimal" | "low" | "medium" | "high" | "xhigh";
+type ThinkingLevel = "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | "max";
 
 type ModeSpec = {
 	provider?: string;
@@ -247,7 +247,7 @@ function normalizeThinkingLevel(level: unknown): ThinkingLevel | undefined {
 	if (typeof level !== "string") return undefined;
 	const v = level as ThinkingLevel;
 	// Keep the list local to avoid importing internal enums.
-	const allowed: ThinkingLevel[] = ["off", "minimal", "low", "medium", "high", "xhigh"];
+	const allowed: ThinkingLevel[] = ["off", "minimal", "low", "medium", "high", "xhigh", "max"];
 	return allowed.includes(v) ? v : undefined;
 }
 
@@ -614,7 +614,7 @@ const MODE_UI_CONFIGURE = "Configure modes…";
 const MODE_UI_ADD = "Add mode…";
 const MODE_UI_BACK = "Back";
 
-const ALL_THINKING_LEVELS: ThinkingLevel[] = ["off", "minimal", "low", "medium", "high", "xhigh"];
+const ALL_THINKING_LEVELS: ThinkingLevel[] = ["off", "minimal", "low", "medium", "high", "xhigh", "max"];
 const THINKING_UNSET_LABEL = "(don't change)";
 
 function isDefaultModeName(name: string): boolean {

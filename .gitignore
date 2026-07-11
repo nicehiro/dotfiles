@@ -50,7 +50,12 @@ bun.lock
 .claude/todos/
 .claude/transcripts/
 
+# Codex - exclude sensitive/generated content
+.codex/*
+!.codex/AGENTS.md
+
 # Pi - exclude sensitive/generated content
+.pi-subagents/
 .pi/safe-rm-debug.log
 .pi/.pi/
 .pi/agent/auth.json

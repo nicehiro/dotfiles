@@ -36,19 +36,11 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 
 ## Task Orchestration
 
-- Use the configured subagent model routing. Do not ask the user which model to use or add per-run model overrides unless explicitly requested
-- Handle small, obvious changes directly in the parent session
-- Route explicit plan-only requests through `planner`; return the plan without launching `worker` unless implementation was also requested
-- Route explicit investigation, research, review, and architecture-advice requests through `scout`, `context-builder`, `researcher`, `reviewer`, or `oracle` as appropriate
-- Once implementation is explicitly requested, use this workflow for non-trivial, architectural, or materially ambiguous work; touching multiple files alone does not require it:
-  1. Use `planner` to investigate the relevant context and produce a concrete plan
-  2. Use `worker` to implement the plan
-  3. Use a fresh-context `reviewer` in review-only mode to inspect the result for correctness, regressions, validation gaps, and unnecessary complexity; it must not modify project files
-  4. If the review finds fixes worth doing now, use `worker` to apply them
-- Use `worker` as the implementation agent in automatic workflows; use `coder` only when explicitly requested
-- When implementation was explicitly requested, proceed from planning to implementation without separate approval if the plan stays within scope and requires no unresolved decision
-- Keep one file-mutating agent active in a worktree at a time; parallelize only read-only investigation, research, review, and validation
-- Ask before continuing when required information is missing, a destructive or irreversible action needs approval, planning cannot resolve a product, scope, or architecture decision, or a large refactor is required
+- Do not launch subagents automatically or proactively. Handle all tasks directly in the parent session by default, regardless of task size or type.
+- Launch subagents only when the user explicitly asks to use, launch, run, or delegate to subagents, or invokes a subagent-specific slash command such as `/run`, `/chain`, or `/parallel`.
+- A request to plan, implement, investigate, research, review, or advise does not by itself authorize subagent use.
+- When subagents are explicitly requested, use the configured model routing and keep one file-mutating agent active in a worktree at a time.
+- Ask before continuing when required information is missing, a destructive or irreversible action needs approval, or a large refactor is required.
 
 ## Response Style
 

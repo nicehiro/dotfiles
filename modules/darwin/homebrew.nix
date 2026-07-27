@@ -42,6 +42,7 @@
       "tree-sitter"
       "zlib"
       "rustup"
+      "herdr"
     ];
 
     casks = [

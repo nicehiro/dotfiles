@@ -41,4 +41,4 @@ window-padding-x = 20
 window-padding-y = 10
 window-save-state = always
 
-macos-titlebar-style = transparent
+macos-titlebar-style = tabs

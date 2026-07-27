@@ -3,6 +3,8 @@
 # Read JSON input from stdin
 input=$(cat)
 
+printf '%s' "$input" | "$HOME/.claude/runcat-statusline.py" >/dev/null 2>&1 || true
+
 # Extract values using jq
 CURRENT_DIR=$(echo "$input" | jq -r '.workspace.current_dir')
 PROJECT_DIR=$(echo "$input" | jq -r '.workspace.project_dir')

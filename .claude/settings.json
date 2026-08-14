@@ -1,11 +1,36 @@
 {
-  "agentPushNotifEnabled": true,
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
   "attribution": {
     "commit": "",
     "pr": ""
   },
-  "effortLevel": "xhigh",
+  "permissions": {
+    "allow": [
+      "mcp__pencil"
+    ]
+  },
+  "model": "claude-fable-5[1m]",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/fangyuan/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "enableWorkflows": true,
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
   "enabledPlugins": {
     "code-simplifier@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
@@ -18,33 +43,8 @@
     "scientific-skills@claude-scientific-skills": true,
     "superpowers@superpowers-marketplace": true
   },
-  "env": {
-    "DISABLE_AUTOUPDATER": "1"
-  },
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "bash '/Users/fangyuan/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "*"
-      }
-    ]
-  },
-  "model": "claude-fable-5[1m]",
-  "permissions": {
-    "allow": [
-      "mcp__pencil"
-    ]
-  },
-  "promptSuggestionEnabled": false,
   "spinnerTipsEnabled": false,
-  "statusLine": {
-    "command": "~/.claude/statusline.sh",
-    "type": "command"
-  }
+  "effortLevel": "xhigh",
+  "promptSuggestionEnabled": false,
+  "agentPushNotifEnabled": true
 }

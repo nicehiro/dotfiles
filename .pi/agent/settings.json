@@ -10,9 +10,9 @@
     "npm:pi-markdown-preview"
   ],
   "theme": "nightowl",
-  "lastChangelogVersion": "0.82.1",
+  "lastChangelogVersion": "0.84.1",
   "defaultProvider": "anthropic",
-  "defaultModel": "claude-opus-5",
+  "defaultModel": "claude-fable-5",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "xhigh",
   "safeGit": {

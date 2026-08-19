@@ -9,10 +9,10 @@
     "npm:pi-web-access",
     "npm:pi-markdown-preview"
   ],
-  "theme": "nightowl",
-  "lastChangelogVersion": "0.84.1",
-  "defaultProvider": "anthropic",
-  "defaultModel": "claude-fable-5",
+  "theme": "tokyo-night-storm",
+  "lastChangelogVersion": "0.84.2",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.6-sol",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "xhigh",
   "safeGit": {

@@ -10,7 +10,7 @@
       "/Applications/Ghostty.app"
       "/Applications/Emacs.app"
       "/Applications/Figma.app"
-      "/Applications/Spotify.app"
+      "/System/Applications/Music.app"
       "/Applications/Zotero.app"
       "/Applications/ChatGPT.app"
       "/Applications/Claude.app"

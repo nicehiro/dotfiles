@@ -3,6 +3,24 @@ onboarding = false
 name = "tokyo-night"
 auto_switch = false
 
+[theme.custom]
+accent = "#7aa2f7"
+panel_bg = "#1f2335"
+surface0 = "#292e42"
+surface1 = "#3b4261"
+surface_dim = "#1f2335"
+overlay0 = "#414868"
+overlay1 = "#565f89"
+text = "#c0caf5"
+subtext0 = "#a9b1d6"
+mauve = "#bb9af7"
+green = "#9ece6a"
+yellow = "#e0af68"
+red = "#f7768e"
+blue = "#7aa2f7"
+teal = "#7dcfff"
+peach = "#ff9e64"
+
 [ui]
 show_agent_labels_on_pane_borders = true
 

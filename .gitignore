@@ -108,6 +108,7 @@ sing-box-*.json
 # Pi - generated/runtime state
 .pi/agent/mcp-onboarding.json
 .pi/agent/models-store.json
+.pi/pi-acp/
 .pi/agent/skills/**/__pycache__/
 
 # Herdr - runtime state and generated integrations
@@ -115,6 +116,7 @@ sing-box-*.json
 !.config/herdr/config.toml
 .claude/hooks/herdr-agent-state.sh
 .config/opencode/plugins/herdr-agent-state.js
+.config/opencode/herdr-tui-session.js
 .pi/agent/extensions/herdr-agent-state.ts
 
 # RunCat Neo - runtime usage snapshots

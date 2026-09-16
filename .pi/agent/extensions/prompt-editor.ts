@@ -1,5 +1,6 @@
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { CustomEditor, ModelSelectorComponent, SettingsManager } from "@earendil-works/pi-coding-agent";
+import { truncateToWidth, visibleWidth, stripTerminalSequences } from "@earendil-works/pi-tui";
 import path from "node:path";
 import os from "node:os";
 import fs from "node:fs/promises";
@@ -930,7 +931,7 @@ interface PromptEntry {
 	timestamp: number;
 }
 
-class PromptEditor extends CustomEditor {
+export class PromptEditor extends CustomEditor {
 	public modeLabelProvider?: () => string;
 	/**
 	 * Color function for the mode label. If unset, the label inherits the border color.
@@ -945,7 +946,7 @@ class PromptEditor extends CustomEditor {
 		theme: ConstructorParameters<typeof CustomEditor>[1],
 		keybindings: ConstructorParameters<typeof CustomEditor>[2],
 	) {
-		super(tui, theme, keybindings);
+		super(tui, theme, keybindings, { embedWorkingStatus: true });
 		delete (this as { borderColor?: (text: string) => string }).borderColor;
 		Object.defineProperty(this, "borderColor", {
 			get: () => this._borderColor ?? ((text: string) => text),
@@ -964,36 +965,31 @@ class PromptEditor extends CustomEditor {
 
 	render(width: number): string[] {
 		const lines = super.render(width);
+		const topBorder = lines[0] ?? "";
 		const mode = this.modeLabelProvider?.();
 		if (!mode) return lines;
 
-		const stripAnsi = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, "");
-		const topPlain = stripAnsi(lines[0] ?? "");
-
-		// If the editor is scrolled, the built-in editor renders a scroll indicator on the top border.
-		// Preserve it, but still show the mode label.
-		const scrollPrefixMatch = topPlain.match(/^(─── ↑ \d+ more )/);
-		const prefix = scrollPrefixMatch?.[1] ?? "──";
-
-		let label = formatModeLabel(mode);
-
-		// Compute how much room we have for the label core (without truncating the prefix).
-		const labelLeftSpace = prefix.endsWith(" ") ? "" : " ";
-		const labelRightSpace = " ";
-		const minRightBorder = 1; // keep at least one border cell on the right
-		const maxLabelLen = Math.max(0, width - prefix.length - labelLeftSpace.length - labelRightSpace.length - minRightBorder);
-		if (maxLabelLen <= 0) return lines;
-		if (label.length > maxLabelLen) label = label.slice(0, maxLabelLen);
-
-		const labelChunk = `${labelLeftSpace}${label}${labelRightSpace}`;
-
-		const remaining = width - prefix.length - labelChunk.length;
-		if (remaining < 0) return lines;
-
-		const right = "─".repeat(Math.max(0, remaining));
-
+		const topPlain = stripTerminalSequences(topBorder);
+		const isBashMode = this.getText().trimStart().startsWith("!");
+		// Preserve the built-in working status and scroll indicator before the trailing border.
+		const trailingBorderStart = topPlain.search(/─+$/);
+		const semanticPrefix = trailingBorderStart > 0 ? topPlain.slice(0, trailingBorderStart) : "";
+		const prefixWidth = Math.min(width, semanticPrefix ? visibleWidth(semanticPrefix) : isBashMode ? 2 : 0);
+		let left = truncateToWidth(topBorder, prefixWidth, "");
+		let leftWidth = visibleWidth(left);
 		const labelColor = this.modeLabelColor ?? ((text: string) => this.borderColor(text));
-		lines[0] = this.borderColor(prefix) + labelColor(labelChunk) + this.borderColor(right);
+		if (isBashMode) {
+			const bashPrefix = semanticPrefix ? this.borderColor("── ") : labelColor(" ");
+			const bashLabel = labelColor("bash ");
+			left += bashPrefix + bashLabel;
+			leftWidth += visibleWidth(bashPrefix) + visibleWidth(bashLabel);
+		}
+		const maxModeWidth = Math.max(0, width - leftWidth - 5);
+		if (maxModeWidth <= 0) return lines;
+		const label = truncateToWidth(formatModeLabel(mode), maxModeWidth, "");
+		const gapWidth = width - leftWidth - visibleWidth(label) - 4;
+		lines[0] = left + this.borderColor("─".repeat(gapWidth))
+			+ labelColor(` ${label} `) + this.borderColor("──");
 		return lines;
 	}
 

@@ -11,7 +11,7 @@
       "mcp__pencil"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "fable[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -46,6 +46,6 @@
   "spinnerTipsEnabled": false,
   "effortLevel": "xhigh",
   "promptSuggestionEnabled": false,
-  "agentPushNotifEnabled": true,
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "agentPushNotifEnabled": true
 }

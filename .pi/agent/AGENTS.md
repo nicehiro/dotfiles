@@ -37,7 +37,7 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 ## Task Orchestration
 
 - Do not launch subagents automatically or proactively. Handle all tasks directly in the parent session by default, regardless of task size or type.
-- Launch subagents only when the user explicitly asks to use, launch, run, or delegate to subagents, or invokes a subagent-specific slash command such as `/run`, `/chain`, or `/parallel`.
+- Launch subagents only when the user explicitly asks to use, launch, run, or delegate to subagents, or invokes a subagent-specific slash command such as `/run`, `/implement`, or `/parallel-review`.
 - A request to plan, implement, investigate, research, review, or advise does not by itself authorize subagent use.
 - When subagents are explicitly requested, use the configured model routing and keep one file-mutating agent active in a worktree at a time.
 - Ask before continuing when required information is missing, a destructive or irreversible action needs approval, or a large refactor is required.

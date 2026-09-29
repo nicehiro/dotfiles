@@ -33,6 +33,18 @@ if test -d $HOME/Documents/keys
     end
 end
 
+# Secrets held in the macOS login keychain: encrypted at rest, never synced,
+# never stored in this repo. Add one with:
+#   security add-generic-password -a $USER -s NAME -w -U
+if command -q security
+    for secret in TYPESAFE_API_KEY
+        set -l val (security find-generic-password -a $USER -s $secret -w 2>/dev/null)
+        if test -n "$val"
+            set -gx $secret $val
+        end
+    end
+end
+
 # Proxy (sing-box)
 # set -gx HTTP_PROXY http://127.0.0.1:2080
 # set -gx HTTPS_PROXY http://127.0.0.1:2080

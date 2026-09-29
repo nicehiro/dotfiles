@@ -1,0 +1,27 @@
+{
+  "providers": [
+    {
+      "id": "codex",
+      "name": "",
+      "key": "",
+      "models": [
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-5.6-sol"
+      ]
+    },
+    {
+      "id": "copilot",
+      "name": "",
+      "key": "",
+      "models": [
+        "claude-fable-5.1",
+        "gemini-3.8-flash",
+        "gpt-6-sol",
+        "kimi-k3",
+        "claude-opus-5.5",
+        "gpt-6-astra"
+      ]
+    }
+  ]
+}

@@ -131,3 +131,8 @@ images/
 
 # Direnv generated state
 .config/direnv/
+
+# Magpie (credentials / runtime state)
+.config/magpie/logins.json
+.config/magpie/applied.json
+.config/magpie/library.json

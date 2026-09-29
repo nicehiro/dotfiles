@@ -7,11 +7,21 @@
           "compat": {
             "supportsMidConvoEffort": false
           }
+        },
+        "claude-opus-5-5": {
+          "compat": {
+            "supportsMidConvoEffort": false
+          }
         }
       }
     },
     "openai": {
       "baseUrl": "https://sub2api.nicehiro.org"
+      // "baseUrl": "https://api.verloge.space"
+    },
+    "xai": {
+      "baseUrl": "https://sub2api.nicehiro.org"
+      // "baseUrl": "https://api.verloge.space"
     }
   }
 }

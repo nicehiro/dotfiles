@@ -7,14 +7,18 @@
     "npm:pi-mcp-adapter",
     "https://github.com/nicehiro/pi-arxiv",
     "npm:pi-web-access",
-    "npm:pi-markdown-preview"
+    "npm:pi-markdown-preview",
+    "npm:@qraxiss/pi-gemini-auth"
   ],
   "theme": "tokyo-night-storm",
-  "lastChangelogVersion": "0.85.1",
-  "defaultProvider": "openai",
-  "defaultModel": "gpt-6-astra",
+  "lastChangelogVersion": "0.87.1",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-5-5",
   "hideThinkingBlock": false,
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "medium",
+  "modelThinkingLevels": {
+    "anthropic/claude-sonnet-5-5": "high"
+  },
   "safeGit": {
     "enabledByDefault": true,
     "promptLevel": "medium"
@@ -24,8 +28,12 @@
     "~/.codex/skills"
   ],
   "enabledModels": [
-    "openai/gpt-6-astra:high",
-    "anthropic/claude-fable-5-1:high"
+    "openai/gpt-6-astra:medium",
+    "anthropic/claude-fable-5-1:medium",
+    "anthropic/claude-opus-5-5:high",
+    "anthropic/claude-sonnet-5-5:high",
+    "openai/gpt-6-sol:high",
+    "xai/grok-4.7:medium"
   ],
   "subagents": {
     "agentOverrides": {

@@ -23,6 +23,17 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
     ]
   },
   "enableWorkflows": true,
@@ -43,7 +54,7 @@
     "superpowers@superpowers-marketplace": true
   },
   "spinnerTipsEnabled": false,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "tui": "fullscreen",
   "agentPushNotifEnabled": true

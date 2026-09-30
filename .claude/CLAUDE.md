@@ -71,3 +71,5 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 - Don't add type: ignore or noqa comments to silence warnings; fix the root cause
 - Never commit secrets, API keys, or credentials
 - Treat discussions, reviews, and issue reports as read-only unless the user explicitly requests implementation or a file change
+
+@RTK.md

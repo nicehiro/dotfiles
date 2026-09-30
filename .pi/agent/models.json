@@ -1,27 +1,15 @@
 {
   "providers": {
     "anthropic": {
-      "baseUrl": "https://sub2api.nicehiro.org",
-			"modelOverrides": {
-        "claude-fable-5-1": {
-          "compat": {
-            "supportsMidConvoEffort": false
-          }
-        },
-        "claude-opus-5-5": {
-          "compat": {
-            "supportsMidConvoEffort": false
-          }
-        }
-      }
+      "baseUrl": "http://127.0.0.1:3425"
     },
     "openai": {
-      "baseUrl": "https://sub2api.nicehiro.org"
+      "baseUrl": "http://127.0.0.1:3425"
+      // "baseUrl": "https://sub2api.nicehiro.org"
       // "baseUrl": "https://api.verloge.space"
     },
     "xai": {
-      "baseUrl": "https://sub2api.nicehiro.org"
-      // "baseUrl": "https://api.verloge.space"
+      "baseUrl": "http://127.0.0.1:3425"
     }
   }
 }

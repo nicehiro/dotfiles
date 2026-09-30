@@ -1,10 +1,12 @@
 # Sensitive
 auth.json
+mcp-auth.json
 
 # Runtime / generated
 sessions/
 bin/
 safe-rm-debug.log
+mcp.log*
 
 # Git-managed packages (cloned repos)
 git/*

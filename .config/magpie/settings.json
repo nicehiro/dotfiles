@@ -2,8 +2,12 @@
   "theme": "system",
   "lang": "system",
   "tray": "panel",
+  "sessionTerminal": "com.github.wez.wezterm",
+  "currency": "usd",
+  "trayUsageEvery": 3,
+  "textSize": 100,
   "window": [
-    659,
-    599
+    978,
+    860
   ]
 }

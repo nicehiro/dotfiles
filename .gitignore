@@ -136,3 +136,10 @@ images/
 .config/magpie/logins.json
 .config/magpie/applied.json
 .config/magpie/library.json
+.config/magpie/cli-identity.json
+.config/magpie/install-id
+.config/magpie/quotas.json
+.config/magpie/stats-sent
+.config/magpie/usage.jsonl
+.config/magpie/backups/
+.config/magpie/routing/

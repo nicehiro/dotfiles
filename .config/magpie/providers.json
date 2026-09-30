@@ -6,8 +6,7 @@
       "key": "",
       "models": [
         "gpt-6-astra",
-        "gpt-6-sol",
-        "gpt-5.6-sol"
+        "gpt-6.1-sol"
       ]
     },
     {
@@ -15,12 +14,42 @@
       "name": "",
       "key": "",
       "models": [
+        "claude-opus-5.5",
         "claude-fable-5.1",
         "gemini-3.8-flash",
-        "gpt-6-sol",
+        "gpt-6-astra",
         "kimi-k3",
-        "claude-opus-5.5",
-        "gpt-6-astra"
+        "gpt-6.1-sol"
+      ],
+      "off": true
+    },
+    {
+      "id": "claude",
+      "name": "",
+      "key": "",
+      "models": [
+        "claude-sonnet-5-5",
+        "claude-opus-5-5",
+        "claude-fable-5-1"
+      ]
+    },
+    {
+      "id": "grok",
+      "name": "",
+      "key": "",
+      "models": [
+        "grok-4.7",
+        "grok-4.7-build-fast"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "the-best",
+      "name": "The Best",
+      "members": [
+        "claude/claude-fable-5-1",
+        "codex/gpt-6-astra"
       ]
     }
   ]

@@ -7,6 +7,11 @@ sessions/
 bin/
 safe-rm-debug.log
 mcp.log*
+/mcp-last-seen-version.json
+/install/
+/missions/
+pi-subagents/last-seen-version.json
+pi-web-access/last-seen-version.json
 
 # Git-managed packages (cloned repos)
 git/*

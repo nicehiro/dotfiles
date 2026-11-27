@@ -2,7 +2,10 @@
   "mcpServers": {
     "figma": {
       "url": "https://mcp.figma.com/mcp",
-      "headers": { "X-Figma-Region": "us-east-1" }
+      "oauth": {
+        "clientName": "Codex"
+      },
+      "exposure": "deferred"
     }
   }
 }

@@ -2,7 +2,7 @@
 name: writer
 description: LaTeX academic paper writing for AI/robotics venues
 tools: read, grep, find, ls, bash
-model: anthropic/claude-fable-5
+model: anthropic/claude-fable-5-2
 thinking: high
 ---
 

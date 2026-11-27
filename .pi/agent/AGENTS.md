@@ -27,6 +27,10 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 - Do NOT leave placeholder comments like `// removed X` or `# previously did Y`
 - When deleting code, just delete it. No tombstone comments.
 
+## UI Design
+
+- Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
+
 ## Behavior
 
 - Read and understand relevant code before proposing edits
@@ -52,16 +56,13 @@ PhD student in robotics. Research areas: reinforcement learning, vision-language
 - Match depth to the task: simple questions get short answers; complex tasks can be structured but should stay tight.
 - Use bullets or numbered steps only when the content has natural structure.
 - For yes/no questions, answer first and give brief reasoning.
-- For comparisons, give the recommendation first, then the key reasons.
+- When a task calls for judgment, lead with your conclusion and its key rationale. Identify the specific condition most likely to change your judgment.
 - Do not end with generic follow-up menus like "If you want, I can also...". If a next step is genuinely useful, state it directly and briefly.
 
-## Tool Call Behavior
+## Progress Updates
 
-- Before any meaningful tool call, send one concise sentence stating the immediate next action.
-- Always do this before code edits and before running verification commands/tests.
-- Skip it for routine file reads, obvious follow-up searches, and repetitive low-signal calls.
-- When sending such a preface, make the tool call in the same turn.
-- Keep the preface short, concrete, and action-focused.
+- On longer tasks, report progress at meaningful milestones so the user can follow without reading tool output. Say what you learned, what remains uncertain, and what comes next when relevant.
+- Skip routine tool narration. If a step takes a while, briefly say what is pending.
 
 ## Refactoring & Compatibility
 

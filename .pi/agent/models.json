@@ -1,15 +1,14 @@
 {
+  "$schema": "https://pi.dev/schemas/models.schema.json",
   "providers": {
     "anthropic": {
-      "baseUrl": "http://127.0.0.1:3425"
+      "baseUrl": "https://sub2api.nicehiro.org"
     },
     "openai": {
-      "baseUrl": "http://127.0.0.1:3425"
-      // "baseUrl": "https://sub2api.nicehiro.org"
-      // "baseUrl": "https://api.verloge.space"
+      "baseUrl": "https://sub2api.nicehiro.org"
     },
     "xai": {
-      "baseUrl": "http://127.0.0.1:3425"
+      "baseUrl": "https://sub2api.nicehiro.org"
     }
   }
 }

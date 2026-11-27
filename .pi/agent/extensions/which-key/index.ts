@@ -5,14 +5,14 @@
  * Trigger with Ctrl+/ or /which-key.
  */
 
-import type { ExtensionAPI, KeybindingsManager } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI, KeybindingsManager } from "@earendil-works/pi-coding-agent";
 import {
   Key,
   matchesKey,
   truncateToWidth,
   visibleWidth,
   CURSOR_MARKER,
-} from "@mariozechner/pi-tui";
+} from "@earendil-works/pi-tui";
 
 const DESC: Record<string, string> = {
   "tui.editor.cursorUp": "Move cursor up",

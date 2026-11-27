@@ -1,6 +1,6 @@
 // From: https://github.com/qualisero/rhubarb-pi
 
-import type { ExtensionContext } from "@mariozechner/pi-coding-agent";
+import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { BackgroundNotifyConfig } from "./types";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";

@@ -8,7 +8,7 @@
  * Carefully detects rm to avoid false positives.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';

@@ -29,7 +29,7 @@
  * Use `/todos` to bring up the visual todo manager or just let the LLM use them
  * naturally.
  */
-import { DynamicBorder, copyToClipboard, getMarkdownTheme, keyHint, type ExtensionAPI, type ExtensionContext, type Theme } from "@earendil-works/pi-coding-agent";
+import { DynamicBorder, copyToClipboard, getMarkdownTheme, type ExtensionAPI, type ExtensionContext, type KeybindingHints, type Theme } from "@earendil-works/pi-coding-agent";
 import { StringEnum } from "@earendil-works/pi-ai";
 import { Type } from "typebox";
 import path from "node:path";
@@ -1270,8 +1270,8 @@ function renderTodoDetail(theme: Theme, todo: TodoRecord, expanded: boolean): st
 	return lines.join("\n");
 }
 
-function appendExpandHint(theme: Theme, text: string): string {
-	return `${text}\n${theme.fg("dim", `(${keyHint("app.tools.expand", "to expand")})`)}`;
+function appendExpandHint(theme: Theme, hints: KeybindingHints, text: string): string {
+	return `${text}\n${theme.fg("dim", `(${hints.keyHint("app.tools.expand", "to expand")})`)}`;
 }
 
 async function ensureTodoExists(filePath: string, id: string): Promise<TodoRecord | null> {
@@ -1740,7 +1740,7 @@ export default function todosExtension(pi: ExtensionAPI) {
 			return new Text(text, 0, 0);
 		},
 
-		renderResult(result, { expanded, isPartial }, theme) {
+		renderResult(result, { expanded, isPartial }, theme, context) {
 			const details = result.details as TodoToolDetails | undefined;
 			if (isPartial) {
 				return new Text(theme.fg("warning", "Processing..."), 0, 0);
@@ -1759,7 +1759,7 @@ export default function todosExtension(pi: ExtensionAPI) {
 				if (!expanded) {
 					const { closedTodos } = splitTodosByAssignment(details.todos);
 					if (closedTodos.length) {
-						text = appendExpandHint(theme, text);
+						text = appendExpandHint(theme, context, text);
 					}
 				}
 				return new Text(text, 0, 0);
@@ -1791,7 +1791,7 @@ export default function todosExtension(pi: ExtensionAPI) {
 				text = lines.join("\n");
 			}
 			if (!expanded) {
-				text = appendExpandHint(theme, text);
+				text = appendExpandHint(theme, context, text);
 			}
 			return new Text(text, 0, 0);
 		},

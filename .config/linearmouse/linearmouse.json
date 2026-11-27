@@ -1,5 +1,5 @@
 {
-  "$schema" : "https:\/\/schema.linearmouse.app\/0.11.3",
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.12.0",
   "schemes" : [
     {
       "if" : {
@@ -45,49 +45,55 @@
       "buttons" : {
         "mappings" : [
           {
-            "action" : "media.previous",
-            "button" : 3,
-            "command" : false,
-            "control" : false,
-            "option" : false,
-            "shift" : false
+            "outcomes" : {
+              "shortPress" : "media.previous"
+            },
+            "trigger" : {
+              "input" : {
+                "button" : 3
+              }
+            }
           },
           {
-            "action" : "media.next",
-            "button" : 4,
-            "command" : false,
-            "control" : false,
-            "option" : false,
-            "shift" : false
+            "outcomes" : {
+              "shortPress" : "media.next"
+            },
+            "trigger" : {
+              "input" : {
+                "button" : 4
+              }
+            }
           },
           {
             "action" : "media.volumeDown",
-            "command" : false,
-            "control" : false,
-            "option" : false,
-            "scroll" : "left",
-            "shift" : false
+            "trigger" : {
+              "input" : {
+                "wheel" : "left"
+              }
+            }
           },
           {
             "action" : "media.volumeUp",
-            "command" : false,
-            "control" : false,
-            "option" : false,
-            "scroll" : "right",
-            "shift" : false
+            "trigger" : {
+              "input" : {
+                "wheel" : "right"
+              }
+            }
           },
           {
-            "action" : "media.playPause",
-            "button" : {
-              "controlID" : 195,
-              "kind" : "logitechControl",
-              "productID" : 45091,
-              "serialNumber" : "A491D00E994AA1BB"
+            "outcomes" : {
+              "shortPress" : "media.playPause"
             },
-            "command" : false,
-            "control" : false,
-            "option" : false,
-            "shift" : false
+            "trigger" : {
+              "input" : {
+                "button" : {
+                  "controlID" : 195,
+                  "kind" : "logitechControl",
+                  "productID" : 45091,
+                  "serialNumber" : "A491D00E994AA1BB"
+                }
+              }
+            }
           }
         ]
       },
@@ -123,7 +129,13 @@
       },
       "pointer" : {
         "acceleration" : 4.997,
+        "redirectsToScroll" : false,
         "speed" : 0.1047
+      },
+      "scrolling" : {
+        "reverse" : {
+          "vertical" : true
+        }
       }
     }
   ]

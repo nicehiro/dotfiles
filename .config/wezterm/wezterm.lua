@@ -18,7 +18,8 @@ config.line_height = 1.2
 config.color_scheme = "Atom (Gogh)"
 config.default_cursor_style = "SteadyBlock"
 
-config.window_background_opacity = 0.85
+config.window_background_opacity = 0.75
+config.text_background_opacity = 0.75
 if is_macos then
   config.macos_window_background_blur = 20
 end

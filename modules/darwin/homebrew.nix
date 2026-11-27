@@ -1,6 +1,14 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
+  system.activationScripts.setup-homebrew.text = lib.mkAfter (
+    lib.concatMapStringsSep "\n" (prefix: ''
+      /usr/bin/install -d -o ${lib.escapeShellArg config.nix-homebrew.user} -g ${lib.escapeShellArg config.nix-homebrew.group} -m 0775 "${prefix.library}/Taps"
+      # Some casks locate tap scripts relative to nix-homebrew's placeholder repository.
+      /bin/ln -s "${prefix.library}" "${prefix.library}/.homebrew-is-managed-by-nix/Library"
+    '') (lib.filter (prefix: prefix.enable) (builtins.attrValues config.nix-homebrew.prefixes))
+  );
+
   homebrew = {
     enable = true;
     onActivation = {
@@ -54,7 +62,7 @@
       "orbstack"
       "visual-studio-code"
       "zed"
-      "ghostty@tip"
+      "ghostty"
       "wezterm"
       "windows-app"
       "wakatime"

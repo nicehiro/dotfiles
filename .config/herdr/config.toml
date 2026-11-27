@@ -1,28 +1,44 @@
 onboarding = false
 [theme]
-name = "tokyo-night"
+name = "terminal"
 auto_switch = false
 
-[theme.custom]
-accent = "#7aa2f7"
-panel_bg = "#1f2335"
-surface0 = "#292e42"
-surface1 = "#3b4261"
-surface_dim = "#1f2335"
-overlay0 = "#414868"
-overlay1 = "#565f89"
-text = "#c0caf5"
-subtext0 = "#a9b1d6"
-mauve = "#bb9af7"
-green = "#9ece6a"
-yellow = "#e0af68"
-red = "#f7768e"
-blue = "#7aa2f7"
-teal = "#7dcfff"
-peach = "#ff9e64"
+[terminal]
+new_cwd = "follow"
+kitty_graphics = true
+
+[keys]
+previous_workspace = "prefix+["
+next_workspace = "prefix+]"
+reload_config = "prefix+shift+r"
 
 [ui]
 show_agent_labels_on_pane_borders = true
+pane_borders = "auto"
+pane_outer_borders = false
+pane_gaps = false
+pane_scrollbars = true
+mouse_capture = true
+hide_tab_bar_when_single_tab = true
+sidebar_width = 26
+sidebar_min_width = 18
+sidebar_max_width = 32
+prompt_new_tab_name = false
+agent_panel_sort = "priority"
+status_indicators = "symbols"
+tab_bar_position = "top"
 
-[experimental]
-kitty_graphics = true
+[ui.toast]
+delivery = "herdr"
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "bottom-right"
+
+[ui.sound]
+enabled = false
+
+[ui.sidebar]
+
+[ui.sidebar.agents]
+rows = [["state_icon", "machine", "workspace", "tab"], ["agent"]]

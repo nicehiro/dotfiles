@@ -25,19 +25,13 @@ set -gx EDITOR nvim
 set -gx LEDGER_FILE $HOME/Documents/account.journal
 set -gx BIBTEX_PATH $HOME/Documents/roam/library.bib
 
-# if test -d $HOME/Documents/keys
-#     for keyfile in $HOME/Documents/keys/*.fish.key
-#         if test -f $keyfile
-#             source $keyfile
-#         end
-#     end
-# end
-
-set -gx OPENAI_BASE_URL http://127.0.0.1:3425/v1
-set -gx OPENAI_API_KEY magpie
-
-set -gx ANTHROPIC_BASE_URL http://127.0.0.1:3425/v1
-set -gx ANTHROPIC_API_KEY magpie
+if test -d $HOME/Documents/keys
+    for keyfile in $HOME/Documents/keys/*.fish.key
+        if test -f $keyfile
+            source $keyfile
+        end
+    end
+end
 
 # Secrets held in the macOS login keychain: encrypted at rest, never synced,
 # never stored in this repo. Add one with:
